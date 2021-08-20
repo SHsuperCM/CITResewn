@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "citresewn",
+  "version": "${version}",
+  "name": "CITResewn",
+  "description": "Re-implements MCPatcher's CIT",
+  "authors": [
+    "SHsuperCM"
+  ],
+  "contact": {},
+  "license": "MIT",
+
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "shcm.shsupercm.fabric.citresewn.CITResewnClient"
+    ]
+  },
+  "mixins": [
+    "citresewn.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.6",
+    "minecraft": "1.17.1"
+  }
+}

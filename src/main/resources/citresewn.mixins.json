@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "shcm.shsupercm.fabric.citresewn.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "client": [
+    "ReloadableResourceManagerImplMixin",
+    "IdentifierMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
