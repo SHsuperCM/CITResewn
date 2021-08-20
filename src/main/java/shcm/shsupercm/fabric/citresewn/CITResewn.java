@@ -3,21 +3,15 @@ package shcm.shsupercm.fabric.citresewn;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.resource.ReloadableResourceManager;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceReloader;
-import net.minecraft.util.profiler.Profiler;
-
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Environment(EnvType.CLIENT)
-public class CITResewnClient implements ClientModInitializer {
-    public static CITResewnClient INSTANCE;
+public class CITResewn implements ClientModInitializer {
+    public static final Logger LOG = LogManager.getLogger("citresewn");
+    public static CITResewn INSTANCE;
+
+    public ActiveCITs activeCITs = null;
 
     @Override
     public void onInitializeClient() {

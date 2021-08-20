@@ -13,7 +13,7 @@
   "environment": "client",
   "entrypoints": {
     "client": [
-      "shcm.shsupercm.fabric.citresewn.CITResewnClient"
+      "shcm.shsupercm.fabric.citresewn.CITResewn"
     ]
   },
   "mixins": [

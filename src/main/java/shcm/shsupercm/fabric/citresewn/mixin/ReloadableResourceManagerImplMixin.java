@@ -1,6 +1,5 @@
 package shcm.shsupercm.fabric.citresewn.mixin;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
@@ -10,6 +9,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import shcm.shsupercm.fabric.citresewn.ActiveCITs;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.pack.CITParser;
+import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -29,20 +32,14 @@ public abstract class ReloadableResourceManagerImplMixin implements ReloadableRe
         if (this.type != ResourceType.CLIENT_RESOURCES)
             return;
 
-        Map<String, ResourcePack> citFiles = new HashMap<>();
-        for (ResourcePack pack : packs) {
-            for (Identifier identifier : pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", 5, s -> true))
-                citFiles.put(identifier.getPath(), pack);
-            for (Identifier identifier : pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", 5, s -> true))
-                citFiles.put(identifier.getPath(), pack);
-            for (Identifier identifier : pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", 5, s -> true))
-                citFiles.put(identifier.getPath(), pack);
+        if (CITResewn.INSTANCE.activeCITs != null) {
+            CITResewn.INSTANCE.activeCITs.dispose();
+            CITResewn.INSTANCE.activeCITs = null;
         }
 
-        for (Map.Entry<String, ResourcePack> citFile : citFiles.entrySet()) {
+        Collection<CIT> cits = CITParser.parse(packs);
 
-        }
-
-        new String();
+        if (cits.size() > 0)
+            CITResewn.INSTANCE.activeCITs = new ActiveCITs(cits);
     }
 }
