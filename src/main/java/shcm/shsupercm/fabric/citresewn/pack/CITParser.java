@@ -3,7 +3,9 @@ package shcm.shsupercm.fabric.citresewn.pack;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
+import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.io.InputStream;
 import java.util.*;
@@ -54,6 +56,7 @@ public class CITParser { private CITParser() {}
                         citPack.cits.add(parseCIT(citPack, citIdentifier, citProperties));
 
                 } catch (Exception e) {
+                    CITResewn.LOG.error(e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -63,7 +66,13 @@ public class CITParser { private CITParser() {}
         return cits;
     }
 
-    public static CIT parseCIT(CITPack pack, Identifier identifier, Properties properties) {
-        return null;
+    public static CIT parseCIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
+        return switch (properties.getProperty("type", "item")) {
+            case "item" -> new CITItem(pack, identifier, properties);
+            case "armor" -> new CITArmor(pack, identifier, properties);
+            case "elytra" -> new CITElytra(pack, identifier, properties);
+            case "enchantment" -> new CITEnchantment(pack, identifier, properties);
+            default -> throw new CITParseException(pack.resourcePack, identifier, "Unknown cit type");
+        };
     }
 }

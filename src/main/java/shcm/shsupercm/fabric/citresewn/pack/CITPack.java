@@ -1,7 +1,9 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.minecraft.resource.ResourcePack;
+import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 
 import java.util.ArrayList;
@@ -26,17 +28,17 @@ public class CITPack {
         try {
             cap = Integer.parseInt(properties.getProperty("cap", "8"));
         } catch (NumberFormatException e) {
-            CITResewn.LOG.error("Skipped property: cap is not a whole number in cit.properties inside " + resourcePack.getName());
+            CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "cap is not a whole number").getMessage());
         }
         try {
             fade = Float.parseFloat(properties.getProperty("fade", "0.5"));
         } catch (NumberFormatException e) {
-            CITResewn.LOG.error("Skipped property: fade is not a number in cit.properties inside " + resourcePack.getName());
+            CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "fade is not a number").getMessage());
         }
         switch (properties.getProperty("useGlint", "true")) {
             case "true" -> useGlint = true;
             case "false" -> useGlint = false;
-            default -> CITResewn.LOG.error("Skipped property: useGlint is not a boolean in cit.properties inside " + resourcePack.getName());
+            default -> CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "useGlint is not a boolean").getMessage());
         }
     }
 
