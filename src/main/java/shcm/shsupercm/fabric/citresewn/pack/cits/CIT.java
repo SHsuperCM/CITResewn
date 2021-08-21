@@ -1,17 +1,16 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public abstract class CIT {
     public final Set<Item> items = new HashSet<>();
@@ -26,14 +25,20 @@ public abstract class CIT {
     public final int stackMin, stackMax;
     public final boolean stackAny, stackRange;
 
+    public final Set<Enchantment> enchantments = new HashSet<>();
+    public final List<Pair<Integer, Integer>> enchantmentLevels = new ArrayList<>();
+    public final boolean enchantmentsAny, enchantmentLevelsAny;
+
+    public final Hand hand;
+
     public CIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
         try {
             for (String itemId : (properties.getProperty("items", properties.getProperty("matchItems", " "))).split(" "))
                 if (!itemId.isEmpty()) {
-                    Item item = Registry.ITEM.get(new Identifier(itemId));
-                    if (item == Items.AIR)
+                    Identifier itemIdentifier = new Identifier(itemId);
+                    if (!Registry.ITEM.containsId(itemIdentifier))
                         throw new Exception("Unknown item " + itemId);
-                    this.items.add(item);
+                    this.items.add(Registry.ITEM.get(itemIdentifier));
                 }
             if (this.items.size() == 0 && !properties.getProperty("type", "item").equals("enchantment"))
                 throw new Exception("CIT must target at least one item type");
@@ -116,6 +121,52 @@ public abstract class CIT {
                     this.stackMin = this.stackMax = Integer.parseInt(stackSize);
                 }
             }
+
+            String enchantmentIDs = properties.getProperty("enchantments", properties.getProperty("enchantmentIDs"));
+            if (!(this.enchantmentsAny = enchantmentIDs == null)) {
+                for (String ench : enchantmentIDs.split(" ")) {
+                    Identifier enchIdentifier = new Identifier(ench);
+                    if (!Registry.ENCHANTMENT.containsId(enchIdentifier))
+                        throw new Exception("Unknown enchantment " + ench);
+                    this.enchantments.add(Registry.ENCHANTMENT.get(enchIdentifier));
+                }
+            }
+
+            String enchantmentLevelsProp = properties.getProperty("enchantmentLevels");
+            if (!(this.enchantmentLevelsAny = enchantmentLevelsProp == null)) {
+                for (String range : enchantmentLevelsProp.split(" ")) {
+                    if (range.contains("-")) {
+                        if (range.startsWith("-")) {
+                            range = range.substring(1);
+                            if (range.contains("-"))
+                                throw new Exception("enchantmentLevels ranges must have up to 2 numbers each");
+                            this.enchantmentLevels.add(new Pair<>(0, Integer.parseInt(range)));
+                        } else if (range.endsWith("-")) {
+                            range = range.substring(0, range.length() - 1);
+                            if (range.contains("-"))
+                                throw new Exception("enchantmentLevels ranges must have up to 2 numbers each");
+                            this.enchantmentLevels.add(new Pair<>(Integer.parseInt(range), Integer.MAX_VALUE));
+                        } else {
+                            String[] split = range.split("-");
+                            if (split.length != 2)
+                                throw new Exception("enchantmentLevels ranges must have up to 2 numbers each");
+                            Pair<Integer, Integer> minMaxPair = new Pair<>(Integer.parseInt(split[0]), Integer.parseInt(split[1]));
+                            if (minMaxPair.getLeft() > minMaxPair.getRight())
+                                throw new Exception("enchantmentLevels range min is higher than max");
+                            this.enchantmentLevels.add(minMaxPair);
+                        }
+                    } else {
+                        int level = Integer.parseInt(range);
+                        this.enchantmentLevels.add(new Pair<>(level, level));
+                    }
+                }
+            }
+
+            this.hand = switch (properties.getProperty("hand", "any")) {
+                case "main" -> Hand.MAIN_HAND;
+                case "off" -> Hand.OFF_HAND;
+                default -> null;
+            };
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, e.getMessage());
         }
