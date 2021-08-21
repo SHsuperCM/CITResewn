@@ -55,16 +55,18 @@ public abstract class CIT {
                 this.assetIdentifier = modelIdentifier;
                 this.needsModel = false;
             } else {
-                String[] split = modelIdentifier.getPath().split("/");
+                String[] split = identifier.getPath().split("/");
                 String parent = String.join("/", Arrays.copyOf(split, split.length - 1, String[].class));
-                modelIdentifier = new Identifier(parent + "/" + modelIdentifier.getPath());
+                if (!parent.isEmpty())
+                    parent = parent + "/";
+                modelIdentifier = new Identifier(parent + (modelIdentifier.getPath().endsWith(".json") ? modelIdentifier.getPath() : modelIdentifier.getPath() + ".json"));
                 if (pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, modelIdentifier)) {
                     this.assetIdentifier = modelIdentifier;
                     this.needsModel = false;
                 } else {
                     Identifier textureIdentifier = new Identifier(properties.getProperty("texture", identifier.getPath().substring(0, identifier.getPath().length() - ".properties".length()) + ".png"));
                     if (!pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, textureIdentifier)) {
-                        textureIdentifier = new Identifier(parent + "/" + textureIdentifier.getPath());
+                        textureIdentifier = new Identifier(parent + (textureIdentifier.getPath().endsWith(".png") ? textureIdentifier.getPath() : textureIdentifier.getPath() + ".png"));
 
                         if (!pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, textureIdentifier))
                             throw new Exception("CIT must have either a texture or a model");
@@ -103,7 +105,7 @@ public abstract class CIT {
                 }
             }
 
-            this.damageMask = Integer.parseInt(properties.getProperty("damageMask"));
+            this.damageMask = properties.containsKey("damageMask") ? Integer.parseInt(properties.getProperty("damageMask")) : null;
 
             String stackSize = properties.getProperty("stackSize");
             if (stackAny = stackSize == null) {
