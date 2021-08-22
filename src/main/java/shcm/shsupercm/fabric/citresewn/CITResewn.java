@@ -3,23 +3,23 @@ package shcm.shsupercm.fabric.citresewn;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.model.BakedModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.WeakHashMap;
 
 @Environment(EnvType.CLIENT)
 public class CITResewn implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("citresewn");
     public static CITResewn INSTANCE;
 
+    public final WeakHashMap<BakedModel, String> bakedOverridesCache = new WeakHashMap<>();
+
     public ActiveCITs activeCITs = null;
 
     @Override
     public void onInitializeClient() {
-        INSTANCE = this;
-        /*net.minecraft.client.render.model.json.ModelOverrideList#apply
-            eval override
-         */
-
         /*net.minecraft.client.render.entity.feature.ArmorFeatureRenderer#renderArmor
             take entity.getEquippedStack(armorSlot)
             eval override

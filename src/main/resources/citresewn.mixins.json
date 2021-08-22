@@ -3,10 +3,12 @@
   "minVersion": "0.8",
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_16",
-  "client": [
+  "mixins": [
     "ReloadableResourceManagerImplMixin",
     "NbtCompoundAccessor",
-    "IdentifierMixin"
+    "IdentifierMixin",
+    "ModelOverrideListMixin",
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
