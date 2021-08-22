@@ -56,7 +56,7 @@ public class CITParser { private CITParser() {}
                         citPack.cits.add(parseCIT(citPack, citIdentifier, citProperties));
 
                 } catch (Exception e) {
-                    CITResewn.LOG.error(e.getMessage()); //todo be more descriptive
+                    CITResewn.LOG.error(e.getMessage());
                 }
             }
             cits.addAll(citPack.cits);

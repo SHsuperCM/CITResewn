@@ -36,6 +36,8 @@ public abstract class CIT {
 
     public final Predicate<NbtCompound> nbt;
 
+    private final int weight;
+
     public CIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
         try {
             for (String itemId : (properties.getProperty("items", properties.getProperty("matchItems", " "))).split(" "))
@@ -214,8 +216,9 @@ public abstract class CIT {
                 return true;
             };
 
+            this.weight = Integer.parseInt(properties.getProperty("weight", "0"));
         } catch (Exception e) {
-            throw new CITParseException(pack.resourcePack, identifier, e.getMessage());
+            throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
     }
 
