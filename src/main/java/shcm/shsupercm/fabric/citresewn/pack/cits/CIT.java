@@ -3,6 +3,7 @@ package shcm.shsupercm.fabric.citresewn.pack.cits;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.*;
+import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -19,9 +20,6 @@ import java.util.regex.Pattern;
 
 public abstract class CIT {
     public final Set<Item> items = new HashSet<>();
-
-    public final Identifier assetIdentifier;
-    public final boolean needsModel;
 
     public final int damageMin, damageMax;
     public final boolean damageAny, damageRange, damagePercentage;
@@ -49,33 +47,6 @@ public abstract class CIT {
                 }
             if (this.items.size() == 0 && !properties.getProperty("type", "item").equals("enchantment"))
                 throw new Exception("CIT must target at least one item type");
-
-            Identifier modelIdentifier = new Identifier(properties.getProperty("model", identifier.getPath().substring(0, identifier.getPath().length() - ".properties".length()) + ".json"));
-            if (pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, modelIdentifier)) {
-                this.assetIdentifier = modelIdentifier;
-                this.needsModel = false;
-            } else {
-                String[] split = identifier.getPath().split("/");
-                String parent = String.join("/", Arrays.copyOf(split, split.length - 1, String[].class));
-                if (!parent.isEmpty())
-                    parent = parent + "/";
-                modelIdentifier = new Identifier(parent + (modelIdentifier.getPath().endsWith(".json") ? modelIdentifier.getPath() : modelIdentifier.getPath() + ".json"));
-                if (pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, modelIdentifier)) {
-                    this.assetIdentifier = modelIdentifier;
-                    this.needsModel = false;
-                } else {
-                    Identifier textureIdentifier = new Identifier(properties.getProperty("texture", identifier.getPath().substring(0, identifier.getPath().length() - ".properties".length()) + ".png"));
-                    if (!pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, textureIdentifier)) {
-                        textureIdentifier = new Identifier(parent + (textureIdentifier.getPath().endsWith(".png") ? textureIdentifier.getPath() : textureIdentifier.getPath() + ".png"));
-
-                        if (!pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, textureIdentifier))
-                            throw new Exception("CIT must have either a texture or a model");
-                    }
-
-                    this.assetIdentifier = textureIdentifier;
-                    this.needsModel = true;
-                }
-            }
 
             String damage = properties.getProperty("damage");
             if (damageAny = damage == null) {
@@ -246,6 +217,54 @@ public abstract class CIT {
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, e.getMessage());
         }
+    }
+
+    /**
+     * Takes a defined path and resolves it to an identifier pointing to the resourcepack's path of the specified extension(returns null if no path can be resolved).<br>
+     * If definedPath is null, will try to resolve a relative file with the same name as the propertyIdentifier with the extension, otherwise: <br>
+     * definedPath will be formatted to replace "\\" with "/" the extension will be appended if not there already. <br>
+     * It will first try using definedPath as an absolute path, if it cant resolve(or definedPath starts with ./), definedPath will be considered relative. <br>
+     * Relative paths support going to parent directories using "..".
+     */
+    public static Identifier resolvePath(Identifier propertyIdentifier, String path, String extension, ResourcePack pack) {
+        if (path == null) {
+            Identifier pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), propertyIdentifier.getPath().replace(".properties", extension));
+            return pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
+        }
+
+        Identifier pathIdentifier = new Identifier(path);
+
+        path = pathIdentifier.getPath().replace('\\', '/');
+        if (!path.endsWith(extension))
+            path = path + extension;
+
+        if (path.startsWith("./"))
+            path = path.substring(2);
+        else if (!path.contains("..")) {
+            pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
+            if (pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier))
+                return pathIdentifier;
+        }
+
+        LinkedList<String> pathParts = new LinkedList<>(Arrays.asList(propertyIdentifier.getPath().split("/")));
+        pathParts.removeLast();
+
+        if (path.contains("/")) {
+            for (String part : path.split("/")) {
+                if (part.equals("..")) {
+                    if (pathParts.size() == 0)
+                        return null;
+                    pathParts.removeLast();
+                } else
+                    pathParts.addLast(part);
+            }
+        } else
+            pathParts.addLast(path);
+        path = String.join("/", pathParts);
+
+        pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), path);
+
+        return pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
     }
 
     /**
