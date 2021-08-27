@@ -27,13 +27,13 @@ public class CITParser { private CITParser() {}
         Identifier citresewnCITSettingsIdentifier = new Identifier("minecraft", "citresewn/cit.properties"), mcpatcherCITSettingsIdentifier = new Identifier("minecraft", "mcpatcher/cit.properties"), optifineCITSettingsIdentifier = new Identifier("minecraft", "optifine/cit.properties");
         for (ResourcePack pack : packs) {
             Set<Identifier> packIdentifiers = new HashSet<>();
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", 5, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", 2, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, citresewnCITSettingsIdentifier))
                 packIdentifiers.add(citresewnCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", 5, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", 2, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier))
                 packIdentifiers.add(mcpatcherCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", 5, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", 2, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, optifineCITSettingsIdentifier))
                 packIdentifiers.add(optifineCITSettingsIdentifier);
 
