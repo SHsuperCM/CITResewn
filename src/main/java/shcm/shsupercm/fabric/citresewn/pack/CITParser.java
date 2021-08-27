@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.ZipResourcePack;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
@@ -26,14 +27,17 @@ public class CITParser { private CITParser() {}
         final Predicate<String> isProperties = s -> s.endsWith(".properties");
         Identifier citresewnCITSettingsIdentifier = new Identifier("minecraft", "citresewn/cit.properties"), mcpatcherCITSettingsIdentifier = new Identifier("minecraft", "mcpatcher/cit.properties"), optifineCITSettingsIdentifier = new Identifier("minecraft", "optifine/cit.properties");
         for (ResourcePack pack : packs) {
+            //bugfix for zip resourcepack checking depth incorrectly
+            final int maxDepth = pack instanceof ZipResourcePack ? 0 : Integer.MAX_VALUE;
+
             Set<Identifier> packIdentifiers = new HashSet<>();
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", 2, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", maxDepth, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, citresewnCITSettingsIdentifier))
                 packIdentifiers.add(citresewnCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", 2, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", maxDepth, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier))
                 packIdentifiers.add(mcpatcherCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", 2, isProperties));
+            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", maxDepth, isProperties));
             if (pack.contains(ResourceType.CLIENT_RESOURCES, optifineCITSettingsIdentifier))
                 packIdentifiers.add(optifineCITSettingsIdentifier);
 
