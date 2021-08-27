@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Identifier.class)
 public class IdentifierMixin {
-
+    /*//todo remove
     @Inject(method = "isPathValid(Ljava/lang/String;)Z", cancellable = true, at = @At("HEAD"))
     private static void isPathValid(String path, CallbackInfoReturnable<Boolean> ci) {
-        if(path.startsWith("citresewn") || path.startsWith("optifine") || path.startsWith("mcpatcher"))
+        if(path.startsWith("textures/block") || path.startsWith("block") || path.startsWith("optifine"))
             ci.setReturnValue(true); return;
-    }
+    }*/
 }

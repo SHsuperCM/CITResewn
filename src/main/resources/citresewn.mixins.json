@@ -4,11 +4,11 @@
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "ReloadableResourceManagerImplMixin",
-    "NbtCompoundAccessor",
     "IdentifierMixin",
-    "ModelOverrideListMixin",
-    "ItemRendererMixin"
+    "ItemRendererMixin",
+    "ModelLoaderMixin",
+    "NbtCompoundAccessor",
+    "SpriteAtlasTextureMixin"
   ],
   "injectors": {
     "defaultRequire": 1

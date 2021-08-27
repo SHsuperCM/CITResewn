@@ -18,7 +18,7 @@ public class ItemRendererMixin {
         if (CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue());
+        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue(), world, entity);
         if (citModel != null)
             cir.setReturnValue(citModel);
     }

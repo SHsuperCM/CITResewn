@@ -19,6 +19,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public abstract class CIT {
+    public final CITPack pack;
+    public final Identifier propertiesIdentifier;
+
     public final Set<Item> items = new HashSet<>();
 
     public final int damageMin, damageMax;
@@ -39,6 +42,8 @@ public abstract class CIT {
     private final int weight;
 
     public CIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
+        this.pack = pack;
+        this.propertiesIdentifier = identifier;
         try {
             for (String itemId : (properties.getProperty("items", properties.getProperty("matchItems", " "))).split(" "))
                 if (!itemId.isEmpty()) {
@@ -220,6 +225,10 @@ public abstract class CIT {
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
+    }
+
+    public void dispose() {
+        //stub
     }
 
     /**
