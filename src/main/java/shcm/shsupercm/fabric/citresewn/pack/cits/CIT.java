@@ -1,7 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
@@ -9,6 +13,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.StringEscapeUtils;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.NbtCompoundAccessor;
@@ -225,6 +230,70 @@ public abstract class CIT {
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
+    }
+
+    public boolean test(ItemStack stack, Hand hand, World world, LivingEntity entity) {
+        if (!damageAny && stack.getItem().isDamageable()) {
+            int damage = stack.getDamage();
+            if (damageMask != null)
+                damage &= damageMask;
+            if (damagePercentage)
+                damage = Math.round(100f * (float) stack.getDamage() / (float) stack.getMaxDamage());
+            if (damageRange ? (damage < damageMin || damage > damageMax) : (damage != damageMin))
+                return false;
+        }
+
+        if (!stackAny) {
+            int count = stack.getCount();
+            if (stackRange ? (count < stackMin || count > stackMax) : (count != stackMin))
+                return false;
+        }
+
+        if (this.hand != null && this.hand != hand)
+            return false;
+
+        if (!enchantmentsAny) {
+            Map<Enchantment, Integer> stackEnchantments = EnchantmentHelper.get(stack);
+
+            boolean matches = false;
+            for (Enchantment enchantment : enchantments) {
+                Integer level = stackEnchantments.get(enchantment);
+                if (level != null)
+                    if (enchantmentLevelsAny) {
+                        if (level > 0) {
+                            matches = true;
+                            break;
+                        }
+                    } else
+                        for (Pair<Integer, Integer> levelRange : enchantmentLevels)
+                            if (level >= levelRange.getLeft() && level <= levelRange.getRight()) {
+                                matches = true;
+                                break;
+                            }
+            }
+
+            if (!matches)
+                return false;
+        } else if (!enchantmentLevelsAny) {
+            Collection<Integer> levels = EnchantmentHelper.get(stack).values();
+            levels.add(0);
+
+            boolean matches = false;
+
+            l: for (Integer level : levels) {
+                for (Pair<Integer, Integer> levelRange : enchantmentLevels) {
+                    if (level >= levelRange.getLeft() && level <= levelRange.getRight()) {
+                        matches = true;
+                        break l;
+                    }
+                }
+            }
+
+            if (!matches)
+                return false;
+        }
+
+        return nbt == null || nbt.test(stack.getNbt());
     }
 
     public void dispose() {

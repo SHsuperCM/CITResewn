@@ -7,8 +7,16 @@ import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
+import net.minecraft.world.World;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
@@ -93,5 +101,19 @@ public class CITItem extends CIT {
             IOUtils.closeQuietly(is);
         }
         throw new Exception("Unknown asset type");
+    }
+
+    public BakedModel getItemModel(ItemStack stack, Hand hand, BakedModel model, World world, LivingEntity entity) {
+        if (test(stack, hand, world, entity)) {
+            if (subItems != null) {
+                BakedModel subModel = subItems.get(model);
+                if (subModel != null)
+                    return subModel;
+            }
+
+            return this.bakedModel;
+        }
+
+        return null;
     }
 }

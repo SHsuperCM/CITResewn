@@ -5,6 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
@@ -52,7 +53,17 @@ public class ActiveCITs {
     }
 
     public BakedModel getItemModel(ItemStack stack, BakedModel model, World world, LivingEntity entity) {
-        //stub
-        return null;
+        BakedModel bakedModel = null;
+        Hand hand = entity != null && stack == entity.getOffHandStack() ? Hand.OFF_HAND : Hand.MAIN_HAND;
+
+        List<CITItem> citItems = this.citItems.get(stack.getItem());
+        if (citItems != null)
+            for (CITItem citItem : citItems) {
+                bakedModel = citItem.getItemModel(stack, hand, model, world, entity);
+                if (bakedModel != null)
+                    break;
+            }
+
+        return bakedModel;
     }
 }
