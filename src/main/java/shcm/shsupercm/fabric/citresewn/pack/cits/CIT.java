@@ -39,7 +39,7 @@ public abstract class CIT {
 
     public final Predicate<NbtCompound> nbt;
 
-    private final int weight;
+    public final int weight;
 
     public CIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
         this.pack = pack;

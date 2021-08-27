@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ActiveCITs {
     public final Collection<CIT> cits;
@@ -21,7 +22,8 @@ public class ActiveCITs {
 
     public ActiveCITs(Collection<CIT> cits) {
         this.cits = cits;
-        for (CIT cit : cits) {
+
+        for (CIT cit : cits.stream().sorted(Comparator.<CIT>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.getPath())).collect(Collectors.toList())) {
             if (cit instanceof CITItem item)
                 for (Item type : item.items)
                     citItems.computeIfAbsent(type, t -> new ArrayList<>()).add(item);
