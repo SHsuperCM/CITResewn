@@ -14,7 +14,7 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Inject(method = "getHeldItemModel", cancellable = true, at = @At("RETURN"))
-    public void getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
+    public void injectCIT(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (CITResewn.INSTANCE.activeCITs == null)
             return;
 

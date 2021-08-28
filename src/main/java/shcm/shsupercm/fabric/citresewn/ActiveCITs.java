@@ -6,6 +6,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
@@ -65,5 +66,13 @@ public class ActiveCITs {
             }
 
         return bakedModel;
+    }
+
+    public Identifier getElytraTexture(ItemStack stack, World world, LivingEntity livingEntity) {
+        for (CITElytra citElytra : citElytra)
+            if (citElytra.test(stack, Hand.MAIN_HAND, world, livingEntity))
+                return citElytra.textureIdentifier;
+
+        return null;
     }
 }
