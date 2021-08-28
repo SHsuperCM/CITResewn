@@ -1,0 +1,6 @@
+{
+  "config.citresewn.title": "CIT Resewn Configuration",
+
+  "config.citresewn.citsEnabled.title": "Enabled",
+  "config.citresewn.citsEnabled.tooltip": "Should CITResewn load and inject cits from resourcepacks"
+}

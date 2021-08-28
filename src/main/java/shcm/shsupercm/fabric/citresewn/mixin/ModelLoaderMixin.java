@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.CITParser;
 import shcm.shsupercm.fabric.citresewn.pack.ResewnItemModelIdentifier;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
@@ -41,6 +42,9 @@ public abstract class ModelLoaderMixin {
             CITResewn.INSTANCE.activeCITs = null;
         }
 
+        if (!CITResewnConfig.INSTANCE().enabled)
+            return;
+
         Collection<CIT> parsed = CITParser.parse(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
 
         for (CIT cit : parsed)
@@ -65,11 +69,17 @@ public abstract class ModelLoaderMixin {
 
     @Inject(method = "bake", at = @At("RETURN"))
     public void onBake(Identifier id, ModelBakeSettings settings, CallbackInfoReturnable<BakedModel> cir) {
+        if (CITResewn.INSTANCE.activeCITs == null)
+            return;
+
         this.citOverrideCacheMap.put(id, cir.getReturnValue());
     }
 
     @Inject(method = "upload", at = @At("RETURN"))
     public void linkBakedModels(TextureManager textureManager, Profiler profiler, CallbackInfoReturnable<SpriteAtlasManager> cir) {
+        if (CITResewn.INSTANCE.activeCITs == null)
+            return;
+
         profiler.push("citresewn_linking");
 
         if (CITResewn.INSTANCE.activeCITs != null) {

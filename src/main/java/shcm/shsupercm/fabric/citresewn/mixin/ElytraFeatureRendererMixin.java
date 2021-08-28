@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 import java.lang.ref.WeakReference;
 
@@ -24,7 +25,7 @@ public class ElytraFeatureRendererMixin {
 
     @Inject(method = "render", cancellable = true, at = @At("HEAD"))
     public void injectCIT(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if (CITResewn.INSTANCE.activeCITs == null)
+        if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
         this.elytraItemCached = new WeakReference<>(livingEntity.getEquippedStack(EquipmentSlot.CHEST));
@@ -33,6 +34,9 @@ public class ElytraFeatureRendererMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorCutoutNoCull(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/render/RenderLayer;"))
     public RenderLayer getArmorCutoutNoCull(Identifier originalIdentifier) {
+        if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
+            return RenderLayer.getArmorCutoutNoCull(originalIdentifier);
+
         ItemStack itemStack = this.elytraItemCached.get();
         LivingEntity livingEntity = livingEntityCached.get();
         if (itemStack != null && livingEntity != null) {

@@ -10,12 +10,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Inject(method = "getHeldItemModel", cancellable = true, at = @At("RETURN"))
     public void injectCIT(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-        if (CITResewn.INSTANCE.activeCITs == null)
+        if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
         BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue(), world, entity);
