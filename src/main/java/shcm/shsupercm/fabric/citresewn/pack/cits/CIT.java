@@ -1,6 +1,5 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;

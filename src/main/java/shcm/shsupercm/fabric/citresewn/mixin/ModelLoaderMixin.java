@@ -69,7 +69,7 @@ public abstract class ModelLoaderMixin {
     }
 
     @Inject(method = "upload", at = @At("RETURN"))
-    public void linkBakedModel(TextureManager textureManager, Profiler profiler, CallbackInfoReturnable<SpriteAtlasManager> cir) {
+    public void linkBakedModels(TextureManager textureManager, Profiler profiler, CallbackInfoReturnable<SpriteAtlasManager> cir) {
         profiler.push("citresewn_linking");
 
         if (CITResewn.INSTANCE.activeCITs != null) {
