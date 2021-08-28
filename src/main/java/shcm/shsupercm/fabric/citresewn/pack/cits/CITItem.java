@@ -39,6 +39,9 @@ public class CITItem extends CIT {
     public CITItem(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
         super(pack, identifier, properties);
         try {
+            if (this.items.size() == 0)
+                throw new Exception("CIT must target at least one item type");
+
             Identifier assetIdentifier = resolvePath(identifier, properties.getProperty("model"), ".json", pack.resourcePack);
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);

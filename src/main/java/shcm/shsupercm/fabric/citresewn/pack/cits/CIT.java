@@ -56,8 +56,6 @@ public abstract class CIT {
                         throw new Exception("Unknown item " + itemId);
                     this.items.add(Registry.ITEM.get(itemIdentifier));
                 }
-            if (this.items.size() == 0 && !properties.getProperty("type", "item").equals("enchantment"))
-                throw new Exception("CIT must target at least one item type");
 
             String damage = properties.getProperty("damage");
             if (damageAny = damage == null) {
