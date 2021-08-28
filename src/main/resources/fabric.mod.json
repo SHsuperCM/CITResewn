@@ -7,8 +7,8 @@
   "authors": [
     "SHsuperCM"
   ],
-  "contact": {},
   "license": "MIT",
+  "icon": "assets/citresewn/logo.png",
 
   "environment": "client",
   "entrypoints": {
