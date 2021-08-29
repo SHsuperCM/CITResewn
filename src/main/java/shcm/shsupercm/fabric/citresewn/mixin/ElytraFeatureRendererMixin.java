@@ -24,7 +24,7 @@ public class ElytraFeatureRendererMixin {
     private WeakReference<LivingEntity> livingEntityCached = new WeakReference<>(null);
 
     @Inject(method = "render", cancellable = true, at = @At("HEAD"))
-    public void injectCIT(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
+    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 

@@ -75,4 +75,16 @@ public class ActiveCITs {
 
         return null;
     }
+
+    public Map<String, Identifier> getArmorTextures(ItemStack itemStack, World world, LivingEntity livingEntity) {
+        Item item = itemStack.getItem();
+        if (item instanceof ArmorItem) {
+            List<CITArmor> citArmor = this.citArmor.get(item);
+            if (citArmor != null)
+                for (CITArmor armor : citArmor)
+                    if (armor.test(itemStack, null, world, livingEntity))
+                        return armor.textures;
+        }
+        return null;
+    }
 }

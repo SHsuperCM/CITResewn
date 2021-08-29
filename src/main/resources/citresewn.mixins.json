@@ -4,6 +4,7 @@
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "ArmorFeatureRendererMixin",
     "ElytraFeatureRendererMixin",
     "IdentifierMixin",
     "ItemRendererMixin",

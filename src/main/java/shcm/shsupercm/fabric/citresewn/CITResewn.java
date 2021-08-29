@@ -21,20 +21,5 @@ public class CITResewn implements ClientModInitializer {
         INSTANCE = this;
 
         config = CITResewnConfig.read();
-
-        /*net.minecraft.client.render.entity.feature.ArmorFeatureRenderer#renderArmor
-            take entity.getEquippedStack(armorSlot)
-            eval override
-            save shadow String cachedOverride /null
-
-        /*net.minecraft.client.render.entity.feature.ArmorFeatureRenderer#getArmorTexture
-            if(shadow cachedOverride != null)
-                mxreturn shadow cachedOverride
-
-         */
-
-        /*
-
-         */
     }
 }
