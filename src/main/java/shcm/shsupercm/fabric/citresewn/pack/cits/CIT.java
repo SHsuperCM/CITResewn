@@ -201,7 +201,7 @@ public abstract class CIT {
                                         try {
                                             NbtElement subElement = nbtList.get(Integer.parseInt(name));
                                             return subElement != null && test(subElement, index + 1);
-                                        } catch (NumberFormatException ignored) {
+                                        } catch (Exception ignored) {
                                             return false;
                                         }
                                     }
