@@ -34,7 +34,7 @@ public class ActiveCITs {
                     if (type instanceof ArmorItem armorType)
                         citArmor.computeIfAbsent(armorType, t -> new ArrayList<>()).add(armor);
                     else
-                        CITResewn.LOG.error("Skipping item type: " + Registry.ITEM.getId(type) + " is not armor in " + cit.pack.resourcePack.getName() + " -> " + cit.propertiesIdentifier.getPath());
+                        CITResewn.logErrorLoading("Skipping item type: " + Registry.ITEM.getId(type) + " is not armor in " + cit.pack.resourcePack.getName() + " -> " + cit.propertiesIdentifier.getPath());
             else if (cit instanceof CITElytra)
                 citElytra.add((CITElytra) cit);
             else if (cit instanceof CITEnchantment)

@@ -28,17 +28,17 @@ public class CITPack {
         try {
             cap = Integer.parseInt(properties.getProperty("cap", "8"));
         } catch (NumberFormatException e) {
-            CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "cap is not a whole number").getMessage());
+            CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "cap is not a whole number").getMessage());
         }
         try {
             fade = Float.parseFloat(properties.getProperty("fade", "0.5"));
         } catch (NumberFormatException e) {
-            CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "fade is not a number").getMessage());
+            CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "fade is not a number").getMessage());
         }
         switch (properties.getProperty("useGlint", "true")) {
             case "true" -> useGlint = true;
             case "false" -> useGlint = false;
-            default -> CITResewn.LOG.error(new CITParseException(resourcePack, new Identifier("cit.properties"), "useGlint is not a boolean").getMessage());
+            default -> CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "useGlint is not a boolean").getMessage());
         }
     }
 

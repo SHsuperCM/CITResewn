@@ -1,6 +1,12 @@
 {
   "config.citresewn.title": "CIT Resewn Configuration",
 
-  "config.citresewn.citsEnabled.title": "Enabled",
-  "config.citresewn.citsEnabled.tooltip": "Should CITResewn load and inject cits from resourcepacks"
+  "config.citresewn.enabled.title": "Enabled",
+  "config.citresewn.enabled.tooltip": "Should CIT Resewn load and inject cits from resourcepacks",
+
+  "config.citresewn.mute_errors.title": "Mute loading errors",
+  "config.citresewn.mute_errors.tooltip": "Should CIT Resewn not log cit errors",
+
+  "config.citresewn.mute_warns.title": "Mute loading warnings",
+  "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings"
 }

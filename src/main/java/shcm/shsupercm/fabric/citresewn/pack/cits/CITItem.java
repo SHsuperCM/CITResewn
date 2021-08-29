@@ -189,7 +189,7 @@ public class CITItem extends CIT {
         };
 
         if (replacement != null) {
-            CITResewn.LOG.error("CIT Warning: Using deprecated sub item id \"" + subItem + "\" instead of \"" + replacement + "\" in " + pack.resourcePack.getName() + " -> " + propertiesIdentifier.getPath());
+            CITResewn.logWarnLoading("CIT Warning: Using deprecated sub item id \"" + subItem + "\" instead of \"" + replacement + "\" in " + pack.resourcePack.getName() + " -> " + propertiesIdentifier.getPath());
 
             return new Identifier("minecraft", "item/" + replacement);
         }

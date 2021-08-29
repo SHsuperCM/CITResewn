@@ -20,8 +20,8 @@ public class CITResewnConfigScreenFactory {
         ConfigCategory category = builder.getOrCreateCategory(new LiteralText(""));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.citsEnabled.title"), currentConfig.enabled)
-                .setTooltip(new TranslatableText("config.citresewn.citsEnabled.tooltip"))
+        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.enabled.title"), currentConfig.enabled)
+                .setTooltip(new TranslatableText("config.citresewn.enabled.tooltip"))
                 .setSaveConsumer(newConfig -> {
                     if (currentConfig.enabled != newConfig) {
                         currentConfig.enabled = newConfig;
@@ -29,6 +29,18 @@ public class CITResewnConfigScreenFactory {
                     }
                 })
                 .setDefaultValue(defaultConfig.enabled)
+                .build());
+
+        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_errors.title"), currentConfig.mute_errors)
+                .setTooltip(new TranslatableText("config.citresewn.mute_errors.tooltip"))
+                .setSaveConsumer(newConfig -> currentConfig.mute_errors = newConfig)
+                .setDefaultValue(defaultConfig.mute_errors)
+                .build());
+
+        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_warns.title"), currentConfig.mute_warns)
+                .setTooltip(new TranslatableText("config.citresewn.mute_warns.tooltip"))
+                .setSaveConsumer(newConfig -> currentConfig.mute_warns = newConfig)
+                .setDefaultValue(defaultConfig.mute_warns)
                 .build());
 
         return builder.build();

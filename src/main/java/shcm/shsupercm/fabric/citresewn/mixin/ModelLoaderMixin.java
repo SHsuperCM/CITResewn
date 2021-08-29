@@ -59,7 +59,7 @@ public abstract class ModelLoaderMixin {
                         this.modelsToBake.put(id, unbakedModel);
                     }
                 } catch (Exception e) {
-                    CITResewn.LOG.error(e.getMessage());
+                    CITResewn.logErrorLoading(e.getMessage());
                 }
             }
 
@@ -99,7 +99,7 @@ public abstract class ModelLoaderMixin {
                         if (override != null)
                             citItem.subItems.put(override, this.bakedModels.get(new ResewnItemModelIdentifier(citModelEntry.getValue().id)));
                         else {
-                            CITResewn.LOG.error("Skipping sub cit: No such sub item model \"" + citModelEntry.getKey().getPath().substring(5) + "\" in " + citItem.pack.resourcePack.getName() + " -> " + citItem.propertiesIdentifier.getPath());
+                            CITResewn.logErrorLoading("Skipping sub cit: No such sub item model \"" + citModelEntry.getKey().getPath().substring(5) + "\" in " + citItem.pack.resourcePack.getName() + " -> " + citItem.propertiesIdentifier.getPath());
                         }
                     }
                 }
