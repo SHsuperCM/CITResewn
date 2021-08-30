@@ -166,13 +166,24 @@ public abstract class CIT {
                     String matchProperty = StringEscapeUtils.unescapeJava(properties.getProperty(property));
                     final boolean caseSensitive = !matchProperty.startsWith("i");
                     if (matchProperty.startsWith(caseSensitive ? "pattern:" : "ipattern:")) {
-                        final String pattern = caseSensitive ? matchProperty.substring(8) : matchProperty.substring(9).toLowerCase(Locale.ENGLISH);
+                        matchProperty = caseSensitive ? matchProperty.substring(8) : matchProperty.substring(9).toLowerCase(Locale.ENGLISH);
+                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
+                            matchProperty = "{\"text\":\"" + matchProperty + "\"}";
+                        final String pattern = matchProperty;
                         match = s -> matchesPattern(caseSensitive ? s : s.toLowerCase(), pattern, 0, s.length(), 0, pattern.length());
                     } else if (matchProperty.startsWith(caseSensitive ? "regex:" : "iregex:")) {
-                        final Pattern pattern = Pattern.compile(caseSensitive ? matchProperty.substring(5) : matchProperty.substring(6).toLowerCase(Locale.ENGLISH));
+                        matchProperty = caseSensitive ? matchProperty.substring(5) : matchProperty.substring(6).toLowerCase(Locale.ENGLISH);
+                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
+                            matchProperty = "\\{\"text\":\"" + matchProperty + "\"}";
+                        final Pattern pattern = Pattern.compile(matchProperty);
                         match = s -> pattern.matcher(caseSensitive ? s : s.toLowerCase()).matches();
-                    } else
-                        match = s -> s.equals(matchProperty);
+                    } else {
+                        matchProperty = caseSensitive ? matchProperty.substring(5) : matchProperty.substring(6).toLowerCase(Locale.ENGLISH);
+                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
+                            matchProperty = "{\"text\":\"" + matchProperty + "\"}";
+                        final String pattern = matchProperty;
+                        match = s -> s.equals(pattern);
+                    }
 
                     nbtPredicates.add(new Predicate<NbtCompound>() {
                         public boolean test(NbtElement nbtElement, int index) {
