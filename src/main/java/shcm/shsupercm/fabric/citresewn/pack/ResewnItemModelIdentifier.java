@@ -10,4 +10,8 @@ public class ResewnItemModelIdentifier extends Identifier {
     public ResewnItemModelIdentifier(String id) {
         super(id);
     }
+
+    public ResewnItemModelIdentifier(Identifier identifier) {
+        super(identifier.getNamespace(), identifier.getPath());
+    }
 }

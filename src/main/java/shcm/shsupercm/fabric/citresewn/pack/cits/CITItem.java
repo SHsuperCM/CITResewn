@@ -21,6 +21,7 @@ import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.JsonUnbakedModelAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
+import shcm.shsupercm.fabric.citresewn.pack.ResewnItemModelIdentifier;
 import shcm.shsupercm.fabric.citresewn.pack.ResewnTextureIdentifier;
 
 import java.io.InputStream;
@@ -152,6 +153,24 @@ public class CITItem extends CIT {
                 json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(identifier)).getInputStream(), StandardCharsets.UTF_8));
                 json.id = identifier.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
+
+                ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layer, original) -> {
+                    Optional<SpriteIdentifier> left = original.left();
+                    if (left.isPresent() && left.get().getTextureId().getPath().startsWith("./")) {
+                        Identifier resolvedIdentifier = resolvePath(identifier, left.get().getTextureId().getPath(), ".png", pack.resourcePack);
+                        if (resolvedIdentifier != null)
+                            return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
+                    }
+                    return original;
+                });
+
+                Identifier parentId = ((JsonUnbakedModelAccessor) json).getParentId();
+                if (parentId.getPath().startsWith("./")) {
+                    parentId = resolvePath(identifier, parentId.getPath(), ".json", pack.resourcePack);
+                    if (parentId != null)
+                        ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                }
+
                 return json;
             } finally {
                 IOUtils.closeQuietly(is, resource);

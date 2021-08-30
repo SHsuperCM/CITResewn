@@ -318,7 +318,7 @@ public abstract class CIT {
     public static Identifier resolvePath(Identifier propertyIdentifier, String path, String extension, ResourcePack pack) {
         if (path == null) {
             Identifier pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), propertyIdentifier.getPath().replace(".properties", extension));
-            return pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
+            return pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
         }
 
         Identifier pathIdentifier = new Identifier(path);
@@ -331,7 +331,7 @@ public abstract class CIT {
             path = path.substring(2);
         else if (!path.contains("..")) {
             pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
-            if (pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier))
+            if (pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier))
                 return pathIdentifier;
         }
 
@@ -353,7 +353,7 @@ public abstract class CIT {
 
         pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), path);
 
-        return pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
+        return pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
     }
 
     /**
