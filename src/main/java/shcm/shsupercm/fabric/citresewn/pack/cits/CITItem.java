@@ -156,19 +156,26 @@ public class CITItem extends CIT {
 
                 ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layer, original) -> {
                     Optional<SpriteIdentifier> left = original.left();
-                    if (left.isPresent() && left.get().getTextureId().getPath().startsWith("./")) {
-                        Identifier resolvedIdentifier = resolvePath(identifier, left.get().getTextureId().getPath(), ".png", pack.resourcePack);
-                        if (resolvedIdentifier != null)
-                            return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
+                    if (left.isPresent()) {
+                        String originalPath = left.get().getTextureId().getPath();
+                        String[] split = originalPath.split("/");
+                        if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
+                            Identifier resolvedIdentifier = CIT.resolvePath(identifier, originalPath, ".png", pack.resourcePack);
+                            if (resolvedIdentifier != null)
+                                return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
+                        }
                     }
                     return original;
                 });
 
                 Identifier parentId = ((JsonUnbakedModelAccessor) json).getParentId();
-                if (parentId.getPath().startsWith("./")) {
-                    parentId = resolvePath(identifier, parentId.getPath(), ".json", pack.resourcePack);
-                    if (parentId != null)
-                        ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                if (parentId != null) {
+                    String[] parentIdPathSplit = parentId.getPath().split("/");
+                    if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
+                        parentId = resolvePath(identifier, parentId.getPath(), ".json", pack.resourcePack);
+                        if (parentId != null)
+                            ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                    }
                 }
 
                 return json;

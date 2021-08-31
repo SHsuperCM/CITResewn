@@ -6,7 +6,6 @@
   "mixins": [
     "ArmorFeatureRendererMixin",
     "ElytraFeatureRendererMixin",
-    "IdentifierMixin",
     "ItemRendererMixin",
     "JsonUnbakedModelAccessor",
     "ModelLoaderMixin",

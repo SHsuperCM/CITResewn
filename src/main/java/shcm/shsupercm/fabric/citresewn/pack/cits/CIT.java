@@ -178,7 +178,6 @@ public abstract class CIT {
                         final Pattern pattern = Pattern.compile(matchProperty);
                         match = s -> pattern.matcher(caseSensitive ? s : s.toLowerCase()).matches();
                     } else {
-                        matchProperty = caseSensitive ? matchProperty.substring(5) : matchProperty.substring(6).toLowerCase(Locale.ENGLISH);
                         if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
                             matchProperty = "{\"text\":\"" + matchProperty + "\"}";
                         final String pattern = matchProperty;
