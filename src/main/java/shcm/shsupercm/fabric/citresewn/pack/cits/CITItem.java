@@ -43,9 +43,15 @@ public class CITItem extends CIT {
             if (this.items.size() == 0)
                 throw new Exception("CIT must target at least one item type");
 
-            Identifier assetIdentifier = resolvePath(identifier, properties.getProperty("model"), ".json", pack.resourcePack);
+            String modelProp = properties.getProperty("model");
+            Identifier assetIdentifier = resolvePath(identifier, modelProp, ".json", pack.resourcePack);
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);
+            else if (modelProp != null && !modelProp.startsWith("models")) {
+                assetIdentifier = resolvePath(identifier, "models/" + modelProp, ".json", pack.resourcePack);
+                if (assetIdentifier != null)
+                    assetIdentifiers.put(null, assetIdentifier);
+            }
 
             for (Object o : properties.keySet())
                 if (o instanceof String property && property.startsWith("model.")) {
