@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.pack.CITParser;
+import shcm.shsupercm.fabric.citresewn.pack.cits.CITItem;
 
 import java.io.*;
 
@@ -20,6 +22,8 @@ public class CITResewnConfig {
     public static CITResewnConfig read() {
         if (!FILE.exists())
             return new CITResewnConfig().write();
+
+        CITParser.REGISTRY.put("test", CITItem::new);
 
         Reader reader = null;
         try {

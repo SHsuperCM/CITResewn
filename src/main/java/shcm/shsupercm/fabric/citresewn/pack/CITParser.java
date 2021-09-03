@@ -4,6 +4,7 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.ZipResourcePack;
 import net.minecraft.util.Identifier;
+import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
@@ -13,6 +14,14 @@ import java.util.*;
 import java.util.function.Predicate;
 
 public class CITParser { private CITParser() {}
+    public static final Map<String, CITConstructor> REGISTRY = new HashMap<>();
+
+    static {
+        REGISTRY.put("item", CITItem::new);
+        REGISTRY.put("armor", CITArmor::new);
+        REGISTRY.put("elytra", CITElytra::new);
+        REGISTRY.put("enchantment", CITEnchantment::new);
+    }
 
     /**
      * Parses cit entries from an ordered collection of resourcepacks.
@@ -47,20 +56,40 @@ public class CITParser { private CITParser() {}
 
         for (Map.Entry<ResourcePack, Set<Identifier>> citPackEntry : citPacks.entrySet()) {
             CITPack citPack = new CITPack(citPackEntry.getKey());
+            InputStream is = null;
+            Properties citProperties = new Properties();
+            try {
+                if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
+                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
+                else if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
+                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
+                else if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
+                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
+
+                if (is != null) {
+                    citProperties.load(is);
+                    citPack.loadProperties(citProperties);
+                }
+            } catch (Exception e) {
+                CITResewn.logErrorLoading(e.getMessage());
+            } finally {
+                IOUtils.closeQuietly(is);
+            }
+
+
             for (Identifier citIdentifier : citPackEntry.getValue()) {
                 try {
-                    InputStream is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, citIdentifier);
-                    Properties citProperties = new Properties();
-                    citProperties.load(is);
-                    is.close();
+                    citProperties = new Properties();
+                    citProperties.load(is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, citIdentifier));
 
-                    if (citIdentifier == citresewnCITSettingsIdentifier || citIdentifier == mcpatcherCITSettingsIdentifier || citIdentifier == optifineCITSettingsIdentifier)
-                        citPack.loadProperties(citProperties);
-                    else
-                        citPack.cits.add(parseCIT(citPack, citIdentifier, citProperties));
-
+                    CITConstructor type = REGISTRY.get(citProperties.getProperty("type", "item"));
+                    if (type == null)
+                        throw new CITParseException(citPack.resourcePack, citIdentifier, "Unknown cit type \"" + citProperties.getProperty("type") + "\"");
+                    citPack.cits.add(type.cit(citPack, citIdentifier, citProperties));
                 } catch (Exception e) {
                     CITResewn.logErrorLoading(e.getMessage());
+                } finally {
+                    IOUtils.closeQuietly(is);
                 }
             }
             cits.addAll(citPack.cits);
@@ -69,13 +98,7 @@ public class CITParser { private CITParser() {}
         return cits;
     }
 
-    public static CIT parseCIT(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
-        return switch (properties.getProperty("type", "item")) {
-            case "item" -> new CITItem(pack, identifier, properties);
-            case "armor" -> new CITArmor(pack, identifier, properties);
-            case "elytra" -> new CITElytra(pack, identifier, properties);
-            case "enchantment" -> new CITEnchantment(pack, identifier, properties);
-            default -> throw new CITParseException(pack.resourcePack, identifier, "Unknown cit type");
-        };
+    public interface CITConstructor {
+        CIT cit(CITPack pack, Identifier identifier, Properties properties) throws CITParseException;
     }
 }
