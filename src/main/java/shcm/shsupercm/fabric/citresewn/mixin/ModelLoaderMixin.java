@@ -139,7 +139,7 @@ public abstract class ModelLoaderMixin {
                         String originalPath = left.get().getTextureId().getPath();
                         String[] split = originalPath.split("/");
                         if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
-                            Identifier resolvedIdentifier = CIT.resolvePath(id, originalPath, ".png", null);
+                            Identifier resolvedIdentifier = CIT.resolvePath(id, originalPath, ".png", identifier -> resourceManager.containsResource(identifier));
                             if (resolvedIdentifier != null)
                                 return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
                         }
@@ -151,7 +151,7 @@ public abstract class ModelLoaderMixin {
                 if (parentId != null) {
                     String[] parentIdPathSplit = parentId.getPath().split("/");
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
-                        parentId = CIT.resolvePath(id, parentId.getPath(), ".json", null);
+                        parentId = CIT.resolvePath(id, parentId.getPath(), ".json", identifier -> resourceManager.containsResource(identifier));
                         if (parentId != null)
                             ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
                     }

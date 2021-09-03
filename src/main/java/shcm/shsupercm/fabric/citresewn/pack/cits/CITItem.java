@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -44,18 +45,18 @@ public class CITItem extends CIT {
                 throw new Exception("CIT must target at least one item type");
 
             String modelProp = properties.getProperty("model");
-            Identifier assetIdentifier = resolvePath(identifier, modelProp, ".json", pack.resourcePack);
+            Identifier assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);
             else if (modelProp != null && !modelProp.startsWith("models")) {
-                assetIdentifier = resolvePath(identifier, "models/" + modelProp, ".json", pack.resourcePack);
+                assetIdentifier = resolvePath(identifier, "models/" + modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
             }
 
             for (Object o : properties.keySet())
                 if (o instanceof String property && property.startsWith("model.")) {
-                    Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".json", pack.resourcePack);
+                    Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                     if (subIdentifier == null)
                         throw new Exception("Cannot resolve path for " + property);
 
@@ -66,13 +67,13 @@ public class CITItem extends CIT {
 
             if (assetIdentifiers.size() == 0) {
                 isTexture = true;
-                assetIdentifier = resolvePath(identifier, properties.getProperty("texture"), ".png", pack.resourcePack);
+                assetIdentifier = resolvePath(identifier, properties.getProperty("texture"), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
 
                 for (Object o : properties.keySet())
                     if (o instanceof String property && property.startsWith("texture.")) {
-                        Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".png", pack.resourcePack);
+                        Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                         if (subIdentifier == null)
                             throw new Exception("Cannot resolve path for " + property);
 
@@ -166,7 +167,7 @@ public class CITItem extends CIT {
                         String originalPath = left.get().getTextureId().getPath();
                         String[] split = originalPath.split("/");
                         if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
-                            Identifier resolvedIdentifier = CIT.resolvePath(identifier, originalPath, ".png", pack.resourcePack);
+                            Identifier resolvedIdentifier = CIT.resolvePath(identifier, originalPath, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                             if (resolvedIdentifier != null)
                                 return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
                         }
@@ -178,7 +179,7 @@ public class CITItem extends CIT {
                 if (parentId != null) {
                     String[] parentIdPathSplit = parentId.getPath().split("/");
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
-                        parentId = resolvePath(identifier, parentId.getPath(), ".json", pack.resourcePack);
+                        parentId = resolvePath(identifier, parentId.getPath(), ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                         if (parentId != null)
                             ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
                     }

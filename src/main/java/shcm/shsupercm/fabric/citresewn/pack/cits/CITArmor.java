@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn.pack.cits;
 
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
@@ -23,7 +24,7 @@ public class CITArmor extends CIT {
 
             for (Object o : properties.keySet())
                 if (o instanceof String property && property.startsWith("texture.")) {
-                    Identifier textureIdentifier = resolvePath(identifier, properties.getProperty(property), ".png", pack.resourcePack);
+                    Identifier textureIdentifier = resolvePath(identifier, properties.getProperty(property), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                     if (textureIdentifier == null)
                         throw new Exception("Cannot resolve path for " + property);
 

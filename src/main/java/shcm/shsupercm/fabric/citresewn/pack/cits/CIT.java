@@ -314,10 +314,10 @@ public abstract class CIT {
      * It will first try using definedPath as an absolute path, if it cant resolve(or definedPath starts with ./), definedPath will be considered relative. <br>
      * Relative paths support going to parent directories using "..".
      */
-    public static Identifier resolvePath(Identifier propertyIdentifier, String path, String extension, ResourcePack pack) {
+    public static Identifier resolvePath(Identifier propertyIdentifier, String path, String extension, Predicate<Identifier> packContains) {
         if (path == null) {
             Identifier pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), propertyIdentifier.getPath().replace(".properties", extension));
-            return pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
+            return packContains.test(pathIdentifier) ? pathIdentifier : null;
         }
 
         Identifier pathIdentifier = new Identifier(path);
@@ -330,7 +330,7 @@ public abstract class CIT {
             path = path.substring(2);
         else if (!path.contains("..")) {
             pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
-            if (pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier))
+            if (packContains.test(pathIdentifier))
                 return pathIdentifier;
         }
 
@@ -352,7 +352,7 @@ public abstract class CIT {
 
         pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), path);
 
-        return pack == null || pack.contains(ResourceType.CLIENT_RESOURCES, pathIdentifier) ? pathIdentifier : null;
+        return packContains.test(pathIdentifier) ? pathIdentifier : null;
     }
 
     /**

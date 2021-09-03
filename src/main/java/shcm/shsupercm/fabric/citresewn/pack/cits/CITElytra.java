@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
@@ -12,7 +13,7 @@ public class CITElytra extends CIT {
     public CITElytra(CITPack pack, Identifier identifier, Properties properties) throws CITParseException {
         super(pack, identifier, properties);
         try {
-            textureIdentifier = resolvePath(identifier, properties.getProperty("texture"), ".png", pack.resourcePack);
+            textureIdentifier = resolvePath(identifier, properties.getProperty("texture"), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
             if (textureIdentifier == null)
                 throw new Exception("Cannot resolve texture");
         } catch (Exception e) {
