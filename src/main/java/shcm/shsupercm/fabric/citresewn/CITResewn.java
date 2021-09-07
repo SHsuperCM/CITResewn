@@ -27,6 +27,10 @@ public class CITResewn implements ClientModInitializer {
         config = CITResewnConfig.read();
     }
 
+    public static void info(String message) {
+        LOG.info(message);
+    }
+
     public static void logErrorLoading(String message) {
         if (CITResewnConfig.INSTANCE().mute_errors)
             return;

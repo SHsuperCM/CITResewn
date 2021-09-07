@@ -34,6 +34,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
+
 @Mixin(ModelLoader.class)
 public abstract class ModelLoaderMixin {
     @Shadow @Final private ResourceManager resourceManager;
@@ -46,8 +48,9 @@ public abstract class ModelLoaderMixin {
     private Map<Identifier, BakedModel> citOverrideCacheMap = new HashMap<>();
 
     @Inject(method = "addModel", at = @At("TAIL"))
-    public void addCITModels(ModelIdentifier eventModelId, CallbackInfo ci) { if (eventModelId != ModelLoader.MISSING_ID) return;
+    public void loadCIT(ModelIdentifier eventModelId, CallbackInfo ci) { if (eventModelId != ModelLoader.MISSING_ID) return;
         if (CITResewn.INSTANCE.activeCITs != null) {
+            info("Clearing active CITs..");
             CITResewn.INSTANCE.activeCITs.dispose();
             CITResewn.INSTANCE.activeCITs = null;
         }
@@ -55,26 +58,33 @@ public abstract class ModelLoaderMixin {
         if (!CITResewnConfig.INSTANCE().enabled)
             return;
 
+        info("Loading CIT Resewn..");
+
+        info("Parsing CITs...");
         Collection<CIT> parsed = CITParser.parse(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
 
-        for (CIT cit : parsed)
-            if (cit instanceof CITItem citItem) {
-                try {
-                    citItem.loadUnbakedAssets(resourceManager);
+        if (parsed.size() > 0) {
+            info("Loading CITItem models..");
+            for (CIT cit : parsed)
+                if (cit instanceof CITItem citItem) {
+                    try {
+                        citItem.loadUnbakedAssets(resourceManager);
 
-                    for (JsonUnbakedModel unbakedModel : citItem.unbakedAssets.values()) {
-                        ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
-                        this.unbakedModels.put(id, unbakedModel);
-                        this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
-                        this.modelsToBake.put(id, unbakedModel);
+                        for (JsonUnbakedModel unbakedModel : citItem.unbakedAssets.values()) {
+                            ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
+                            this.unbakedModels.put(id, unbakedModel);
+                            this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
+                            this.modelsToBake.put(id, unbakedModel);
+                        }
+                    } catch (Exception e) {
+                        CITResewn.logErrorLoading(e.getMessage());
                     }
-                } catch (Exception e) {
-                    CITResewn.logErrorLoading(e.getMessage());
                 }
-            }
 
-        if (parsed.size() > 0)
+            info("Activating CITs...");
             CITResewn.INSTANCE.activeCITs = new ActiveCITs(parsed);
+        } else
+            info("No cit packs found.");
     }
 
     @Inject(method = "bake", at = @At("RETURN"))
@@ -91,6 +101,7 @@ public abstract class ModelLoaderMixin {
             return;
 
         profiler.push("citresewn_linking");
+        info("Linking baked models to CITItems...");
 
         if (CITResewn.INSTANCE.activeCITs != null) {
             for (CITItem citItem : CITResewn.INSTANCE.activeCITs.citItems.values().stream().flatMap(Collection::stream).distinct().collect(Collectors.toList())) {
