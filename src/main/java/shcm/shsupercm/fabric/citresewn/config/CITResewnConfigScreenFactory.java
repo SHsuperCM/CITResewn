@@ -43,6 +43,17 @@ public class CITResewnConfigScreenFactory {
                 .setDefaultValue(defaultConfig.mute_warns)
                 .build());
 
+        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.broken_paths.title"), currentConfig.broken_paths)
+                .setTooltip(new TranslatableText("config.citresewn.broken_paths.tooltip"))
+                .setSaveConsumer(newConfig -> {
+                    if (currentConfig.broken_paths != newConfig) {
+                        currentConfig.broken_paths = newConfig;
+                        MinecraftClient.getInstance().reloadResources();
+                    }
+                })
+                .setDefaultValue(defaultConfig.broken_paths)
+                .build());
+
         return builder.build();
     }
 }

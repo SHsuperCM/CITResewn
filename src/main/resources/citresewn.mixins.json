@@ -4,12 +4,16 @@
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "AbstractFileResourcePackMixin",
     "ArmorFeatureRendererMixin",
     "ElytraFeatureRendererMixin",
+    "IdentifierMixin",
     "ItemRendererMixin",
     "JsonUnbakedModelAccessor",
     "ModelLoaderMixin",
     "NbtCompoundAccessor",
+    "ReloadableResourceManagerImplMixin",
+    "ResourcePackCompatibilityMixin",
     "SpriteAtlasTextureMixin"
   ],
   "injectors": {

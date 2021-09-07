@@ -8,5 +8,11 @@
   "config.citresewn.mute_errors.tooltip": "Should CIT Resewn not log cit errors",
 
   "config.citresewn.mute_warns.title": "Mute loading warnings",
-  "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings"
+  "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings",
+
+  "config.citresewn.broken_paths.title": "Allow broken paths in resourcepacks",
+  "config.citresewn.broken_paths.tooltip": "Allows packs with illegal resource paths to load.\nMay cause issues!",
+
+  "pack.incompatible.broken_paths": "(Contains broken paths)",
+  "pack.incompatible.confirm.broken_paths": "This pack contains broken paths and support for it may be dropped in the future. Contact pack author to remove this warning. (~ CIT Resewn)"
 }

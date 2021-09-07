@@ -13,6 +13,7 @@ public class CITResewnConfig {
     public boolean enabled = true;
     public boolean mute_errors = false;
     public boolean mute_warns = false;
+    public boolean broken_paths = false;
 
     private static final File FILE = new File("config/citresewn.json");
     public static CITResewnConfig INSTANCE() {

@@ -17,6 +17,9 @@ public class CITResewn implements ClientModInitializer {
 
     public CITResewnConfig config = null;
 
+
+    public boolean processingBrokenPaths = false;
+
     @Override
     public void onInitializeClient() {
         INSTANCE = this;
