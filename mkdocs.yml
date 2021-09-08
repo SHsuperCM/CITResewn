@@ -5,7 +5,9 @@ theme:
   name: readthedocs
   custom_dir: 'custom_theme/'
   collapse_by_default: false
-
+  highlightjs: true
+  hljs_languages:
+    - properties
 
 plugins:
     - search
