@@ -19,9 +19,6 @@
     <li class="navtree toctree-l{{ navlevel }} page current">
       <a class="current" href="{{ nav_item.url|url }}">
         {{ nav_item.title }}
-        {%- if nav_item.children or navlevel == 2 %}
-          <span class="toctree-expand"></span>
-        {%- endif %}
       </a>
     </li>
     {% for toc_item in page.toc %}

@@ -205,9 +205,9 @@ td, th {
 
 .wy-menu-vertical ul.tocbase li a {
     position: relative;
-    color: #808080;
+    color: #eeeeee;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: bold;
 }
 
 .wy-menu-vertical ul.tocbase li.current.with-children > a {
@@ -223,6 +223,7 @@ td, th {
     font-size: 12px !important;
     font-weight: 400;
     color: #333333;
+	
 }
 
 .wy-menu-vertical ul.tocbase li.toctree-l2 > a > span.toctree-expand {
@@ -246,11 +247,11 @@ td, th {
 /* Selected top-level heading */
 .wy-menu-vertical .navtree li.toctree-l2.current,
 .wy-menu-vertical .navtree li.toctree-l2.current > a {
-    background: #fcfcfc;
+    background: #404040;
 }
 .wy-menu-vertical .navtree li.toctree-l2.current > a,
 .wy-menu-vertical .navtree li.toctree-l2.current > span {
-    color: #404040 !important;
+    color: #ffffff !important;
 }
 
 .wy-menu-vertical .navtree li.toctree-l2.current > a {

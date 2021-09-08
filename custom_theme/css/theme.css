@@ -5906,7 +5906,7 @@ article ol li ul li {
   height: 32px;
   display: inline-block;
   line-height: 32px;
-  padding: 0 1.618em;
+  padding: 0 0.7em;
   margin-bottom: 0;
   display: block;
   font-weight: bold;
@@ -5929,12 +5929,12 @@ article ol li ul li {
 }
 
 .wy-menu-vertical li.current {
-  background: #e3e3e3
+  background: #404040;
 }
 
 .wy-menu-vertical li.current a {
   color: gray;
-  border-right: solid 1px #c9c9c9;
+  border-right: solid 1px #787878;
   padding: .4045em 2.427em
 }
 
@@ -5963,11 +5963,11 @@ article ol li ul li {
 
 .wy-menu-vertical li.on a,
 .wy-menu-vertical li.current>a {
-  color: #404040;
+  color: #fff;
   padding: .4045em 1.618em;
   font-weight: bold;
   position: relative;
-  background: #fcfcfc;
+  background: #545454;
   border: none;
   padding-left: 1.618em -4px
 }
@@ -5991,8 +5991,8 @@ article ol li ul li {
 }
 
 .wy-menu-vertical li.toctree-l1.current>a {
-  border-bottom: solid 1px #c9c9c9;
-  border-top: solid 1px #c9c9c9
+  border-bottom: solid 1px #787878;
+  border-top: solid 1px #787878;
 }
 
 .wy-menu-vertical li.toctree-l1.current li.toctree-l2>ul,

@@ -16,11 +16,11 @@ If you find a problem with the docs, feel free to create a [Pull Request](https:
 or open an [Issue](https://github.com/SHsuperCM/CITResewn/issues) through Github.
 
 ## Downloads
-You can get CIT Resewn from either(ordered by update frequency):
+You can get CIT Resewn by either(ordered by update frequency):
 
   - Compiling from source: [github.com/SHsuperCM/CITResewn](https://github.com/SHsuperCM/CITResewn)  
-  - Modrinth: [modrinth.com/mod/cit-resewn](https://modrinth.com/mod/cit-resewn)  
-  - CurseForge: [curseforge.com/minecraft/mc-mods/cit-resewn](https://www.curseforge.com/minecraft/mc-mods/cit-resewn)  
+  - Downloading from Modrinth: [modrinth.com/mod/cit-resewn](https://modrinth.com/mod/cit-resewn)  
+  - Downloading from CurseForge: [curseforge.com/minecraft/mc-mods/cit-resewn](https://www.curseforge.com/minecraft/mc-mods/cit-resewn)  
 
 ## Need Help / Found a Bug / Questions
 ### A resourcepack is not loading:
