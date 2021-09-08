@@ -305,3 +305,17 @@ td, th {
 .wy-menu-vertical ul.tocbase li.toctree-l7 > a:hover {
     background: #d6d6d6 !important;
 }
+
+/* CIT Resewn */
+
+.wy-side-nav-search, .wy-nav-top {
+  background: #392f57;
+  background-image: none;
+  background-color: none;
+  padding: none;
+}
+
+.wy-side-nav-search img {
+  background: none;
+  padding: 0px;
+}
