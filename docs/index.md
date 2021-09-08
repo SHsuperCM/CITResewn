@@ -22,7 +22,7 @@ You can get CIT Resewn from either(ordered by update frequency):
   - Modrinth: [modrinth.com/mod/cit-resewn](https://modrinth.com/mod/cit-resewn)  
   - CurseForge: [curseforge.com/minecraft/mc-mods/cit-resewn](https://www.curseforge.com/minecraft/mc-mods/cit-resewn)  
 
-## Need Help/Found a Bug/Questions
+## Need Help / Found a Bug / Questions
 ### A resourcepack is not loading:
 Check the logs, they are more useful than you think!
 

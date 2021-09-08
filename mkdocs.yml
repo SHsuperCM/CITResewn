@@ -9,8 +9,16 @@ theme:
     - properties
 
 plugins:
-    - search
+  - search
 
 nav:
-    - 'index.md'
-
+  - 'index.md'
+  - CIT:
+    - 'cit_base.md'
+    - 'cit_item.md'
+    - 'cit_elytra.md'
+    - 'cit_armor.md'
+    - 'cit_enchantment.md'
+  - Misc:
+    - 'global_properties.md'
+    - 'api.md'
