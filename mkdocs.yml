@@ -1,8 +1,13 @@
 site_name: CIT Resewn Docs
+site_url: https://cit-resewn.rtfd.io
 
 theme:
-  name: readthedocs
-  custom_dir: custom_theme/
+  name: null
+  custom_dir: 'custom_theme/'
+  collapse_by_default: false
+
+plugins:
+  - search
 
 nav:
     - 'index.md'
