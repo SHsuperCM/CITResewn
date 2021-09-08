@@ -23,14 +23,14 @@
  * to make toc scrollbar end before navigations buttons to not be overlapping.
  */
 .wy-nav-side {
-    height: calc(100% - 45px);
+    height: calc(100% - 25px);
     overflow-y: auto;
     min-height: 0;
 }
 
 .rst-versions{
     border-top: 0;
-    height: 45px;
+    height: 25px;
 }
 
 @media screen and (max-width: 768px) {
