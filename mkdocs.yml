@@ -1,5 +1,5 @@
 site_name: CIT Resewn Docs
-site_url: https://cit-resewn.rtfd.io
+site_url: https://citresewn.rtfd.io
 
 theme:
   name: readthedocs
