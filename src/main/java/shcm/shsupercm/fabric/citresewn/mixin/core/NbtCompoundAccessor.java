@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.core;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;

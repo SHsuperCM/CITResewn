@@ -3,18 +3,21 @@
   "minVersion": "0.8",
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_16",
+  "plugin": "shcm.shsupercm.fabric.citresewn.config.CITResewnMixinConfiguration",
   "mixins": [
-    "AbstractFileResourcePackMixin",
-    "ArmorFeatureRendererMixin",
-    "ElytraFeatureRendererMixin",
-    "IdentifierMixin",
-    "ItemRendererMixin",
-    "JsonUnbakedModelAccessor",
-    "ModelLoaderMixin",
-    "NbtCompoundAccessor",
-    "ReloadableResourceManagerImplMixin",
-    "ResourcePackCompatibilityMixin",
-    "SpriteAtlasTextureMixin"
+    "core.ModelLoaderMixin",
+    "core.SpriteAtlasTextureMixin",
+    "core.JsonUnbakedModelAccessor",
+    "core.NbtCompoundAccessor",
+
+    "cititem.ItemRendererMixin",
+    "citarmor.ArmorFeatureRendererMixin",
+    "citelytra.ElytraFeatureRendererMixin",
+
+    "broken_paths.AbstractFileResourcePackMixin",
+    "broken_paths.ReloadableResourceManagerImplMixin",
+    "broken_paths.IdentifierMixin",
+    "broken_paths.ResourcePackCompatibilityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

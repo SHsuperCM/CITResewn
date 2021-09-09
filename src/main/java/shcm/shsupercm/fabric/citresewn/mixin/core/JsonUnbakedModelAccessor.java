@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.core;
 
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;

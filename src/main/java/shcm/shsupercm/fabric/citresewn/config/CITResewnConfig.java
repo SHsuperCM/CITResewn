@@ -24,13 +24,10 @@ public class CITResewnConfig {
         if (!FILE.exists())
             return new CITResewnConfig().write();
 
-        CITParser.REGISTRY.put("test", CITItem::new);
-
         Reader reader = null;
         try {
             return new Gson().fromJson(reader = new FileReader(FILE), CITResewnConfig.class);
         } catch (Exception e) {
-            CITResewn.LOG.error("Couldn't load config");
             e.printStackTrace();
             throw new RuntimeException(e);
         } finally {

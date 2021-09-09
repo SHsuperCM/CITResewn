@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.broken_paths;
 
 import net.minecraft.resource.ResourcePackCompatibility;
 import net.minecraft.resource.ResourceType;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ResourcePackCompatibility.class)
+@Mixin(ResourcePackCompatibility.class) // Only registered if CITResewnConfig#broken_paths is true
 public abstract class ResourcePackCompatibilityMixin {
     private static final ResourcePackCompatibility BROKEN_PATHS = ResourcePackCompatibility("BROKEN_PATHS", -1, "broken_paths");
 

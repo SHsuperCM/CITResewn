@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.core;
 
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;

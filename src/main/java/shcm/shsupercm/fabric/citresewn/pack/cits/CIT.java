@@ -6,8 +6,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -15,7 +13,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringEscapeUtils;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
-import shcm.shsupercm.fabric.citresewn.mixin.NbtCompoundAccessor;
+import shcm.shsupercm.fabric.citresewn.mixin.core.NbtCompoundAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 
 import java.util.*;

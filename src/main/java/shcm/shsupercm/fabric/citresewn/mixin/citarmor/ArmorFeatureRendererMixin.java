@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.citarmor;
 
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;

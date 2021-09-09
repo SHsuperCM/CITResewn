@@ -20,7 +20,7 @@ import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
-import shcm.shsupercm.fabric.citresewn.mixin.JsonUnbakedModelAccessor;
+import shcm.shsupercm.fabric.citresewn.mixin.core.JsonUnbakedModelAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 import shcm.shsupercm.fabric.citresewn.pack.ResewnItemModelIdentifier;
 import shcm.shsupercm.fabric.citresewn.pack.ResewnTextureIdentifier;

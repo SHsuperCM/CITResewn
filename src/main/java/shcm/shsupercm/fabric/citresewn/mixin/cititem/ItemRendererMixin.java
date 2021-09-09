@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.cititem;
 
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
@@ -15,7 +15,7 @@ import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Inject(method = "getHeldItemModel", cancellable = true, at = @At("RETURN"))
-    public void injectCIT(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
+    public void getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 

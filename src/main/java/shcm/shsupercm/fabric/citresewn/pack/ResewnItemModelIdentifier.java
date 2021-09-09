@@ -1,10 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.minecraft.util.Identifier;
+import shcm.shsupercm.fabric.citresewn.mixin.core.ModelLoaderMixin;
 
 /**
  * Marks models as cit item models.
- * @see shcm.shsupercm.fabric.citresewn.mixin.ModelLoaderMixin
+ * @see ModelLoaderMixin
  */
 public class ResewnItemModelIdentifier extends Identifier {
     public ResewnItemModelIdentifier(String id) {

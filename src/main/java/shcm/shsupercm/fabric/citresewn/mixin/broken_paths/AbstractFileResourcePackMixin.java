@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.mixin;
+package shcm.shsupercm.fabric.citresewn.mixin.broken_paths;
 
 import net.minecraft.resource.AbstractFileResourcePack;
 import net.minecraft.resource.DirectoryResourcePack;
@@ -14,21 +14,20 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipFile;
 
-@Mixin(AbstractFileResourcePack.class)
+@Mixin(AbstractFileResourcePack.class) // Only registered if CITResewnConfig#broken_paths is true
 public abstract class AbstractFileResourcePackMixin implements ResourcePack {
     @Shadow @Final protected File base;
 
     @SuppressWarnings({"unchecked", "ConstantConditions", "EqualsBetweenInconvertibleTypes"})
     @Inject(method = "parseMetadata(Lnet/minecraft/resource/metadata/ResourceMetadataReader;)Ljava/lang/Object;", cancellable = true, at = @At("RETURN"))
     public <T extends PackResourceMetadata> void parseMetadata(ResourceMetadataReader<T> metaReader, CallbackInfoReturnable<T> cir) {
-        if (CITResewnConfig.INSTANCE().broken_paths && cir.getReturnValue() != null)
+        if (cir.getReturnValue() != null)
             try {
                 if (this.getClass().equals(ZipResourcePack.class)) {
                     try (ZipFile zipFile = new ZipFile(base)) {
