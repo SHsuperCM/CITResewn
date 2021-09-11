@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.OptionalCompat;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 import java.lang.ref.WeakReference;
@@ -30,6 +31,10 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
             return;
 
         ItemStack itemStack = entity.getEquippedStack(armorSlot);
+
+        //compat Cosmetic Armor
+        itemStack = OptionalCompat.getCosmeticArmor(itemStack, entity, armorSlot);
+
         Map<String, Identifier> armorTextures = CITResewn.INSTANCE.activeCITs.getArmorTextures(itemStack, entity.world, entity);
         if (armorTextures != null) {
             armorTexturesCached = new WeakReference<>(armorTextures);

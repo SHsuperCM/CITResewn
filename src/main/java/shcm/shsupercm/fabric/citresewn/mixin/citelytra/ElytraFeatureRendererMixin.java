@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.OptionalCompat;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 import java.lang.ref.WeakReference;
@@ -28,7 +29,12 @@ public class ElytraFeatureRendererMixin {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        this.elytraItemCached = new WeakReference<>(livingEntity.getEquippedStack(EquipmentSlot.CHEST));
+        ItemStack itemStack = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
+
+        //compat Cosmetic Armor
+        itemStack = OptionalCompat.getCosmeticArmor(itemStack, livingEntity, EquipmentSlot.CHEST);
+
+        this.elytraItemCached = new WeakReference<>(itemStack);
         this.livingEntityCached = new WeakReference<>(livingEntity);
     }
 

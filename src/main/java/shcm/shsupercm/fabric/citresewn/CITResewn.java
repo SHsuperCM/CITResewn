@@ -3,6 +3,7 @@ package shcm.shsupercm.fabric.citresewn;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +18,8 @@ public class CITResewn implements ClientModInitializer {
 
     public CITResewnConfig config = null;
 
+    public OptionalCompat compat = null;
+
 
     public boolean processingBrokenPaths = false;
 
@@ -25,6 +28,8 @@ public class CITResewn implements ClientModInitializer {
         INSTANCE = this;
 
         config = CITResewnConfig.read();
+
+        compat = new OptionalCompat(s -> FabricLoader.getInstance().isModLoaded(s));
     }
 
     public static void info(String message) {

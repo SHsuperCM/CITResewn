@@ -26,6 +26,8 @@ dependencies {
     modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    modCompileOnly(files("libs/cosmetic-armor-1.1.0.jar"))
 }
 
 processResources {
