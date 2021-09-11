@@ -8,6 +8,7 @@ import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Properties;
 
 public class CITPack {
@@ -24,7 +25,7 @@ public class CITPack {
     }
 
     public void loadProperties(Properties properties) {
-        method = CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method", "average"));
+        method = CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method", "average").toUpperCase(Locale.ENGLISH));
         try {
             cap = Integer.parseInt(properties.getProperty("cap", "8"));
         } catch (NumberFormatException e) {
@@ -35,7 +36,7 @@ public class CITPack {
         } catch (NumberFormatException e) {
             CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "fade is not a number").getMessage());
         }
-        switch (properties.getProperty("useGlint", "true")) {
+        switch (properties.getProperty("useGlint", "true").toLowerCase(Locale.ENGLISH)) {
             case "true" -> useGlint = true;
             case "false" -> useGlint = false;
             default -> CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "useGlint is not a boolean").getMessage());
