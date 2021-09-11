@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ResourcePackCompatibility.class) // Only registered if CITResewnConfig#broken_paths is true
+/* if (CITResewnConfig.read().broken_paths) */ @Mixin(ResourcePackCompatibility.class)
 public abstract class ResourcePackCompatibilityMixin {
     private static final ResourcePackCompatibility BROKEN_PATHS = ResourcePackCompatibility("BROKEN_PATHS", -1, "broken_paths");
 

@@ -20,7 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.zip.ZipFile;
 
-@Mixin(AbstractFileResourcePack.class) // Only registered if CITResewnConfig#broken_paths is true
+/* if (CITResewnConfig.read().broken_paths) */ @Mixin(AbstractFileResourcePack.class)
 public abstract class AbstractFileResourcePackMixin implements ResourcePack {
     @Shadow @Final protected File base;
 

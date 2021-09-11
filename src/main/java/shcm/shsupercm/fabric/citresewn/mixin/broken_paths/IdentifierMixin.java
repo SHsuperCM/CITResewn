@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 
-@Mixin(Identifier.class) // Only registered if CITResewnConfig#broken_paths is true
+/* if (CITResewnConfig.read().broken_paths) */ @Mixin(Identifier.class)
 public class IdentifierMixin {
     @Inject(method = "isPathValid", cancellable = true, at = @At("HEAD"))
     private static void processBrokenPaths(String path, CallbackInfoReturnable<Boolean> cir) {

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-@Mixin(ReloadableResourceManagerImpl.class) // Only registered if CITResewnConfig#broken_paths is true
+/* if (CITResewnConfig.read().broken_paths) */ @Mixin(ReloadableResourceManagerImpl.class)
 public class ReloadableResourceManagerImplMixin {
     @Shadow @Final private ResourceType type;
 
