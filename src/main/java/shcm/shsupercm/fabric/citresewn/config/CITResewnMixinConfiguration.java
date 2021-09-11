@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.config;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
@@ -27,6 +28,9 @@ public class CITResewnMixinConfiguration implements IMixinConfigPlugin {
 
         if (mixinClassName.startsWith("broken_paths"))
             return broken_paths;
+
+        if (mixinClassName.equals("core.GroupResourcePackAccessor"))
+            return FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0");
 
         return true;
     }

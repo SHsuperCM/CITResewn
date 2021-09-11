@@ -8,6 +8,6 @@ import net.minecraft.util.Identifier;
  */
 public class CITLoadException extends Exception {
     public CITLoadException(ResourcePack resourcePack, Identifier identifier, String message) {
-        super("Couldn't load CIT: " + message + " in " + resourcePack.getName() + " -> " + identifier.getPath());
+        super("Couldn't load CIT: " + message + " in " + resourcePack.getName() + " -> " + identifier.toString());
     }
 }

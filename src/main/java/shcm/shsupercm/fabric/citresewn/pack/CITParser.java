@@ -1,21 +1,30 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
+import net.fabricmc.fabric.impl.resource.loader.GroupResourcePack;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.resource.ZipResourcePack;
 import net.minecraft.util.Identifier;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
+import shcm.shsupercm.fabric.citresewn.mixin.core.GroupResourcePackAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.io.InputStream;
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class CITParser { private CITParser() {}
+/**
+ * Parses cits from resourcepacks
+ */
+public final class CITParser { private CITParser() {}
+    /**
+     * CIT type registry.
+     */
     public static final Map<String, CITConstructor> REGISTRY = new HashMap<>();
-
     static {
         REGISTRY.put("item", CITItem::new);
         REGISTRY.put("armor", CITArmor::new);
@@ -28,74 +37,82 @@ public class CITParser { private CITParser() {}
      * @param packs packs to parse
      * @return a collection of parsed CITs
      */
-    public static Collection<CIT> parse(Collection<ResourcePack> packs) {
-        Collection<CIT> cits = new ArrayList<>();
+    public static Collection<CIT> parseCITs(Collection<ResourcePack> packs) {
+        return packs.stream()
+                .map(CITParser::parse)
+                .flatMap(Collection::stream)
+                .flatMap(pack -> pack.cits.stream())
+                .collect(Collectors.toList());
+    }
 
-        // load cit resourcepack entries
-        Map<ResourcePack, Set<Identifier>> citPacks = new HashMap<>();
-        final Predicate<String> isProperties = s -> s.endsWith(".properties");
-        Identifier citresewnCITSettingsIdentifier = new Identifier("minecraft", "citresewn/cit.properties"), mcpatcherCITSettingsIdentifier = new Identifier("minecraft", "mcpatcher/cit.properties"), optifineCITSettingsIdentifier = new Identifier("minecraft", "optifine/cit.properties");
-        for (ResourcePack pack : packs) {
-            //bugfix for zip resourcepack checking depth incorrectly
-            final int maxDepth = pack instanceof ZipResourcePack ? 0 : Integer.MAX_VALUE;
-
-            Set<Identifier> packIdentifiers = new HashSet<>();
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "citresewn/cit", maxDepth, isProperties));
-            if (pack.contains(ResourceType.CLIENT_RESOURCES, citresewnCITSettingsIdentifier))
-                packIdentifiers.add(citresewnCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "mcpatcher/cit", maxDepth, isProperties));
-            if (pack.contains(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier))
-                packIdentifiers.add(mcpatcherCITSettingsIdentifier);
-            packIdentifiers.addAll(pack.findResources(ResourceType.CLIENT_RESOURCES, "minecraft", "optifine/cit", maxDepth, isProperties));
-            if (pack.contains(ResourceType.CLIENT_RESOURCES, optifineCITSettingsIdentifier))
-                packIdentifiers.add(optifineCITSettingsIdentifier);
-
-            if (packIdentifiers.size() > 0)
-                citPacks.put(pack, packIdentifiers);
+    /**
+     * Parses a resourcepack into a possible collection of citpacks that are contained within.
+     * @param resourcePack pack to parse
+     * @return a collection of CITPacks or an empty collection if resourcepack contains none
+     */
+    public static Collection<CITPack> parse(ResourcePack resourcePack) {
+        if (FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0")) {
+            Collection<CITPack> group = parseFabricGroup(resourcePack);
+            if (group != null)
+                return group;
         }
 
-        for (Map.Entry<ResourcePack, Set<Identifier>> citPackEntry : citPacks.entrySet()) {
-            CITPack citPack = new CITPack(citPackEntry.getKey());
-            InputStream is = null;
-            Properties citProperties = new Properties();
-            try {
-                if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
-                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
-                else if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
-                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
-                else if (citPackEntry.getValue().remove(mcpatcherCITSettingsIdentifier))
-                    is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, mcpatcherCITSettingsIdentifier);
+        final CITPack citPack = new CITPack(resourcePack);
 
-                if (is != null) {
-                    citProperties.load(is);
-                    citPack.loadProperties(citProperties);
-                }
-            } catch (Exception e) {
-                CITResewn.logErrorLoading(e.getMessage());
-            } finally {
-                IOUtils.closeQuietly(is);
-            }
-
-
-            for (Identifier citIdentifier : citPackEntry.getValue()) {
-                try {
-                    citProperties = new Properties();
-                    citProperties.load(is = citPackEntry.getKey().open(ResourceType.CLIENT_RESOURCES, citIdentifier));
-
-                    CITConstructor type = REGISTRY.get(citProperties.getProperty("type", "item"));
-                    if (type == null)
-                        throw new CITParseException(citPack.resourcePack, citIdentifier, "Unknown cit type \"" + citProperties.getProperty("type") + "\"");
-                    citPack.cits.add(type.cit(citPack, citIdentifier, citProperties));
-                } catch (Exception e) {
-                    CITResewn.logErrorLoading(e.getMessage());
-                } finally {
-                    IOUtils.closeQuietly(is);
-                }
-            }
-            cits.addAll(citPack.cits);
+        Collection<Identifier> packProperties = new ArrayList<>();
+        for (String namespace : resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES)) {
+            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "citresewn/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "optifine/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "mcpatcher/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
         }
 
-        return cits;
+        boolean readCitProperties = false;
+        for (Iterator<Identifier> iterator = packProperties.iterator(); iterator.hasNext(); ) {
+            Identifier propertiesIdentifier = iterator.next();
+            if (propertiesIdentifier.getPath().substring(propertiesIdentifier.getPath().indexOf("cit/") + 4).equals("cit.properties")) {
+                if (!readCitProperties) {
+                    Properties citProperties = new Properties();
+                    try (InputStream is = resourcePack.open(ResourceType.CLIENT_RESOURCES, propertiesIdentifier)) {
+                        citProperties.load(is);
+                        citPack.loadProperties(citProperties);
+                        readCitProperties = true;
+                    } catch (Exception e) {
+                        CITResewn.logErrorLoading(new CITLoadException(resourcePack, propertiesIdentifier, e.getMessage()).getMessage());
+                    }
+                }
+                iterator.remove();
+            }
+        }
+
+        packProperties.stream()
+                .flatMap(citIdentifier -> {
+                    try (InputStream is = resourcePack.open(ResourceType.CLIENT_RESOURCES, citIdentifier)) {
+                        Properties citProperties = new Properties();
+                        citProperties.load(is);
+
+                        CITConstructor type = REGISTRY.get(citProperties.getProperty("type", "item"));
+                        if (type == null)
+                            throw new CITParseException(citPack.resourcePack, citIdentifier, "Unknown cit type \"" + citProperties.getProperty("type") + "\"");
+
+                        return Stream.of(type.cit(citPack, citIdentifier, citProperties));
+                    } catch (Exception e) {
+                        CITResewn.logErrorLoading(e.getMessage());
+                        return Stream.empty();
+                    }
+                })
+                .collect(Collectors.toCollection(() -> citPack.cits));
+
+        return citPack.cits.isEmpty() ? Collections.emptySet() : Collections.singleton(citPack);
+    }
+
+    public static Collection<CITPack> parseFabricGroup(ResourcePack resourcePack) {
+        if (!(resourcePack instanceof GroupResourcePack))
+            return null;
+
+        return ((GroupResourcePackAccessor) resourcePack).getPacks().stream()
+                        .map(CITParser::parse)
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toList());
     }
 
     public interface CITConstructor {

@@ -61,7 +61,7 @@ public abstract class ModelLoaderMixin {
         info("Loading CIT Resewn..");
 
         info("Parsing CITs...");
-        Collection<CIT> parsed = CITParser.parse(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
+        Collection<CIT> parsed = CITParser.parseCITs(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
 
         if (parsed.size() > 0) {
             info("Loading CITItem models..");
