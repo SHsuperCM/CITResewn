@@ -323,7 +323,10 @@ public abstract class CIT {
      */
     public static Identifier resolvePath(Identifier propertyIdentifier, String path, String extension, Predicate<Identifier> packContains) {
         if (path == null) {
-            Identifier pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), propertyIdentifier.getPath().replace(".properties", extension));
+            path = propertyIdentifier.getPath().substring(0, propertyIdentifier.getPath().length() - 11);
+            if (!path.endsWith(extension))
+                path = path + extension;
+            Identifier pathIdentifier = new Identifier(propertyIdentifier.getNamespace(), path);
             return packContains.test(pathIdentifier) ? pathIdentifier : null;
         }
 
