@@ -342,6 +342,13 @@ public abstract class CIT {
             pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
             if (packContains.test(pathIdentifier))
                 return pathIdentifier;
+            else if (path.startsWith("assets/")) {
+                path = path.substring(7);
+                int sep = path.indexOf('/');
+                pathIdentifier = new Identifier(path.substring(0, sep), path.substring(sep + 1));
+                if (packContains.test(pathIdentifier))
+                    return pathIdentifier;
+            }
         }
 
         LinkedList<String> pathParts = new LinkedList<>(Arrays.asList(propertyIdentifier.getPath().split("/")));
