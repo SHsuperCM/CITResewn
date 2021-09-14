@@ -54,6 +54,15 @@ public abstract class CIT {
                         throw new Exception("Unknown item " + itemId);
                     this.items.add(Registry.ITEM.get(itemIdentifier));
                 }
+            if (this.items.isEmpty())
+                try {
+                    String id = propertiesIdentifier.getPath().substring(0, propertiesIdentifier.getPath().length() - 11);
+                    String[] split = id.split("/");
+                    id = split[split.length - 1];
+                    Identifier itemId = new Identifier(propertiesIdentifier.getNamespace(), id);
+                    if (Registry.ITEM.containsId(itemId))
+                        this.items.add(Registry.ITEM.get(itemId));
+                } catch (Exception ignored) { }
 
             String damage = properties.getProperty("damage");
             if (damageAny = damage == null) {
