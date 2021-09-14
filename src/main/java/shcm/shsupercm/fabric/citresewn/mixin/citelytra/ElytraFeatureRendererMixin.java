@@ -7,6 +7,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,7 +33,7 @@ public class ElytraFeatureRendererMixin {
         ItemStack itemStack = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
 
         //compat Cosmetic Armor
-        itemStack = OptionalCompat.getCosmeticArmor(itemStack, livingEntity, EquipmentSlot.CHEST);
+        itemStack = OptionalCompat.getCosmeticArmor(itemStack, livingEntity, EquipmentSlot.CHEST, true);
 
         this.elytraItemCached = new WeakReference<>(itemStack);
         this.livingEntityCached = new WeakReference<>(livingEntity);
@@ -44,9 +45,11 @@ public class ElytraFeatureRendererMixin {
             return RenderLayer.getArmorCutoutNoCull(originalIdentifier);
 
         ItemStack itemStack = this.elytraItemCached.get();
-        LivingEntity livingEntity = livingEntityCached.get();
-        if (itemStack != null && livingEntity != null) {
+        LivingEntity livingEntity = this.livingEntityCached.get();
+        if (itemStack != null && itemStack.isOf(Items.ELYTRA) && livingEntity != null) {
             Identifier elytraTexture = CITResewn.INSTANCE.activeCITs.getElytraTexture(itemStack, livingEntity.world, livingEntity);
+            this.elytraItemCached = new WeakReference<>(null);
+            this.livingEntityCached = new WeakReference<>(null);
             if (elytraTexture != null)
                 return RenderLayer.getArmorCutoutNoCull(elytraTexture);
         }

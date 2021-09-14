@@ -33,7 +33,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         ItemStack itemStack = entity.getEquippedStack(armorSlot);
 
         //compat Cosmetic Armor
-        itemStack = OptionalCompat.getCosmeticArmor(itemStack, entity, armorSlot);
+        itemStack = OptionalCompat.getCosmeticArmor(itemStack, entity, armorSlot, false);
 
         Map<String, Identifier> armorTextures = CITResewn.INSTANCE.activeCITs.getArmorTextures(itemStack, entity.world, entity);
         if (armorTextures != null) {

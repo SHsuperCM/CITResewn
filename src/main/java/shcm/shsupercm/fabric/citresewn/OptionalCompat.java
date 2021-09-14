@@ -4,6 +4,7 @@ import io.github.apace100.cosmetic_armor.CosmeticArmor;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 
 import java.util.function.Predicate;
 
@@ -18,10 +19,10 @@ public final class OptionalCompat {
         compatCosmeticArmor = isLoaded.test("cosmetic-armor") ? CompatCosmeticArmor.impl() : null;
     }
 
-    public static ItemStack getCosmeticArmor(ItemStack original, LivingEntity entity, EquipmentSlot slot) {
+    public static ItemStack getCosmeticArmor(ItemStack original, LivingEntity entity, EquipmentSlot slot, boolean elytra) {
         if (INSTANCE().compatCosmeticArmor != null) {
             ItemStack stackInCosmeticSlot = INSTANCE().compatCosmeticArmor.getStackInCosmeticSlot(entity, slot);
-            if (!stackInCosmeticSlot.isEmpty())
+            if (!stackInCosmeticSlot.isEmpty() && (!elytra || stackInCosmeticSlot.isOf(Items.ELYTRA)))
                 return stackInCosmeticSlot;
         }
 
