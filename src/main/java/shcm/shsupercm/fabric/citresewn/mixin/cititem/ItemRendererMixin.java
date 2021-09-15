@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.mixin.cititem;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.entity.LivingEntity;
@@ -19,7 +20,7 @@ public class ItemRendererMixin {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue(), world, entity);
+        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue(), world == null ? MinecraftClient.getInstance().world : world, entity);
         if (citModel != null)
             cir.setReturnValue(citModel);
     }
