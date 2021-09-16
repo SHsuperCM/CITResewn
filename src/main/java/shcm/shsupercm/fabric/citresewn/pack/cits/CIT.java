@@ -289,7 +289,7 @@ public abstract class CIT {
             if (!matches)
                 return false;
         } else if (!enchantmentLevelsAny) {
-            Collection<Integer> levels = EnchantmentHelper.get(stack).values();
+            Collection<Integer> levels = new ArrayList<>(EnchantmentHelper.get(stack).values());
             levels.add(0);
 
             boolean matches = false;
