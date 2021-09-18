@@ -181,7 +181,7 @@ public abstract class CIT {
                         final String pattern = matchProperty;
                         match = s -> matchesPattern(caseSensitive ? s : s.toLowerCase(), pattern, 0, s.length(), 0, pattern.length());
                     } else if (matchProperty.startsWith(caseSensitive ? "regex:" : "iregex:")) {
-                        matchProperty = caseSensitive ? matchProperty.substring(5) : matchProperty.substring(6).toLowerCase(Locale.ENGLISH);
+                        matchProperty = caseSensitive ? matchProperty.substring(6) : matchProperty.substring(7).toLowerCase(Locale.ENGLISH);
                         if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
                             matchProperty = "\\{\"text\":\"" + matchProperty + "\"}";
                         final Pattern pattern = Pattern.compile(matchProperty);
