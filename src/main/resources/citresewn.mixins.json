@@ -12,6 +12,7 @@
     "citarmor.ArmorFeatureRendererMixin",
     "citelytra.ElytraFeatureRendererMixin",
     "cititem.ItemRendererMixin",
+    "cititem.ModelLoaderMixin",
     "cititem.JsonUnbakedModelAccessor",
     "core.GroupResourcePackAccessor",
     "core.ModelLoaderMixin",
