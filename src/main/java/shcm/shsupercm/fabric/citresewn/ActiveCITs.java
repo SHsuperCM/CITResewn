@@ -60,11 +60,12 @@ public class ActiveCITs {
 
         List<CITItem> citItems = this.citItems.get(stack.getItem());
         if (citItems != null)
-            for (CITItem citItem : citItems) {
-                bakedModel = citItem.getItemModel(stack, hand, (ClientWorld) world, entity, seed);
-                if (bakedModel != null)
-                    break;
-            }
+            for (CITItem citItem : citItems)
+                if (citItem.test(stack, hand, world, entity)) {
+                    bakedModel = citItem.getItemModel(stack, hand, (ClientWorld) world, entity, seed);
+                    if (bakedModel != null)
+                        break;
+                }
 
         if (bakedModel != null && bakedModel.getOverrides() != null)
             bakedModel = bakedModel.getOverrides().apply(bakedModel, stack, (ClientWorld) world, entity, seed);

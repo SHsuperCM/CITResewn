@@ -315,11 +315,7 @@ public class CITItem extends CIT {
     }
 
     public BakedModel getItemModel(ItemStack stack, Hand hand, ClientWorld world, LivingEntity entity, int seed) {
-        if (test(stack, hand, world, entity)) {
-            return bakedSubModels.apply(this.bakedModel, stack, world, entity, seed);
-        }
-
-        return null;
+        return bakedSubModels.apply(this.bakedModel, stack, world, entity, seed);
     }
 
     public static class CITOverrideList extends ModelOverrideList {
