@@ -75,7 +75,10 @@ public class CITItem extends CIT {
 
             if (assetIdentifiers.size() == 0) {
                 isTexture = true;
-                assetIdentifier = resolvePath(identifier, properties.getProperty("texture"), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                String textureProp = properties.getProperty("texture");
+                if (textureProp == null)
+                    textureProp = properties.getProperty("tile");
+                assetIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
 
