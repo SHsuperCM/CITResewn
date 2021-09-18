@@ -52,14 +52,24 @@ public class CITItem extends CIT {
             if (this.items.size() == 0)
                 throw new Exception("CIT must target at least one item type");
 
+            Identifier assetIdentifier;
+            boolean containsTexture = false;
             String modelProp = properties.getProperty("model");
-            Identifier assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
-            if (assetIdentifier != null)
-                assetIdentifiers.put(null, assetIdentifier);
-            else if (modelProp != null && !modelProp.startsWith("models")) {
+            if (modelProp == null)
+                for (Object o : properties.keySet())
+                    if (o instanceof String property && (property.startsWith("texture") || property.startsWith("tile"))) {
+                        containsTexture = true;
+                        break;
+                    }
+            if (!containsTexture) {
                 assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
+                else if (modelProp != null) {
+                    assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                    if (assetIdentifier != null)
+                        assetIdentifiers.put(null, assetIdentifier);
+                }
             }
 
             for (Object o : properties.keySet())
