@@ -349,6 +349,15 @@ public abstract class CIT {
                 if (packContains.test(pathIdentifier))
                     return pathIdentifier;
             }
+            pathIdentifier = new Identifier(pathIdentifier.getNamespace(), switch (extension) {
+                case ".png" -> "textures/";
+                case ".json" -> "models/";
+
+                /* UNREACHABLE FAILSAFE */
+                default -> "";
+            } + path);
+            if (packContains.test(pathIdentifier))
+                return pathIdentifier;
         }
 
         LinkedList<String> pathParts = new LinkedList<>(Arrays.asList(propertyIdentifier.getPath().split("/")));

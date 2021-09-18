@@ -58,7 +58,7 @@ public class CITItem extends CIT {
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);
             else if (modelProp != null && !modelProp.startsWith("models")) {
-                assetIdentifier = resolvePath(identifier, "models/" + modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
             }
