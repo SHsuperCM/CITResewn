@@ -1,10 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.*;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -12,6 +13,7 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.StringEscapeUtils;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.core.NbtCompoundAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
@@ -33,7 +35,7 @@ public abstract class CIT {
     public final int stackMin, stackMax;
     public final boolean stackAny, stackRange;
 
-    public final Set<Enchantment> enchantments = new HashSet<>();
+    public final Set<Identifier> enchantments = new HashSet<>();
     public final List<Pair<Integer, Integer>> enchantmentLevels = new ArrayList<>();
     public final boolean enchantmentsAny, enchantmentLevelsAny;
 
@@ -123,8 +125,8 @@ public abstract class CIT {
                 for (String ench : enchantmentIDs.split(" ")) {
                     Identifier enchIdentifier = new Identifier(ench);
                     if (!Registry.ENCHANTMENT.containsId(enchIdentifier))
-                        throw new Exception("Unknown enchantment " + ench);
-                    this.enchantments.add(Registry.ENCHANTMENT.get(enchIdentifier));
+                        CITResewn.logWarnLoading("CIT Warning: Unknown enchantment " + enchIdentifier);
+                    this.enchantments.add(enchIdentifier);
                 }
             }
 
@@ -267,10 +269,12 @@ public abstract class CIT {
             return false;
 
         if (!enchantmentsAny) {
-            Map<Enchantment, Integer> stackEnchantments = EnchantmentHelper.get(stack);
+            Map<Identifier, Integer> stackEnchantments = new LinkedHashMap<>();
+            for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
+                stackEnchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
 
             boolean matches = false;
-            for (Enchantment enchantment : enchantments) {
+            for (Identifier enchantment : enchantments) {
                 Integer level = stackEnchantments.get(enchantment);
                 if (level != null)
                     if (enchantmentLevelsAny) {
@@ -289,8 +293,10 @@ public abstract class CIT {
             if (!matches)
                 return false;
         } else if (!enchantmentLevelsAny) {
-            Collection<Integer> levels = new ArrayList<>(EnchantmentHelper.get(stack).values());
+            Collection<Integer> levels = new ArrayList<>();
             levels.add(0);
+            for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
+                levels.add(EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
 
             boolean matches = false;
 
