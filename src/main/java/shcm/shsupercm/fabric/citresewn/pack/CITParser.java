@@ -102,7 +102,12 @@ public final class CITParser { private CITParser() {}
                 })
                 .collect(Collectors.toCollection(() -> citPack.cits));
 
-        return citPack.cits.isEmpty() ? Collections.emptySet() : Collections.singleton(citPack);
+        if (citPack.cits.isEmpty())
+            return Collections.emptySet();
+        else {
+            CITResewn.info("Found " + citPack.cits.size() + " CIT" + (citPack.cits.size() == 1 ? "" : "s") + " in " + resourcePack.getName());
+            return Collections.singleton(citPack);
+        }
     }
 
     public static Collection<CITPack> parseFabricGroup(ResourcePack resourcePack) {

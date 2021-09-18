@@ -51,7 +51,7 @@ public class ModelLoaderMixin {
         if (CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        info("Loading CITItem models..");
+        info("Loading CITItem models...");
         CITResewn.INSTANCE.activeCITs.citItems.values().stream()
                 .flatMap(Collection::stream)
                 .distinct()

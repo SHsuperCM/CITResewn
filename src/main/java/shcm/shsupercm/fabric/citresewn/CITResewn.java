@@ -29,18 +29,18 @@ public class CITResewn implements ClientModInitializer {
     }
 
     public static void info(String message) {
-        LOG.info(message);
-    }
-
-    public static void logErrorLoading(String message) {
-        if (CITResewnConfig.INSTANCE().mute_errors)
-            return;
-        LOG.error(message);
+        LOG.info("[citresewn] " + message);
     }
 
     public static void logWarnLoading(String message) {
         if (CITResewnConfig.INSTANCE().mute_warns)
             return;
-        LOG.error(message);
+        LOG.error("[citresewn] " + message);
+    }
+
+    public static void logErrorLoading(String message) {
+        if (CITResewnConfig.INSTANCE().mute_errors)
+            return;
+        LOG.error("{citresewn} " + message);
     }
 }
