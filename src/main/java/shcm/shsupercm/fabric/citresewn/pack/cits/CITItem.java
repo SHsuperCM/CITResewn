@@ -284,6 +284,7 @@ public class CITItem extends CIT {
     public Identifier fixDeprecatedSubItem(String subItem) {
         String replacement = switch (subItem) {
             case "bow_pulling_standby" -> "bow";
+            case "crossbow_standby" -> "crossbow";
             case "potion_bottle_drinkable" -> "potion";
             case "potion_bottle_splash" -> "splash_potion";
             case "potion_bottle_lingering" -> "lingering_potion";
