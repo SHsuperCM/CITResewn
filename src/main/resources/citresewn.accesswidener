@@ -1,0 +1,12 @@
+accessWidener v1 named
+
+# net.minecraft.client.render.model.json.ModelOverrideList
+accessible   class   net/minecraft/client/render/model/json/ModelOverrideList$BakedOverride
+accessible   class   net/minecraft/client/render/model/json/ModelOverrideList$InlinedCondition
+accessible   method  net/minecraft/client/render/model/json/ModelOverrideList <init> ()V
+accessible   method  net/minecraft/client/render/model/json/ModelOverrideList$BakedOverride <init> ([Lnet/minecraft/client/render/model/json/ModelOverrideList$InlinedCondition;Lnet/minecraft/client/render/model/BakedModel;)V
+accessible   method  net/minecraft/client/render/model/json/ModelOverrideList$InlinedCondition <init> (IF)V
+accessible   field   net/minecraft/client/render/model/json/ModelOverrideList overrides [Lnet/minecraft/client/render/model/json/ModelOverrideList$BakedOverride;
+mutable      field   net/minecraft/client/render/model/json/ModelOverrideList overrides [Lnet/minecraft/client/render/model/json/ModelOverrideList$BakedOverride;
+accessible   field   net/minecraft/client/render/model/json/ModelOverrideList conditionTypes [Lnet/minecraft/util/Identifier;
+mutable      field   net/minecraft/client/render/model/json/ModelOverrideList conditionTypes [Lnet/minecraft/util/Identifier;

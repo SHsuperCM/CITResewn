@@ -19,6 +19,7 @@
       "shcm.shsupercm.fabric.citresewn.config.CITResewnModMenu"
     ]
   },
+  "accessWidener" : "citresewn.accesswidener",
   "mixins": [
     "citresewn.mixins.json"
   ],

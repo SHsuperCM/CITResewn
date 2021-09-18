@@ -15,12 +15,12 @@ import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
-    @Inject(method = "getHeldItemModel", cancellable = true, at = @At("RETURN"))
+    @Inject(method = "getHeldItemModel", cancellable = true, at = @At("HEAD"))
     public void getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, cir.getReturnValue(), world == null ? MinecraftClient.getInstance().world : world, entity);
+        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, world == null ? MinecraftClient.getInstance().world : world, entity, seed);
         if (citModel != null)
             cir.setReturnValue(citModel);
     }

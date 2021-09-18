@@ -1,6 +1,7 @@
 package shcm.shsupercm.fabric.citresewn;
 
 import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
@@ -53,17 +54,20 @@ public class ActiveCITs {
         citEnchantments.clear();
     }
 
-    public BakedModel getItemModel(ItemStack stack, BakedModel model, World world, LivingEntity entity) {
+    public BakedModel getItemModel(ItemStack stack, World world, LivingEntity entity, int seed) {
         BakedModel bakedModel = null;
         Hand hand = entity != null && stack == entity.getOffHandStack() ? Hand.OFF_HAND : Hand.MAIN_HAND;
 
         List<CITItem> citItems = this.citItems.get(stack.getItem());
         if (citItems != null)
             for (CITItem citItem : citItems) {
-                bakedModel = citItem.getItemModel(stack, hand, model, world, entity);
+                bakedModel = citItem.getItemModel(stack, hand, (ClientWorld) world, entity, seed);
                 if (bakedModel != null)
                     break;
             }
+
+        if (bakedModel != null && bakedModel.getOverrides() != null)
+            bakedModel = bakedModel.getOverrides().apply(bakedModel, stack, (ClientWorld) world, entity, seed);
 
         return bakedModel;
     }
