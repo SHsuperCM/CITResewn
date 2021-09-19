@@ -73,23 +73,23 @@ public abstract class CIT {
                 this.damageMin = 0;
                 this.damageMax = 0;
             } else {
-                if (damage.startsWith("-"))
-                    throw new Exception("damage cannot be negative");
-
                 if (this.damagePercentage = damage.contains("%"))
                     damage = damage.replace("%", "");
 
                 if (damage.contains("-")) {
                     String[] split = damage.split("-");
-                    if (split.length != 2)
-                        throw new Exception("damage range must have 2 numbers");
+                    if (split.length > 2)
+                        throw new Exception("damage range must have up to 2 numbers");
 
-                    if ((this.damageMin = Integer.parseInt(split[0])) > (this.damageMax = Integer.parseInt(split[1])))
+                    this.damageMin = split[0].isEmpty() ? Integer.MIN_VALUE : Integer.parseInt(split[0]);
+                    this.damageMax = split.length == 1 ? Integer.MAX_VALUE : Integer.parseInt(split[1]);
+
+                    if (this.damageMin > this.damageMax)
                         throw new Exception("damage range min is higher than max");
 
                     this.damageRange = this.damageMin < this.damageMax;
                 } else {
-                    this.damageRange = true;
+                    this.damageRange = false;
                     this.damageMin = this.damageMax = Integer.parseInt(damage);
                 }
             }
@@ -102,20 +102,20 @@ public abstract class CIT {
                 this.stackMin = 0;
                 this.stackMax = 0;
             } else {
-                if (stackSize.startsWith("-"))
-                    throw new Exception("stackSize cannot be negative");
-
                 if (stackSize.contains("-")) {
                     String[] split = stackSize.split("-");
-                    if (split.length != 2)
-                        throw new Exception("stackSize range must have 2 numbers");
+                    if (split.length > 2)
+                        throw new Exception("stackSize range must have up to 2 numbers");
 
-                    if ((this.stackMin = Integer.parseInt(split[0])) > (this.stackMax = Integer.parseInt(split[1])))
+                    this.stackMin = split[0].isEmpty() ? Integer.MIN_VALUE : Integer.parseInt(split[0]);
+                    this.stackMax = split.length == 1 ? Integer.MAX_VALUE : Integer.parseInt(split[1]);
+
+                    if (this.stackMin > this.stackMax)
                         throw new Exception("stackSize range min is higher than max");
 
                     this.stackRange = this.stackMin < this.stackMax;
                 } else {
-                    this.stackRange = true;
+                    this.stackRange = false;
                     this.stackMin = this.stackMax = Integer.parseInt(stackSize);
                 }
             }
