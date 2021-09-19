@@ -21,6 +21,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
@@ -314,8 +315,15 @@ public class CITItem extends CIT {
         return null;
     }
 
-    public BakedModel getItemModel(ItemStack stack, Hand hand, ClientWorld world, LivingEntity entity, int seed) {
-        return bakedSubModels.apply(this.bakedModel, stack, world, entity, seed);
+    public BakedModel getItemModel(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
+        // get sub items or bakedModel if no sub item matches @Nullable
+        BakedModel bakedModel = bakedSubModels.apply(this.bakedModel, stack, world, entity, seed);
+
+        // apply model overrides
+        if (bakedModel != null && bakedModel.getOverrides() != null)
+            bakedModel = bakedModel.getOverrides().apply(bakedModel, stack, world, entity, seed);
+
+        return bakedModel;
     }
 
     public static class CITOverrideList extends ModelOverrideList {
@@ -337,5 +345,9 @@ public class CITItem extends CIT {
                         .toArray(InlinedCondition[]::new)
                     , bakedModel);
         }
+    }
+
+    public interface Cached {
+        CITItem citresewn_getCachedCITItem(Supplier<CITItem> realtime);
     }
 }

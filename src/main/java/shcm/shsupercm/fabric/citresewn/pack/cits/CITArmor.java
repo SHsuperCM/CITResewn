@@ -9,6 +9,7 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class CITArmor extends CIT {
     public final Map<String, Identifier> textures = new HashMap<>();
@@ -33,5 +34,9 @@ public class CITArmor extends CIT {
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
+    }
+
+    public interface Cached {
+        CITArmor citresewn_getCachedCITArmor(Supplier<CITArmor> realtime);
     }
 }

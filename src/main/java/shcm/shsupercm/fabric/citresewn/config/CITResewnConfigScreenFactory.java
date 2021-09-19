@@ -7,6 +7,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 
 public class CITResewnConfigScreenFactory {
     public static Screen create(Screen parent) {
@@ -41,6 +42,25 @@ public class CITResewnConfigScreenFactory {
                 .setTooltip(new TranslatableText("config.citresewn.mute_warns.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.mute_warns = newConfig)
                 .setDefaultValue(defaultConfig.mute_warns)
+                .build());
+
+        category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)
+                .setTooltip(new TranslatableText("config.citresewn.cache_ms.tooltip"))
+                .setSaveConsumer(newConfig -> currentConfig.cache_ms = newConfig * 50)
+                .setDefaultValue(currentConfig.cache_ms / 50)
+                .setTextGetter(ticks -> {
+                    if (ticks <= 1)
+                        return new TranslatableText("config.citresewn.cache_ms.ticks." + ticks).formatted(Formatting.AQUA);
+
+                    Formatting color = Formatting.DARK_RED;
+
+                    if (ticks <= 40) color = Formatting.RED;
+                    if (ticks <= 20) color = Formatting.GOLD;
+                    if (ticks <= 10) color = Formatting.DARK_GREEN;
+                    if (ticks <= 5) color = Formatting.GREEN;
+
+                    return new TranslatableText("config.citresewn.cache_ms.ticks.any", ticks).formatted(color);
+                })
                 .build());
 
         category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.broken_paths.title"), currentConfig.broken_paths)

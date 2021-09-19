@@ -6,6 +6,7 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 
 import java.util.Properties;
+import java.util.function.Supplier;
 
 public class CITElytra extends CIT {
     public final Identifier textureIdentifier;
@@ -19,5 +20,9 @@ public class CITElytra extends CIT {
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
+    }
+
+    public interface Cached {
+        CITElytra citresewn_getCachedCITElytra(Supplier<CITElytra> realtime);
     }
 }

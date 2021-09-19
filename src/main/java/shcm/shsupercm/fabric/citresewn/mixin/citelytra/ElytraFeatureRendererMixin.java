@@ -47,7 +47,7 @@ public class ElytraFeatureRendererMixin {
         ItemStack itemStack = this.elytraItemCached.get();
         LivingEntity livingEntity = this.livingEntityCached.get();
         if (itemStack != null && itemStack.isOf(Items.ELYTRA) && livingEntity != null) {
-            Identifier elytraTexture = CITResewn.INSTANCE.activeCITs.getElytraTexture(itemStack, livingEntity.world, livingEntity);
+            Identifier elytraTexture = CITResewn.INSTANCE.activeCITs.getElytraTextureCached(itemStack, livingEntity.world, livingEntity);
             this.elytraItemCached = new WeakReference<>(null);
             this.livingEntityCached = new WeakReference<>(null);
             if (elytraTexture != null)

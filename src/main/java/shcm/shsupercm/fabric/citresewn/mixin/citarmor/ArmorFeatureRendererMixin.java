@@ -35,7 +35,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         //compat Cosmetic Armor
         itemStack = OptionalCompat.getCosmeticArmor(itemStack, entity, armorSlot, false);
 
-        Map<String, Identifier> armorTextures = CITResewn.INSTANCE.activeCITs.getArmorTextures(itemStack, entity.world, entity);
+        Map<String, Identifier> armorTextures = CITResewn.INSTANCE.activeCITs.getArmorTexturesCached(itemStack, entity.world, entity);
         if (armorTextures != null) {
             armorTexturesCached = new WeakReference<>(armorTextures);
             return;

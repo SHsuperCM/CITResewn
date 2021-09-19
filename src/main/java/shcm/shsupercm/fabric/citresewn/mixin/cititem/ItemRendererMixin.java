@@ -20,7 +20,7 @@ public class ItemRendererMixin {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
-        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModel(stack, world == null ? MinecraftClient.getInstance().world : world, entity, seed);
+        BakedModel citModel = CITResewn.INSTANCE.activeCITs.getItemModelCached(stack, world == null ? MinecraftClient.getInstance().world : world, entity, seed);
         if (citModel != null)
             cir.setReturnValue(citModel);
     }

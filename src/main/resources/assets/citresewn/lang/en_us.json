@@ -13,6 +13,12 @@
   "config.citresewn.broken_paths.title": "Allow broken paths in resourcepacks",
   "config.citresewn.broken_paths.tooltip": "Allows packs with illegal resource paths to load.\nMay cause issues!",
 
+  "config.citresewn.cache_ms.title": "Cache",
+  "config.citresewn.cache_ms.tooltip": "How often should the cit cache be refreshed.\nHigher values will give more performance.\nLower values will make cits update faster.\nREALTIME will remove the cache entirely,\n making items check for cits every frame.",
+  "config.citresewn.cache_ms.ticks.0": "REALTIME",
+  "config.citresewn.cache_ms.ticks.1": "EVERY TICK",
+  "config.citresewn.cache_ms.ticks.any": "EVERY %s TICKS",
+
   "pack.incompatible.broken_paths": "(Contains broken paths)",
   "pack.incompatible.confirm.broken_paths": "This pack contains broken paths and support for it may be dropped in the future. Contact pack author to remove this warning. (~ CIT Resewn)"
 }

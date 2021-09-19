@@ -10,9 +10,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ActiveCITs {
@@ -44,9 +46,8 @@ public class ActiveCITs {
     }
 
     public void dispose() {
-        for (CIT cit : cits) {
+        for (CIT cit : cits)
             cit.dispose();
-        }
         cits.clear();
         citItems.clear();
         citArmor.clear();
@@ -54,42 +55,71 @@ public class ActiveCITs {
         citEnchantments.clear();
     }
 
-    public BakedModel getItemModel(ItemStack stack, World world, LivingEntity entity, int seed) {
-        BakedModel bakedModel = null;
+    public CITItem getCITItem(ItemStack stack, World world, LivingEntity entity) {
         Hand hand = entity != null && stack == entity.getOffHandStack() ? Hand.OFF_HAND : Hand.MAIN_HAND;
 
         List<CITItem> citItems = this.citItems.get(stack.getItem());
         if (citItems != null)
             for (CITItem citItem : citItems)
-                if (citItem.test(stack, hand, world, entity)) {
-                    bakedModel = citItem.getItemModel(stack, hand, (ClientWorld) world, entity, seed);
-                    if (bakedModel != null)
-                        break;
-                }
-
-        if (bakedModel != null && bakedModel.getOverrides() != null)
-            bakedModel = bakedModel.getOverrides().apply(bakedModel, stack, (ClientWorld) world, entity, seed);
-
-        return bakedModel;
-    }
-
-    public Identifier getElytraTexture(ItemStack stack, World world, LivingEntity livingEntity) {
-        for (CITElytra citElytra : citElytra)
-            if (citElytra.test(stack, Hand.MAIN_HAND, world, livingEntity))
-                return citElytra.textureIdentifier;
-
+                if (citItem.test(stack, hand, world, entity))
+                    return citItem;
         return null;
     }
 
-    public Map<String, Identifier> getArmorTextures(ItemStack itemStack, World world, LivingEntity livingEntity) {
-        Item item = itemStack.getItem();
+    public CITElytra getCITElytra(ItemStack stack, World world, LivingEntity livingEntity) {
+        for (CITElytra citElytra : citElytra)
+            if (citElytra.test(stack, Hand.MAIN_HAND, world, livingEntity))
+                return citElytra;
+        return null;
+    }
+
+    public CITArmor getCITArmor(ItemStack stack, World world, LivingEntity livingEntity) {
+        Item item = stack.getItem();
         if (item instanceof ArmorItem) {
             List<CITArmor> citArmor = this.citArmor.get(item);
             if (citArmor != null)
                 for (CITArmor armor : citArmor)
-                    if (armor.test(itemStack, null, world, livingEntity))
-                        return armor.textures;
+                    if (armor.test(stack, null, world, livingEntity))
+                        return armor;
         }
+        return null;
+    }
+
+    public BakedModel getItemModelCached(ItemStack stack, World world, LivingEntity entity, int seed) {
+        BakedModel bakedModel = null;
+
+        Supplier<CITItem> realtime = () -> getCITItem(stack, world, entity);
+
+        //noinspection ConstantConditions
+        CITItem citItem = CITResewnConfig.INSTANCE().cache_ms == 0 ? realtime.get() : ((CITItem.Cached) (Object) stack).citresewn_getCachedCITItem(realtime);
+
+        if (citItem != null)
+            bakedModel = citItem.getItemModel(stack, (ClientWorld) world, entity, seed);
+
+        return bakedModel;
+    }
+
+    public Identifier getElytraTextureCached(ItemStack stack, World world, LivingEntity livingEntity) {
+        Supplier<CITElytra> realtime = () -> getCITElytra(stack, world, livingEntity);
+
+        //noinspection ConstantConditions
+        CITElytra citElytra = CITResewnConfig.INSTANCE().cache_ms == 0 ? realtime.get() : ((CITElytra.Cached) (Object) stack).citresewn_getCachedCITElytra(realtime);
+
+        if (citElytra != null)
+            return citElytra.textureIdentifier;
+
+        return null;
+    }
+
+    public Map<String, Identifier> getArmorTexturesCached(ItemStack stack, World world, LivingEntity livingEntity) {
+        Supplier<CITArmor> realtime = () -> getCITArmor(stack, world, livingEntity);
+
+        //noinspection ConstantConditions
+        CITArmor citArmor = CITResewnConfig.INSTANCE().cache_ms == 0 ? realtime.get() : ((CITArmor.Cached) (Object) stack).citresewn_getCachedCITArmor(realtime);
+
+        if (citArmor != null)
+            return citArmor.textures;
+
         return null;
     }
 }
