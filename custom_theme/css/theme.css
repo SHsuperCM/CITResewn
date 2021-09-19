@@ -6,6 +6,10 @@
  * https://github.com/rtfd/readthedocs.org/blob/master/readthedocs/core/static/core/css/theme.css
  */
 
+:root {
+  color-scheme: dark;
+}
+
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;

@@ -247,7 +247,7 @@ td, th {
 /* Selected top-level heading */
 .wy-menu-vertical .navtree li.toctree-l2.current,
 .wy-menu-vertical .navtree li.toctree-l2.current > a {
-    background: #404040;
+    background: #545454;
 }
 .wy-menu-vertical .navtree li.toctree-l2.current > a,
 .wy-menu-vertical .navtree li.toctree-l2.current > span {
@@ -262,7 +262,7 @@ td, th {
 /* Level 2 heading */
 .wy-menu-vertical ul.navtree.subnav-l1 ul.subnav-l2,
 .wy-menu-vertical ul.navtree.subnav-l1 li.toctree-l2.current li.toctree-l3 > a {
-    background: #e3e3e3;
+    background: #404040;
 }
 
 .wy-menu-vertical ul.subnav-l1 ul.subnav-l2,
