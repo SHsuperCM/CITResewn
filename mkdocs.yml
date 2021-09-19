@@ -13,12 +13,15 @@ plugins:
 
 nav:
   - 'index.md'
+  - Usage:
+    - 'usage/config.md'
+    - 'usage/users.md'
+    - 'usage/pack_authors.md'
+    - 'usage/mod_authors.md'
   - CIT:
-    - 'cit_base.md'
-    - 'cit_item.md'
-    - 'cit_elytra.md'
-    - 'cit_armor.md'
-    - 'cit_enchantment.md'
-  - Misc:
-    - 'global_properties.md'
-    - 'api.md'
+    - 'cit/global.md'
+    - 'cit/cit_base.md'
+    - 'cit/cit_item.md'
+    - 'cit/cit_elytra.md'
+    - 'cit/cit_armor.md'
+    - 'cit/cit_enchantment.md'

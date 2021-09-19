@@ -11,7 +11,7 @@ CIT Resewn is my shot at providing support for cit outside of optifine.
 
 ## Documentation
 These **(VERY WIP)** docs should hopefully provide pack and mod authors with the information they need in 
-order to work with cits.  
+order to work with CITs and CIT Resewn.  
 If you find a problem with the docs, feel free to create a [Pull Request](https://github.com/SHsuperCM/CITResewn/tree/docs) 
 or open an [Issue](https://github.com/SHsuperCM/CITResewn/issues) through Github.
 
@@ -31,4 +31,4 @@ The resourcepack you're using is not following minecraft's pack formatting stand
 Contact the pack author and inform them. In the mean time you can enable broken paths in the config (try to avoid doing this please).
 
 ### Anything else:
-Feel free to open an [Issue](https://github.com/SHsuperCM/CITResewn/issues) for anything CIT Resewn!  
+Feel free to open an [Issue](https://github.com/SHsuperCM/CITResewn/issues) or DM @SHsuperCM on the Fabric discord server for anything regarding CIT Resewn!
