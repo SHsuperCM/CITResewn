@@ -7,7 +7,7 @@ CITs are most commonly added to the game via resource packs, here's how you do t
 ## Format
 
 CITs are stored in `.properties` files. Poperties are a common file format where
-each line stores a single property containing keys and values that are separated by `=` signs.  
+each line stores a single property containing a key and a value that are separated by an equals sign.  
 Lines starting with `#` will be considered comments and ignored. 
 
 Example:
@@ -40,9 +40,9 @@ Examples:
 ```html
 My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/example_stick.properties
 My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/example_stick.png
-My Cool Resourcepack.zip/assets/minecraft/optifine/cit/emerald/sword/emerald_sword.properties
-My Cool Resourcepack.zip/assets/minecraft/optifine/cit/emerald/sword/emerald_sword.json
-My Cool Resourcepack.zip/assets/minecraft/optifine/cit/emerald/sword/emerald_sword.png
-My Cool Resourcepack.zip/assets/minecraft/optifine/cit/obsidian_dust/obsidian_dust.properties
-My Cool Resourcepack.zip/assets/minecraft/optifine/cit/obsidian_dust/obsidian_dust.png
+My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/emerald/sword/emerald_sword.properties
+My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/emerald/sword/emerald_sword.json
+My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/emerald/sword/emerald_sword.png
+My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/obsidian_dust/obsidian_dust.properties
+My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/obsidian_dust/obsidian_dust.png
 ```

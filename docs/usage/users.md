@@ -10,4 +10,4 @@
    
 ## Usage
 
-Install resource packs and mods that utilize CITs, these docs are mainly for authors.
+Install resource packs and mods that utilize CITs, these docs are mainly for their authors.
