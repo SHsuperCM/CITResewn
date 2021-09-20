@@ -5404,7 +5404,7 @@ input[type="checkbox"][disabled] {
 .wy-table thead,
 .rst-content table.docutils thead,
 .rst-content table.field-list thead {
-  color: #000;
+  color: #fff;
   text-align: left;
   vertical-align: bottom;
   white-space: nowrap
@@ -5465,7 +5465,7 @@ input[type="checkbox"][disabled] {
 .wy-table-odd td,
 .wy-table-striped tr:nth-child(2n-1) td,
 .rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td {
-  background-color: #f3f6f6
+  background-color: #2b2b2b
 }
 
 .wy-table-backed {
