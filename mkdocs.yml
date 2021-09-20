@@ -15,8 +15,8 @@ plugins:
 nav:
   - 'index.md'
   - Usage:
-    - 'usage/config.md'
     - 'usage/users.md'
+    - 'usage/config.md'
     - 'usage/pack_authors.md'
     - 'usage/mod_authors.md'
   - CIT:
