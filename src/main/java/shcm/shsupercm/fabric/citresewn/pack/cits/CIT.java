@@ -7,12 +7,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.*;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.StringEscapeUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.core.NbtCompoundAccessor;
@@ -169,35 +169,38 @@ public abstract class CIT {
             List<Predicate<NbtCompound>> nbtPredicates = new ArrayList<>();
             for (Object o : properties.keySet())
                 if (o instanceof String property && property.startsWith("nbt.")) {
+                    String matchProperty = properties.getProperty(property);
                     final String[] path = property.substring(4).split("\\.");
                     final Predicate<String> match;
-
-                    String matchProperty = StringEscapeUtils.unescapeJava(properties.getProperty(property));
                     final boolean caseSensitive = !matchProperty.startsWith("i");
+
                     if (matchProperty.startsWith(caseSensitive ? "pattern:" : "ipattern:")) {
                         matchProperty = caseSensitive ? matchProperty.substring(8) : matchProperty.substring(9).toLowerCase(Locale.ENGLISH);
-                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
-                            matchProperty = "{\"text\":\"" + matchProperty + "\"}";
                         final String pattern = matchProperty;
                         match = s -> matchesPattern(caseSensitive ? s : s.toLowerCase(), pattern, 0, s.length(), 0, pattern.length());
                     } else if (matchProperty.startsWith(caseSensitive ? "regex:" : "iregex:")) {
                         matchProperty = caseSensitive ? matchProperty.substring(6) : matchProperty.substring(7).toLowerCase(Locale.ENGLISH);
-                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
-                            matchProperty = "\\{\"text\":\"" + matchProperty + "\"}";
                         final Pattern pattern = Pattern.compile(matchProperty);
                         match = s -> pattern.matcher(caseSensitive ? s : s.toLowerCase()).matches();
                     } else {
-                        if ((path[path.length - 1].equals("Name") || path[path.length - 1].equals("Lore")) && !matchProperty.startsWith("{"))
-                            matchProperty = "{\"text\":\"" + matchProperty + "\"}";
                         final String pattern = matchProperty;
                         match = s -> s.equals(pattern);
                     }
+
+                    final boolean checkJson = (path[path.length - 1].equals("Name") || (path.length >= 2 && path[path.length - 2].equals("Lore"))) && !((matchProperty.startsWith("{") || matchProperty.startsWith("\\{")) && matchProperty.endsWith("}"));
 
                     nbtPredicates.add(new Predicate<NbtCompound>() {
                         public boolean test(NbtElement nbtElement, int index) {
                             if (index >= path.length) {
                                 if (nbtElement instanceof NbtString nbtString) {
-                                    return match.test(nbtString.asString());
+                                    String text = nbtString.asString();
+                                    if (checkJson)
+                                        try {
+                                            //noinspection ConstantConditions
+                                            text = Text.Serializer.fromJson(text).getString();
+                                        } catch (Exception ignored) { }
+
+                                    return match.test(text);
                                 } else if (nbtElement instanceof AbstractNbtNumber nbtNumber)
                                     return match.test(String.valueOf(nbtNumber.numberValue()));
                             } else {
