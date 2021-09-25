@@ -46,8 +46,7 @@ public class ModelLoaderMixin {
     @Shadow @Final private Map<Identifier, BakedModel> bakedModels;
 
     @Inject(method = "addModel", at = @At("TAIL"))
-    public void addCITItemModels(ModelIdentifier eventModelId, CallbackInfo ci) {
-        if (eventModelId != ModelLoader.MISSING_ID) return;
+    public void addCITItemModels(ModelIdentifier eventModelId, CallbackInfo ci) { if (eventModelId != ModelLoader.MISSING_ID) return;
         if (CITResewn.INSTANCE.activeCITs == null)
             return;
 
@@ -69,6 +68,8 @@ public class ModelLoaderMixin {
                         CITResewn.logErrorLoading(e.getMessage());
                     }
                 });
+
+        CITItem.GENERATED_SUB_CITS_SEEN.clear();
     }
 
     @Inject(method = "upload", at = @At("RETURN"))

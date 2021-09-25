@@ -18,10 +18,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
@@ -40,8 +38,12 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class CITItem extends CIT {
+    private static final String GENERATED_SUB_CITS_PREFIX = "sub_cititem_generated_";
+    public static final Set<Identifier> GENERATED_SUB_CITS_SEEN = new HashSet<>();
+
     public Map<Identifier, Identifier> assetIdentifiers = new LinkedHashMap<>();
     public Map<List<ModelOverride.Condition>, JsonUnbakedModel> unbakedAssets = new LinkedHashMap<>();
+    private Map<String, Either<SpriteIdentifier, String>> textureOverrideMap = new HashMap<>();
     private boolean isTexture = false;
 
     public BakedModel bakedModel = null;
@@ -84,7 +86,7 @@ public class CITItem extends CIT {
                     assetIdentifiers.put(subItemIdentifier == null ? new Identifier("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
                 }
 
-            if (assetIdentifiers.size() == 0) {
+            if (assetIdentifiers.size() == 0) { // attempt to load texture
                 isTexture = true;
                 String textureProp = properties.getProperty("texture");
                 if (textureProp == null)
@@ -103,6 +105,27 @@ public class CITItem extends CIT {
                         Identifier subItemIdentifier = fixDeprecatedSubItem(subItem);
                         assetIdentifiers.put(subItemIdentifier == null ? new Identifier("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
                     }
+            } else { // attempt to load textureOverrideMap from textures
+                String textureProp = properties.getProperty("texture");
+                if (textureProp == null)
+                    textureProp = properties.getProperty("tile");
+                if (textureProp != null) {
+                    assetIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                    if (assetIdentifier != null)
+                        textureOverrideMap.put(null, Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(assetIdentifier))));
+                    else
+                        throw new Exception("Cannot resolve path for texture");
+                }
+
+                for (Object o : properties.keySet())
+                    if (o instanceof String property && property.startsWith("texture.")) {
+                        textureProp = properties.getProperty(property);
+                        Identifier subIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                        if (subIdentifier == null)
+                            throw new Exception("Cannot resolve path for " + property);
+
+                        textureOverrideMap.put(property.substring(8), Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(subIdentifier))));
+                    }
             }
 
             if (assetIdentifiers.size() == 0)
@@ -115,23 +138,7 @@ public class CITItem extends CIT {
     public void loadUnbakedAssets(ResourceManager resourceManager) throws CITLoadException {
         try {
             if (isTexture) {
-                Supplier<JsonUnbakedModel> itemModelGenerator = new Supplier<>() {
-                    private final Identifier firstItemIdentifier = Registry.ITEM.getId(items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
-                    @Override
-                    public JsonUnbakedModel get() {
-                        Resource itemModelResource = null;
-                        try {
-                            return JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
-                        } catch (Exception e) {
-                            return null;
-                        } finally {
-                            IOUtils.closeQuietly(itemModelResource);
-                        }
-                    }
-                };
-
-                JsonUnbakedModel itemJson = itemModelGenerator.get();
-                Map<String, Either<SpriteIdentifier, String>> textureOverrideMap = new HashMap<>();
+                JsonUnbakedModel itemJson = getModelForFirstItemType(resourceManager);
                 if (((JsonUnbakedModelAccessor) itemJson).getTextureMap().size() > 1) { // use(some/all of) the asset identifiers to build texture override in layered models
                     textureOverrideMap = ((JsonUnbakedModelAccessor) itemJson).getTextureMap();
                     Identifier defaultAsset = assetIdentifiers.get(null);
@@ -153,7 +160,7 @@ public class CITItem extends CIT {
                 Identifier baseIdentifier = assetIdentifiers.remove(null);
 
                 if (baseIdentifier != null)
-                    unbakedAssets.put(null, loadUnbakedAsset(resourceManager, textureOverrideMap, itemModelGenerator, baseIdentifier));
+                    unbakedAssets.put(null, loadUnbakedAsset(resourceManager, baseIdentifier));
 
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
@@ -180,13 +187,19 @@ public class CITItem extends CIT {
                             continue;
 
                         List<ModelOverride.Condition> conditions = overrideConditions.get(overrideModel);
-                        unbakedAssets.put(conditions, loadUnbakedAsset(resourceManager, textureOverrideMap, itemModelGenerator, replacement));
+                        unbakedAssets.put(conditions, loadUnbakedAsset(resourceManager, replacement));
                     }
                 }
-            } else {
+            } else { // isModel
                 Identifier baseIdentifier = assetIdentifiers.remove(null);
-                if (baseIdentifier != null)
-                    unbakedAssets.put(null, loadUnbakedAsset(resourceManager, null, null, baseIdentifier));
+
+                if (baseIdentifier != null) {
+                    if (!GENERATED_SUB_CITS_SEEN.add(baseIdentifier)) // cit generated duplicate
+                        baseIdentifier = new Identifier(baseIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + baseIdentifier.getPath());
+                    GENERATED_SUB_CITS_SEEN.add(baseIdentifier);
+
+                    unbakedAssets.put(null, loadUnbakedAsset(resourceManager, baseIdentifier));
+                }
 
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
@@ -212,8 +225,12 @@ public class CITItem extends CIT {
                         if (replacement == null)
                             continue;
 
+                        if (!GENERATED_SUB_CITS_SEEN.add(replacement)) // cit generated duplicate
+                            replacement = new Identifier(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
+                        GENERATED_SUB_CITS_SEEN.add(replacement);
+
                         List<ModelOverride.Condition> conditions = overrideConditions.get(overrideModel);
-                        unbakedAssets.put(conditions, loadUnbakedAsset(resourceManager, null, null, replacement));
+                        unbakedAssets.put(conditions, loadUnbakedAsset(resourceManager, replacement));
                     }
                 }
             }
@@ -221,17 +238,19 @@ public class CITItem extends CIT {
             throw new CITLoadException(pack.resourcePack, propertiesIdentifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         } finally {
             assetIdentifiers = null;
+            textureOverrideMap = null;
         }
     }
 
-    private JsonUnbakedModel loadUnbakedAsset(ResourceManager resourceManager, Map<java.lang.String, Either<SpriteIdentifier, String>> textureOverrideMap, Supplier<JsonUnbakedModel> itemModelGenerator, Identifier identifier) throws Exception {
+    private JsonUnbakedModel loadUnbakedAsset(ResourceManager resourceManager, Identifier assetIdentifier) throws Exception {
+        final Identifier identifier = !assetIdentifier.getPath().startsWith(GENERATED_SUB_CITS_PREFIX) ? assetIdentifier : new Identifier(assetIdentifier.getNamespace(), assetIdentifier.getPath().substring(assetIdentifier.getPath().substring(GENERATED_SUB_CITS_PREFIX.length()).indexOf('_') + GENERATED_SUB_CITS_PREFIX.length() + 1));
         JsonUnbakedModel json;
         if (identifier.getPath().endsWith(".json")) {
             InputStream is = null;
             Resource resource = null;
             try {
                 json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(identifier)).getInputStream(), StandardCharsets.UTF_8));
-                json.id = identifier.toString();
+                json.id = assetIdentifier.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
 
                 ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layer, original) -> {
@@ -247,6 +266,30 @@ public class CITItem extends CIT {
                     }
                     return original;
                 });
+
+                if (textureOverrideMap.size() > 0) {
+                    Map<String, Either<SpriteIdentifier, String>> jsonTextureMap = ((JsonUnbakedModelAccessor) json).getTextureMap();
+                    if (jsonTextureMap.size() == 0)
+                        jsonTextureMap.put("layer0", null);
+
+                    final Either<SpriteIdentifier, String> defaultTextureOverride = textureOverrideMap.get(null);
+                    if (defaultTextureOverride != null)
+                        jsonTextureMap.replaceAll((layerName, spriteIdentifierStringEither) -> defaultTextureOverride);
+
+                    //jsonTextureMap.putAll(textureOverrideMap);
+                    jsonTextureMap.replaceAll((layerName, texture) -> {
+                        if (layerName != null)
+                            try {
+                                String[] split = texture.map(id -> id.getTextureId().getPath(), s -> s).split("/");
+                                String textureName = split[split.length - 1];
+                                if (textureName.endsWith(".png"))
+                                    textureName = textureName.substring(0, textureName.length() - 4);
+                                return Objects.requireNonNull(textureOverrideMap.get(textureName));
+                            } catch (Exception ignored) { }
+                        return texture;
+                    });
+                    jsonTextureMap.values().removeIf(Objects::isNull);
+                }
 
                 Identifier parentId = ((JsonUnbakedModelAccessor) json).getParentId();
                 if (parentId != null) {
@@ -274,7 +317,7 @@ public class CITItem extends CIT {
                 IOUtils.closeQuietly(is, resource);
             }
         } else if (identifier.getPath().endsWith(".png")) {
-            json = itemModelGenerator.get();
+            json = getModelForFirstItemType(resourceManager);
             if (json == null)
                 json = new JsonUnbakedModel(new Identifier("minecraft", "item/generated"), new ArrayList<>(), ImmutableMap.of("layer0", Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(identifier)))), true, JsonUnbakedModel.GuiLight.ITEM, ModelTransformation.NONE, new ArrayList<>());
             json.getOverrides().clear();
@@ -284,6 +327,8 @@ public class CITItem extends CIT {
             ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layerName, originalTextureEither) -> {
                 if (textureOverrideMap.size() > 0) {
                     Either<SpriteIdentifier, String> textureOverride = textureOverrideMap.get(layerName);
+                    if (textureOverride == null)
+                        textureOverride = textureOverrideMap.get(null);
                     return textureOverride == null ? originalTextureEither : textureOverride;
                 } else
                     return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(identifier)));
@@ -313,6 +358,18 @@ public class CITItem extends CIT {
         }
 
         return null;
+    }
+
+    private JsonUnbakedModel getModelForFirstItemType(ResourceManager resourceManager) {
+        Identifier firstItemIdentifier = Registry.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
+        Resource itemModelResource = null;
+        try {
+            return JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            return null;
+        } finally {
+            IOUtils.closeQuietly(itemModelResource);
+        }
     }
 
     public BakedModel getItemModel(ItemStack stack, ClientWorld world, LivingEntity entity, int seed) {
