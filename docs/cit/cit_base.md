@@ -27,3 +27,6 @@ allowing resourcepack authors to customize their mods using CITs.
 | Key | Type | Description | Default |
 | --- | --- | --- | --- |
 | `items` | List of item ids | A collection of possible item matches for this cit. | Empty list |
+
+
+[**Test text**]{This text is a test tooltip}
