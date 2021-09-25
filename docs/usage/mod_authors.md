@@ -38,7 +38,7 @@ be used instead of `golden_stick.png`!
 
 ## API
 
-CIT Resewn also provides an API that allows adding custom CIT types and predicates.
+CIT Resewn also provides an API that allows adding custom CIT types and conditions.
 
 ### CIT Types:
 
@@ -63,6 +63,6 @@ storage during construction and clean up during `#dispose()`.
 
 For working examples that utilize caching, look at the default types in CIT Resewn.
 
-### Predicates
+### Conditions
 
 This is not implemented yet! Follow issue [#13](https://github.com/SHsuperCM/CITResewn/issues/13) for updates!
