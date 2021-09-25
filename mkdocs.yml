@@ -11,6 +11,7 @@ theme:
 plugins:
   - search:
       separator: '[\s\-\`\.\/\\]+'
+  - tooltips
 
 nav:
   - 'index.md'
