@@ -7,7 +7,8 @@ sometimes overriding their behavior.
 
 When a property is not specified, its default value is used instead, meaning all 
 properties are optional by default. Some property keys have aliases, these were 
-added for legacy support. Try not to use aliases when possible.
+added for legacy support. Hover over keys to see if they have aliases, try not to 
+use them when possible.
 
 CITs are split into 2 parts: Conditions which determine how items are selected and 
 Effects that change something cosmetic about the item. The different types usually 
@@ -26,4 +27,4 @@ allowing resourcepack authors to customize their mods using CITs.
 
 | Key | Type | Description | Default |
 | --- | --- | --- | --- |
-| `items` | List of item ids | A collection of possible item matches for this cit. | Empty list |
+| [**`items`**]{Aliases: &#10matchItems|right} | List of item ids. Namespaces(`minecraft:`) are optional. | A collection of possible item matches for this cit. | Empty list |
