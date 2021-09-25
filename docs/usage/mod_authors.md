@@ -11,7 +11,9 @@ resource packs and have read through [Resource Pack Authors](pack_authors.md).
 
 If you didn't know, your mod jar is basically a resourcepack!  
 This feature requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) 
-to be installed for it to work, specifically `fabric-resource-loader-v0`.
+to be installed to work, specifically `fabric-resource-loader-v0`.
+
+Example:
 
 Let's say the mod "Gold Sticks" wants to add replacement textures for multiple gold sticks. 
 The gold stick is identified by `goldsticks:golden_stick`.  
@@ -33,7 +35,7 @@ texture=multiple_golden_sticks_2.png
 ```
 
 If CIT Resewn is present(and Fabric API), it will load that cit from the mod jar.
-Now if you have 2 or more golden sticks, the `multiple_golden_sticks_2.png` texture will 
+And if you have 2 or more golden sticks, the `multiple_golden_sticks_2.png` texture will 
 be used instead of `golden_stick.png`!
 
 ## API
