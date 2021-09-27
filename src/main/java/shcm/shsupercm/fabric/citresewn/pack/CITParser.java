@@ -5,9 +5,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
-import shcm.shsupercm.fabric.citresewn.ex.CITLoadException;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.core.GroupResourcePackAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
@@ -62,25 +61,34 @@ public final class CITParser { private CITParser() {}
         Collection<Identifier> packProperties = new ArrayList<>();
         for (String namespace : resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES)) {
             packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "citresewn/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "citresewn/cit.properties")))
+                packProperties.add(new Identifier(namespace, "citresewn/cit.properties"));
+
             packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "optifine/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "optifine/cit.properties")))
+                packProperties.add(new Identifier(namespace, "optifine/cit.properties"));
+
             packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "mcpatcher/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "mcpatcher/cit.properties")))
+                packProperties.add(new Identifier(namespace, "mcpatcher/cit.properties"));
         }
 
-        boolean readCitProperties = false;
+        boolean readGlobalProperties = false;
         for (Iterator<Identifier> iterator = packProperties.iterator(); iterator.hasNext(); ) {
             Identifier propertiesIdentifier = iterator.next();
-            if (propertiesIdentifier.getPath().substring(propertiesIdentifier.getPath().indexOf("cit/") + 4).equals("cit.properties")) {
-                if (!readCitProperties) {
-                    Properties citProperties = new Properties();
-                    try (InputStream is = resourcePack.open(ResourceType.CLIENT_RESOURCES, propertiesIdentifier)) {
-                        citProperties.load(is);
-                        citPack.loadProperties(citProperties);
-                        readCitProperties = true;
-                    } catch (Exception e) {
-                        CITResewn.logErrorLoading(new CITLoadException(resourcePack, propertiesIdentifier, e.getMessage()).getMessage());
-                    }
+            try {
+                if (StringUtils.countMatches(propertiesIdentifier.getPath(), '/') <= 2 && propertiesIdentifier.getPath().endsWith("cit.properties")) {
+                    iterator.remove();
+                    if (!readGlobalProperties)
+                        try (InputStream is = resourcePack.open(ResourceType.CLIENT_RESOURCES, propertiesIdentifier)) {
+                            Properties citProperties = new Properties();
+                            citProperties.load(is);
+                            citPack.loadGlobalProperties(citProperties);
+                            readGlobalProperties = true;
+                        }
                 }
-                iterator.remove();
+            } catch (Exception e) {
+                CITResewn.logErrorLoading("Skipped global properties: " + e.getMessage() + " in " + resourcePack.getName() + " -> " + propertiesIdentifier);
             }
         }
 

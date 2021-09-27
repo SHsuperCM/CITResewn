@@ -1,15 +1,9 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.minecraft.resource.ResourcePack;
-import net.minecraft.util.Identifier;
-import shcm.shsupercm.fabric.citresewn.CITResewn;
-import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Properties;
+import java.util.*;
 
 public class CITPack {
     public final ResourcePack resourcePack;
@@ -24,22 +18,26 @@ public class CITPack {
         this.resourcePack = resourcePack;
     }
 
-    public void loadProperties(Properties properties) {
-        method = CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method", "average").toUpperCase(Locale.ENGLISH));
+    public void loadGlobalProperties(Properties properties) throws Exception {
         try {
-            cap = Integer.parseInt(properties.getProperty("cap", "8"));
-        } catch (NumberFormatException e) {
-            CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "cap is not a whole number").getMessage());
-        }
-        try {
-            fade = Float.parseFloat(properties.getProperty("fade", "0.5"));
-        } catch (NumberFormatException e) {
-            CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "fade is not a number").getMessage());
-        }
-        switch (properties.getProperty("useGlint", "true").toLowerCase(Locale.ENGLISH)) {
-            case "true" -> useGlint = true;
-            case "false" -> useGlint = false;
-            default -> CITResewn.logErrorLoading(new CITParseException(resourcePack, new Identifier("cit.properties"), "useGlint is not a boolean").getMessage());
+            this.method = CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method", "average").toUpperCase(Locale.ENGLISH));
+            this.cap = Integer.parseInt(properties.getProperty("cap", "8"));
+            if (this.cap < 0)
+                throw new Exception("cap cannot be negative");
+            this.fade = Float.parseFloat(properties.getProperty("fade", "0.5"));
+            if (this.fade < 0f)
+                throw new Exception("fade cannot be negative");
+            this.useGlint = switch (properties.getProperty("useGlint", "true").toLowerCase(Locale.ENGLISH)) {
+                case "true" -> true;
+                case "false" -> false;
+                default -> throw new Exception("useGlint is not a boolean");
+            };
+        } catch (Exception e) {
+            this.method = EnchantmentMergeMethod.AVERAGE;
+            this.cap = 8;
+            this.fade = 0.5f;
+            this.useGlint = true;
+            throw e;
         }
     }
 
