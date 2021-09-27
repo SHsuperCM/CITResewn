@@ -18,9 +18,6 @@ CITs are split into 2 parts: Conditions which determine how items are selected a
 Effects that change something about the item. All conditions must match for the CIT 
 to apply.
 
-While CIT Resewn only provides the 4 types, other mods may add their own,
-allowing resourcepack authors to customize their mods using CITs.
-
 ## Effects
 
 | Key | Value Type | Description | Default |
