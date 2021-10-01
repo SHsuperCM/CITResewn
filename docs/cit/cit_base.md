@@ -36,22 +36,16 @@ to apply.
 | `hand` | [**Literal**]{Either: &#10 hand=main / hand=off / hand=any} | Requires that the item is in a specific hand. <br> Either: `main` / `off` for mainhand or offhand | Any |
 | [**`enchantments`**]{Aliases: &#10 enchantmentIDs|right} | [**List of enchantments**]{Examples: &#10 enchantments=sharpness &#10 enchantments=minecraft:power &#10 enchantments=unbreaking mending &#10 enchantments=bane_of_arthropods|right} | Requires that the item has at least one of the enchantments listed. <br> Separated by spaces. <br> Namespaces (`minecraft:`) are optional. | Any |
 | `enchantmentLevels` | [**List of levels/ranges**]{Examples: &#10 enchantmentLevels=5 (only 5) &#10 enchantmentLevels=1- (1 or more) &#10 enchantmentLevels=-2 (up to 2) &#10 enchantmentLevels=1-3 5 (between 1 and 3 or 5) &#10 enchantmentLevels=1 3 (1 or 3)|right} | Requires that one of the item's enchantments matches one of the levels listed. <br> When `enchantments` is declared, requires that either one of `enchantments` matches the levels. <br> Separated by spaces. | Any |
-| `nbt.`[**<ins>  path  </ins>**]{Path from the root of the nbt, use numbers for list index and * to match any nbt entry.|right} | [**[NBT Match](#nbt-match)**]{Examples: &#10 nbt.display.Name=Cool Item &#10 nbt.CustomModelData=5 &#10 nbt.display.Name=regex:.+'s Cool Item &#10 nbt.display.Name=ipattern:The knife of * |right} | Requires that the item matches the specified NBT predicate. <br> [**Multiple nbt conditions are allowed.**]{As long as the paths are unique.|bottom} <br> Accepts literal, pattern and regex checks, along with ignore-case alternatives. <br> When path is `display.Name` or `display.Lore.__`, the nbt is json evaluated when the match value is not a json. <br> See [NBT Match](#nbt-match) for more info.  | None |
+| [`nbt.`[**<ins>  path  </ins>**]{Path from the root of the nbt, use numbers for list index and * to match any nbt entry.|right}](#nbt-path) | [**[NBT Match](#nbt-match)**]{Examples: &#10 nbt.display.Name=Cool Item &#10 nbt.CustomModelData=5 &#10 nbt.display.Name=regex:.+'s Cool Item &#10 nbt.display.Name=ipattern:The knife of * |right} | Requires that the item matches the specified NBT predicate. <br> [**Multiple nbt conditions are allowed.**]{As long as the paths are unique.|bottom} <br> Accepts literal, pattern and regex checks, along with ignore-case alternatives. <br> When path is `display.Name` or `display.Lore.__`, the nbt is json evaluated when the match value is not a json. <br> See [NBT Match](#nbt-match) for more info.  | None |
 
 <br>
 <br>
 <hr>
 
-## NBT Match
+## NBT Path
 
-// This section assumes you are familiar with Minecraft's nbt format.
-
-The `nbt.` condition has a unique handler for nbt predicates. There are two parts to this.  
-
-### Path
-
-The first part is the path. `nbt` cannot be declared by itself, there must be a unique 
-nbt tag path to target for every `nbt` condition.
+The `nbt` property cannot be declared by itself, there must be a unique nbt tag 
+path to target for every `nbt` condition.
 
 The path starts from the item's `tag` root and is separated by dots. For example:  
 ```properties
@@ -76,12 +70,11 @@ And to match any lore line you'd use:
 nbt.display.Lore.*=Any line in the lore
 ```
 
-### Match
+## NBT Match
 
-The second part is what the nbt tag is matching. There are multiple options 
-for how you could do this. Either by literal values, matching patterns or 
-by matching regex. Pattern and regex matching also provide case-insensitive 
-options.
+There are multiple options for how you could do this. Either by literal 
+values, matching patterns or by matching regex. Pattern and regex matching 
+also provide case-insensitive options.
 
 To match literally, the value is used normally. So to match the item name 
 "`Some Name`", you'd write:
