@@ -18,8 +18,8 @@ nav:
   - Usage:
     - 'usage/users.md'
     - 'usage/config.md'
+    - 'usage/help.md'
     - 'usage/pack_authors.md'
-    - 'usage/mod_authors.md'
   - CIT:
     - 'cit/global.md'
     - 'cit/cit_base.md'
@@ -27,3 +27,7 @@ nav:
     - 'cit/cit_armor.md'
     - 'cit/cit_elytra.md'
     - 'cit/cit_enchantment.md'
+  - Mods:
+    - 'mods/supported.md'
+    - 'mods/mod_assets.md'
+    - 'mods/mod_api.md'
