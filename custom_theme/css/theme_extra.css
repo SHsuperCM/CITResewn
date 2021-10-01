@@ -211,11 +211,6 @@ td, th {
     font-weight: bold;
 }
 
-.wy-menu-vertical ul.tocbase li.current.with-children > a {
-    color: #333333;
-    font-weight: bold;
-}
-
 .wy-menu-vertical ul.tocbase span.toctree-expand {
     position: absolute;
     top: 6px;
@@ -278,7 +273,7 @@ td, th {
 /* Level 3 heading */
 .wy-menu-vertical ul.navtree.subnav-l1 li.toctree-l2.current li.toctree-l3.current > a,
 .wy-menu-vertical ul.navtree.subnav-l1 li.toctree-l3.current li.toctree-l4 > a {
-    background: #c9c9c9;
+    background: #404040;
 }
 .wy-menu-vertical ul.subnav-l1 li.toctree-l2.current li.toctree-l3.current > a,
 .wy-menu-vertical ul.subnav-l1 li.toctree-l3.current li.toctree-l4 > a {
@@ -305,7 +300,7 @@ td, th {
 .wy-menu-vertical ul.tocbase li.toctree-l5 > a:hover,
 .wy-menu-vertical ul.tocbase li.toctree-l6 > a:hover,
 .wy-menu-vertical ul.tocbase li.toctree-l7 > a:hover {
-    background: #d6d6d6 !important;
+    background: #505050 !important;
 }
 
 /* highlight.js */

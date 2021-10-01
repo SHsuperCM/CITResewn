@@ -16,9 +16,11 @@
       {% if toc_item.children %}
           {% include 'toc.html' %}
       {% else %}
-        <li class="toctree-l{{ navlevel }}">
-          <a class="toctree-l{{ navlevel + 1 }}" href="{{ toc_item.url }}">{{ toc_item.title }}</a>
-        </li>
+        {% if navlevel < 4 %}
+          <li class="toctree-l{{ navlevel }}">
+            <a class="toctree-l{{ navlevel + 1 }}" href="{{ toc_item.url }}">{{ toc_item.title }}</a>
+          </li>
+        {% endif %}
       {%- endif %}
     {% endfor %}
     {%- set navlevel = navlevel - 1%}
