@@ -87,8 +87,14 @@
     {# SIDE NAV, TOGGLES ON MOBILE #}
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
       <div class="wy-side-nav-search">
-		<a href="{{ nav.homepage.url|url }}" style="margin: 0 auto"> <img src="{{ 'img/logo.png'|url }}" style="width:200px ; height: 200px; border-radius: 0%;margin: 0 auto"> </a>
-    {%- block site_name %}
+        <a href="{{ nav.homepage.url|url }}" style="margin: 0 auto"> <img src="{{ 'img/logo.png'|url }}" style="width:200px ; height: 200px; border-radius: 0%;margin: 0 auto"> </a>
+        <br>
+        <a href="https://modrinth.com/mod/cit-resewn" class="hint--bottom" aria-label="Modrinth"> <img src="{{ 'img/modrinth.png'|url }}" style="width: 32px; height: 32px; margin-bottom: 0px;"> </a>
+             
+        <a href="https://github.com/SHsuperCM/CITResewn" class="hint--bottom" aria-label="Github"> <img src="{{ 'img/github.png'|url }}" style="width: 32px; height: 32px; margin-bottom: 0px;"> </a>
+             
+        <a href="https://www.curseforge.com/minecraft/mc-mods/cit-resewn" class="hint--bottom" aria-label="CurseForge"> <img src="{{ 'img/curseforge.png'|url }}" style="width: 32px; height: 32px; margin-bottom: 0px;"> </a>
+      {%- block site_name %}
         
 	  {%- endblock %}
 	  {%- block search_button %}
