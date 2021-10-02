@@ -2,7 +2,11 @@
 
 CIT Resewn also provides an API that allows adding custom CIT types and conditions.
 
-### CIT Types:
+<h2>Expect the API to change a lot, still not 100% sure on how I want to do this..</h2>
+
+### CIT Types
+
+(temporary api)
 
 To register custom cit types, call `CITParser.REGISTRY#put` during your mod's
 client initialisation.
