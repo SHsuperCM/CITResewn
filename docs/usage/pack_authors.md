@@ -46,3 +46,8 @@ My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/emerald/sword/emerald_sw
 My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/obsidian_dust/obsidian_dust.properties
 My Cool Resourcepack.zip/assets/minecraft/citresewn/cit/obsidian_dust/obsidian_dust.png
 ```
+
+## Tips
+
+CIT Resewn provides a lot of information in the logs, it is recommended that you have them 
+open while working on a pack.
