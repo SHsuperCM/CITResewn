@@ -18,12 +18,6 @@ CITs are split into 2 parts: Conditions which determine how items are selected a
 Effects that change something about the item. All conditions must match for the CIT 
 to apply.
 
-## Effects
-
-| Key | Value Type | Description | Default |
-| --- | --- | --- | --- |
-| `type` | [**Literal**]{Either: &#10 type=item / type=armor / type=elytra / type=enchantment|right} | Which type to apply on this CIT. <br> Either: [`item`](/cit/cit_item) / [`armor`](/cit/cit_armor) / [`elytra`](/cit/cit_elytra) / [`enchantment`](/cit/cit_enchantment) <br> Other mods may add different options. | `item` |
-
 ## Conditions
 
 | Key | Value Type                    | Description | Default |
@@ -36,7 +30,14 @@ to apply.
 | `hand` | [**Literal**]{Either: &#10 hand=main / hand=off / hand=any} | Requires that the item is in a specific hand. <br> Either: `main` / `off` for mainhand or offhand | Any |
 | [**`enchantments`**]{Aliases: &#10 enchantmentIDs|right} | [**List of enchantments**]{Examples: &#10 enchantments=sharpness &#10 enchantments=minecraft:power &#10 enchantments=unbreaking mending &#10 enchantments=bane_of_arthropods|right} | Requires that the item has at least one of the enchantments listed. <br> Separated by spaces. <br> Namespaces (`minecraft:`) are optional. | Any |
 | `enchantmentLevels` | [**List of levels/ranges**]{Examples: &#10 enchantmentLevels=5 (only 5) &#10 enchantmentLevels=1- (1 or more) &#10 enchantmentLevels=-2 (up to 2) &#10 enchantmentLevels=1-3 5 (between 1 and 3 or 5) &#10 enchantmentLevels=1 3 (1 or 3)|right} | Requires that one of the item's enchantments matches one of the levels listed. <br> When `enchantments` is declared, requires that either one of `enchantments` matches the levels. <br> Separated by spaces. | Any |
-| [`nbt.`[**<ins>  path  </ins>**]{Path from the root of the nbt, use numbers for list index and * to match any nbt entry.|right}](#nbt-path) | [**[NBT Match](#nbt-match)**]{Examples: &#10 nbt.display.Name=Cool Item &#10 nbt.CustomModelData=5 &#10 nbt.display.Name=regex:.+'s Cool Item &#10 nbt.display.Name=ipattern:The knife of * |right} | Requires that the item matches the specified NBT predicate. <br> [**Multiple nbt conditions are allowed.**]{As long as the paths are unique.|bottom} <br> Accepts literal, pattern and regex checks, along with ignore-case alternatives. <br> When path is `display.Name` or `display.Lore.__`, the nbt is json evaluated when the match value is not a json. <br> See [NBT Match](#nbt-match) for more info.  | None |
+| [`nbt.`[**<ins>  path  </ins>**]{Path from the root of the nbt, use numbers for list index and * to match any nbt entry.|right}](#nbt-path) | [**[NBT Match](#nbt-match)**]{Examples: &#10 nbt.display.Name=Cool Item &#10 nbt.CustomModelData=5 &#10 nbt.display.Name=regex:.+'s Cool Item &#10 nbt.display.Name=ipattern:The knife of * |right} | Requires that the item matches the specified NBT predicate. <br> [**Multiple nbt conditions are allowed.**]{As long as the paths are unique.|bottom} <br> Accepts literal, pattern and regex checks, along with ignore-case alternatives. <br> When path is `display.Name` or `display.Lore.__`, the nbt is json evaluated when the match value is not a json. <br> See [NBT Path](#nbt-path) and [NBT Match](#nbt-match) for more info.  | None |
+
+
+## Effects
+
+| Key | Value Type | Description | Default |
+| --- | --- | --- | --- |
+| `type` | [**Literal**]{Either: &#10 type=item / type=armor / type=elytra / type=enchantment|right} | Which type to apply on this CIT. <br> Either: [`item`](/cit/cit_item) / [`armor`](/cit/cit_armor) / [`elytra`](/cit/cit_elytra) / [`enchantment`](/cit/cit_enchantment) <br> Other mods may add different options. | `item` |
 
 <br>
 <br>
@@ -121,4 +122,85 @@ nbt.display.Name=Some Item's Name
 
 Note that this is supported for both patterns and regex as well by prefixing before the json if present.
 
-<hr>
+
+## Asset Resolution
+
+Most effects use the `Asset` type to find files. CITs will find properties in their own
+resourcepack through either an absolute or a relative declared path.
+
+Assets are type specific, meaning that the file extension is optional in the properties 
+declaration but required for the file name. For example the `texture` property will only 
+look for textures, so both `example` and `example.png` would work when `texture` is 
+looking for `example.png`.
+
+While not required, you can force a path to be relative by prefixing it with `./` like so:
+```properties
+# minecraft/citresewn/cit/sticks/stick.properties
+# ↓
+# minecraft/citresewn/cit/sticks/my_textures/stick_texture.png
+
+# forced relative texture
+texture=./my_textures/stick_texture.png
+
+# assumed relative texture
+texture=my_textures/stick_texture.png
+```
+
+Relative paths also support going up directories with `..` like so:
+```properties
+# minecraft/citresewn/cit/sticks/properties/stick.properties
+# ↓
+# minecraft/citresewn/cit/sticks/my_textures/stick_texture.png
+
+# go back one level and into textures
+texture=./../my_textures/stick_texture.png
+```
+<br>
+
+Absolute paths can start from multiple roots, examples:
+```properties
+# Full resourcepack path:
+texture=assets/minecraft/citresewn/cit/item_textures/texture.png
+# ↓
+# assets/minecraft/citresewn/cit/item_textures/texture.png
+
+# Namespaced full path:
+texture=minecraft:citresewn/cit/item_textures/texture.png
+# ↓
+# assets/minecraft/citresewn/cit/item_textures/texture.png
+
+# Relative namespace full path:
+texture=citresewn/cit/item_textures/texture.png
+# ↓ (when the CIT is in the minecraft namespace)
+# assets/minecraft/citresewn/cit/item_textures/texture.png
+
+# Namespaced typed directories:
+texture=minecraft:item/texture.png
+# ↓
+# assets/minecraft/textures/item/texture.png
+
+# Relative namespace typed directories:
+texture=item/texture.png
+# ↓ (when the CIT is in the minecraft namespace)
+# assets/minecraft/textures/item/texture.png
+
+# The typed directories are:
+#    .png → textures/
+#    .json → models/
+```
+
+*When an asset is not declared, some properties will also try to 
+find assets with similar names as their CITs' in the same directory. 
+For Example:*
+```properties
+# assets/minecraft/citresewn/cit/stuff/my_cool_stick.properties
+type=item
+items=stick
+nbt.CustomModelData=1
+
+# because no texture/model were declared, the item CIT will search for either:
+# model=assets/minecraft/citresewn/cit/stuff/my_cool_stick.json
+# or
+# texture=assets/minecraft/citresewn/cit/stuff/my_cool_stick.png
+# with models having more priority than textures.
+```
