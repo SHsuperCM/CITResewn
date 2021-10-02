@@ -482,3 +482,7 @@ code.hljs {
 ::-webkit-scrollbar-thumb:hover {
   background: #615d72;
 }
+
+table.docutils::-webkit-scrollbar:horizontal {
+  display: none;
+}
