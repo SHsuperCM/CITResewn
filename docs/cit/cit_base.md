@@ -125,7 +125,7 @@ Note that this is supported for both patterns and regex as well by prefixing bef
 
 ## Asset Resolution
 
-Most effects use the `Asset` type to find files. CITs will find properties in their own
+Most effects use the `Asset` type to find files. CITs will find assets in their own
 resourcepack through either an absolute or a relative declared path.
 
 Assets are type specific, meaning that the file extension is optional in the properties 
