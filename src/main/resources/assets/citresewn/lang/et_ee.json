@@ -1,0 +1,24 @@
+{
+  "config.citresewn.title": "CIT Resewn seadistus",
+
+  "config.citresewn.enabled.title": "Lubatud",
+  "config.citresewn.enabled.tooltip": "Kas CIT Resewn peaks laadima ja sisestama ressursipakkide CITe",
+
+  "config.citresewn.mute_errors.title": "Vaigista laadimisvead",
+  "config.citresewn.mute_errors.tooltip": "Kas CIT Resewn peaks mitte logima CITi laadimisvigu",
+
+  "config.citresewn.mute_warns.title": "Vaigista laadimishoiatused",
+  "config.citresewn.mute_warns.tooltip": "Kas CIT Resewn peaks mitte logima CITi laadimishoiatusi",
+
+  "config.citresewn.broken_paths.title": "Luba ressursipakkidel katkised failiteed",
+  "config.citresewn.broken_paths.tooltip": "Lubab ebasobivate ressursside failiteedega pakkide laadimist.\nVõib põhjustada vigu!",
+
+  "config.citresewn.cache_ms.title": "Vahemälu",
+  "config.citresewn.cache_ms.tooltip": "Kui tihti peaks CITide vahemälu värskendama.\nKõrgemad väärtused parandavad jõudlust.\nMadalamad väärtused sunnivad CITid kiiremini uuenduma.\nREAALAJAS eemaldab vahemälu täielikult,\n sundides esemeid igal kaadril CITe kontrollima.",
+  "config.citresewn.cache_ms.ticks.0": "REAALAJAS",
+  "config.citresewn.cache_ms.ticks.1": "IGA TIKSUGA",
+  "config.citresewn.cache_ms.ticks.any": "IGA %s TIKSUGA",
+
+  "pack.incompatible.broken_paths": "(Sisaldab katkiseid failiteid)",
+  "pack.incompatible.confirm.broken_paths": "See pakk sisaldab katkiseid failiteid ning selle toetamine võidakse tulevikus lõpetada. Selle hoiatuse eemaldamiseks kontakteeru paki autoriga. (~ CIT Resewn)"
+}
