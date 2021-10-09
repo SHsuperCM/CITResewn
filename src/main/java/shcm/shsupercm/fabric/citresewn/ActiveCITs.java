@@ -69,14 +69,14 @@ public class ActiveCITs {
         List<CITItem> citItems = this.citItems.get(stack.getItem());
         if (citItems != null)
             for (CITItem citItem : citItems)
-                if (citItem.test(stack, hand, world, entity))
+                if (citItem.test(stack, hand, world, entity, true))
                     return citItem;
         return null;
     }
 
     public CITElytra getCITElytra(ItemStack stack, World world, LivingEntity livingEntity) {
         for (CITElytra citElytra : citElytra)
-            if (citElytra.test(stack, Hand.MAIN_HAND, world, livingEntity))
+            if (citElytra.test(stack, Hand.MAIN_HAND, world, livingEntity, true))
                 return citElytra;
         return null;
     }
@@ -87,10 +87,25 @@ public class ActiveCITs {
             List<CITArmor> citArmor = this.citArmor.get(item);
             if (citArmor != null)
                 for (CITArmor armor : citArmor)
-                    if (armor.test(stack, null, world, livingEntity))
+                    if (armor.test(stack, null, world, livingEntity, true))
                         return armor;
         }
         return null;
+    }
+
+    public List<CITEnchantment> getCITEnchantment(ItemStack stack, World world, LivingEntity livingEntity) {
+        Hand hand = livingEntity != null && stack == livingEntity.getOffHandStack() ? Hand.OFF_HAND : Hand.MAIN_HAND;
+
+        List<CITEnchantment> applied = new ArrayList<>();
+
+        for (List<CITEnchantment> layer : this.citEnchantments)
+            for (CITEnchantment cit : layer)
+                if (cit.test(stack, hand, world, livingEntity, false)) {
+                    applied.add(cit);
+                    break;
+                }
+
+        return applied;
     }
 
     public BakedModel getItemModelCached(ItemStack stack, World world, LivingEntity entity, int seed) {

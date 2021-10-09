@@ -36,8 +36,6 @@ public class CITEnchantment extends CIT {
             rotation = Float.parseFloat(properties.getProperty("rotation", "0"));
 
             duration = Float.max(0f, Float.parseFloat(properties.getProperty("duration", "0")));
-
-
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
