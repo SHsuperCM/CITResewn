@@ -22,11 +22,13 @@ public class ActiveCITs {
     public final Map<Item, List<CITItem>> citItems = new HashMap<>();
     public final Map<ArmorItem, List<CITArmor>> citArmor = new HashMap<>();
     public final List<CITElytra> citElytra = new ArrayList<>();
-    public final List<CITEnchantment> citEnchantments = new ArrayList<>();
+    public final List<List<CITEnchantment>> citEnchantments = new ArrayList<>();
 
 
     public ActiveCITs(Collection<CIT> cits) {
         this.cits = cits;
+
+        Map<Integer, List<CITEnchantment>> citEnchantmentLayers = new TreeMap<>(); // order citEnchantments by layers
 
         for (CIT cit : cits.stream().sorted(Comparator.<CIT>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString())).collect(Collectors.toList())) {
             if (cit instanceof CITItem item)
@@ -38,11 +40,13 @@ public class ActiveCITs {
                         citArmor.computeIfAbsent(armorType, t -> new ArrayList<>()).add(armor);
                     else
                         CITResewn.logErrorLoading("Ignoring item type: " + Registry.ITEM.getId(type) + " is not armor in " + cit.pack.resourcePack.getName() + " -> " + cit.propertiesIdentifier.toString());
-            else if (cit instanceof CITElytra)
-                citElytra.add((CITElytra) cit);
-            else if (cit instanceof CITEnchantment)
-                citEnchantments.add((CITEnchantment) cit);
+            else if (cit instanceof CITElytra elytra)
+                citElytra.add(elytra);
+            else if (cit instanceof CITEnchantment enchantment)
+                citEnchantmentLayers.computeIfAbsent(enchantment.layer, l -> new ArrayList<>()).add(enchantment);
         }
+
+        citEnchantments.addAll(citEnchantmentLayers.values());
     }
 
     public void dispose() {
