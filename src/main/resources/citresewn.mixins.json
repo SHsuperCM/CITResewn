@@ -13,6 +13,8 @@
     "citarmor.ItemStackMixin",
     "citelytra.ElytraFeatureRendererMixin",
     "citelytra.ItemStackMixin",
+    "citenchantment.BufferBuilderStorageAccessor",
+    "citenchantment.RenderPhaseAccessor",
     "cititem.ItemRendererMixin",
     "cititem.ItemStackMixin",
     "cititem.ModelLoaderMixin",

@@ -46,7 +46,11 @@ public class ActiveCITs {
                 citEnchantmentLayers.computeIfAbsent(enchantment.layer, l -> new ArrayList<>()).add(enchantment);
         }
 
-        citEnchantments.addAll(citEnchantmentLayers.values());
+        for (List<CITEnchantment> layer : citEnchantmentLayers.values()) {
+            for (CITEnchantment enchantment : layer)
+                enchantment.activate();
+            citEnchantments.add(layer);
+        }
     }
 
     public void dispose() {
