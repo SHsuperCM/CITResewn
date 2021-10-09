@@ -364,7 +364,15 @@ public class CITItem extends CIT {
         Identifier firstItemIdentifier = Registry.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
         Resource itemModelResource = null;
         try {
-            return JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
+            JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
+
+            if (!GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier)) // cit generated duplicate
+                firstItemModelIdentifier = new Identifier(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
+            GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier);
+
+            json.id = firstItemModelIdentifier.toString();
+            json.id = json.id.substring(0, json.id.length() - 5);
+            return json;
         } catch (Exception e) {
             return null;
         } finally {
