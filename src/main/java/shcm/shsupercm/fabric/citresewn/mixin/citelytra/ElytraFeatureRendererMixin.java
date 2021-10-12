@@ -25,8 +25,8 @@ public class ElytraFeatureRendererMixin {
     private WeakReference<ItemStack> elytraItemCached = new WeakReference<>(null);
     private WeakReference<LivingEntity> livingEntityCached = new WeakReference<>(null);
 
-    @Inject(method = "render", cancellable = true, at = @At("HEAD"))
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
+    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At("HEAD"))
+    private void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
@@ -39,8 +39,8 @@ public class ElytraFeatureRendererMixin {
         this.livingEntityCached = new WeakReference<>(livingEntity);
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorCutoutNoCull(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/render/RenderLayer;"))
-    public RenderLayer getArmorCutoutNoCull(Identifier originalIdentifier) {
+    @Redirect(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorCutoutNoCull(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/render/RenderLayer;"))
+    private RenderLayer getArmorCutoutNoCull(Identifier originalIdentifier) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return RenderLayer.getArmorCutoutNoCull(originalIdentifier);
 

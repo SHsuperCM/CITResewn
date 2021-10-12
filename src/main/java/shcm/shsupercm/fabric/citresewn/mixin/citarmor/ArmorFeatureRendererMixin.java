@@ -25,8 +25,8 @@ import java.util.Map;
 public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> {
     private WeakReference<Map<String, Identifier>> armorTexturesCached = null;
 
-    @Inject(method = "renderArmor", cancellable = true, at = @At("HEAD"))
-    public void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
+    @Inject(method = "renderArmor", at = @At("HEAD"))
+    private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;
 
@@ -45,7 +45,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
     }
 
     @Inject(method = "getArmorTexture", cancellable = true, at = @At("HEAD"))
-    public void getArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
+    private void getArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
         if (armorTexturesCached == null)
             return;
         Map<String, Identifier> armorTextures = armorTexturesCached.get();
