@@ -1,5 +1,8 @@
 package shcm.shsupercm.fabric.citresewn;
 
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.VertexConsumers;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
@@ -144,5 +147,24 @@ public class ActiveCITs {
             return citArmor.textures;
 
         return null;
+    }
+
+    public void setEnchantmentAppliedContextCached(ItemStack stack, World world, LivingEntity entity) {
+        if (stack == null) {
+            CITEnchantment.appliedContext = null;
+            return;
+        }
+
+        Supplier<List<CITEnchantment>> realtime = () -> getCITEnchantment(stack, world, entity);
+
+        //noinspection ConstantConditions
+        List<CITEnchantment> citEnchantments = CITResewnConfig.INSTANCE().cache_ms == 0 ? realtime.get() : ((CITEnchantment.Cached) (Object) stack).citresewn_getCachedCITEnchantment(realtime);
+
+        if (citEnchantments == null || citEnchantments.isEmpty()) {
+            CITEnchantment.appliedContext = null;
+            return;
+        }
+
+        CITEnchantment.appliedContext = citEnchantments;
     }
 }

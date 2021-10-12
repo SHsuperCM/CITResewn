@@ -2,8 +2,13 @@ package shcm.shsupercm.fabric.citresewn.pack.cits;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
+import shcm.shsupercm.fabric.citresewn.ActiveCITs;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.RenderPhaseAccessor;
@@ -11,11 +16,15 @@ import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class CITEnchantment extends CIT {
+    public static List<CITEnchantment> appliedContext = null;
+
     public final Identifier textureIdentifier;
     public final float speed, rotation, duration;
     public final int layer;
+    public final boolean useGlint;
     public final Blend blend;
 
     public final Map<GlintRenderLayer, RenderLayer> renderLayers = new EnumMap<>(GlintRenderLayer.class);
@@ -27,15 +36,21 @@ public class CITEnchantment extends CIT {
             if (textureIdentifier == null)
                 throw new Exception("Cannot resolve texture");
 
-            layer = Integer.parseInt(properties.getProperty("layer", "0"));
-
-            blend = Blend.valueOf(properties.getProperty("blend", "add").toUpperCase(Locale.ENGLISH));
-
             speed = Float.parseFloat(properties.getProperty("speed", "0"));
 
             rotation = Float.parseFloat(properties.getProperty("rotation", "0"));
 
             duration = Float.max(0f, Float.parseFloat(properties.getProperty("duration", "0")));
+
+            layer = Integer.parseInt(properties.getProperty("layer", "0"));
+
+            useGlint = switch (properties.getProperty("useGlint", "false").toLowerCase(Locale.ENGLISH)) {
+                case "true" -> true;
+                case "false" -> false;
+                default -> throw new Exception("useGlint is not a boolean");
+            };
+
+            blend = Blend.valueOf(properties.getProperty("blend", "add").toUpperCase(Locale.ENGLISH));
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
@@ -52,6 +67,7 @@ public class CITEnchantment extends CIT {
 
     @Override
     public void dispose() {
+        appliedContext = null;
         for (RenderLayer renderLayer : renderLayers.values())
             ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).entityBuilders().remove(renderLayer);
     }
@@ -144,5 +160,20 @@ public class CITEnchantment extends CIT {
                     256,
                     layer.build(false));
         }
+
+        public VertexConsumer tryApply(VertexConsumer base, VertexConsumerProvider provider) {
+            if (appliedContext == null)
+                return null;
+
+            VertexConsumer applied = VertexConsumers.union(appliedContext.stream()
+                    .map(cit -> provider.getBuffer(cit.renderLayers.get(GlintRenderLayer.this)))
+                    .toArray(VertexConsumer[]::new));
+
+            return base == null ? applied : VertexConsumers.union(applied, base);
+        }
+    }
+
+    public interface Cached {
+        List<CITEnchantment> citresewn_getCachedCITEnchantment(Supplier<List<CITEnchantment>> realtime);
     }
 }

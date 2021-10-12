@@ -252,7 +252,7 @@ public abstract class CIT {
     }
 
     public boolean test(ItemStack stack, Hand hand, World world, LivingEntity entity, boolean ignoreItemType) {
-        if (!ignoreItemType && !items.contains(stack.getItem()))
+        if (!ignoreItemType && !items.isEmpty() && !items.contains(stack.getItem()))
             return false;
 
         if (!damageAny && stack.getItem().isDamageable()) {
