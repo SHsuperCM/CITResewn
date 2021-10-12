@@ -2,13 +2,8 @@ package shcm.shsupercm.fabric.citresewn.pack.cits;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
-import shcm.shsupercm.fabric.citresewn.ActiveCITs;
-import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.RenderPhaseAccessor;
@@ -20,6 +15,7 @@ import java.util.function.Supplier;
 
 public class CITEnchantment extends CIT {
     public static List<CITEnchantment> appliedContext = null;
+    public static boolean shouldApply = false;
 
     public final Identifier textureIdentifier;
     public final float speed, rotation, duration;
@@ -162,7 +158,7 @@ public class CITEnchantment extends CIT {
         }
 
         public VertexConsumer tryApply(VertexConsumer base, VertexConsumerProvider provider) {
-            if (appliedContext == null)
+            if (!shouldApply || appliedContext == null)
                 return null;
 
             VertexConsumer applied = VertexConsumers.union(appliedContext.stream()

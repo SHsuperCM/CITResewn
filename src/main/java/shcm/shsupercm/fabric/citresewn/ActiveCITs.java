@@ -1,8 +1,5 @@
 package shcm.shsupercm.fabric.citresewn;
 
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumers;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
