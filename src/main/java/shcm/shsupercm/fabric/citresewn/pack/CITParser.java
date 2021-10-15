@@ -36,11 +36,10 @@ public final class CITParser { private CITParser() {}
      * @param packs packs to parse
      * @return a collection of parsed CITs
      */
-    public static Collection<CIT> parseCITs(Collection<ResourcePack> packs) {
+    public static List<CITPack> parseCITs(Collection<ResourcePack> packs) {
         return packs.stream()
                 .map(CITParser::parse)
                 .flatMap(Collection::stream)
-                .flatMap(pack -> pack.cits.stream())
                 .collect(Collectors.toList());
     }
 

@@ -9,10 +9,10 @@ public class CITPack {
     public final ResourcePack resourcePack;
     public final Collection<CIT> cits = new ArrayList<>();
 
-    private EnchantmentMergeMethod method = EnchantmentMergeMethod.AVERAGE;
-    private int cap = 8;
-    private float fade = 0.5f;
-    private boolean useGlint = true;
+    public EnchantmentMergeMethod method = EnchantmentMergeMethod.AVERAGE;
+    public Integer cap = 8;
+    public Float fade = 0.5f;
+    public Boolean useGlint = true;
 
     public CITPack(ResourcePack resourcePack) {
         this.resourcePack = resourcePack;
@@ -20,25 +20,45 @@ public class CITPack {
 
     public void loadGlobalProperties(Properties properties) throws Exception {
         try {
-            this.method = CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method", "average").toUpperCase(Locale.ENGLISH));
-            this.cap = Integer.parseInt(properties.getProperty("cap", "8"));
-            if (this.cap < 0)
-                throw new Exception("cap cannot be negative");
-            this.fade = Float.parseFloat(properties.getProperty("fade", "0.5"));
-            if (this.fade < 0f)
-                throw new Exception("fade cannot be negative");
-            this.useGlint = switch (properties.getProperty("useGlint", "true").toLowerCase(Locale.ENGLISH)) {
+            this.method = properties.containsKey("method") ? CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method").toUpperCase(Locale.ENGLISH)) : null;
+
+            if (properties.containsKey("cap")) {
+                this.cap = Integer.parseInt(properties.getProperty("cap"));
+                if (this.cap < 0)
+                    throw new Exception("cap cannot be negative");
+            } else
+                this.cap = null;
+
+            if (properties.containsKey("fade")) {
+                this.fade = Float.parseFloat(properties.getProperty("fade"));
+                if (this.fade < 0f)
+                    throw new Exception("fade cannot be negative");
+            } else
+                this.fade = null;
+
+            this.useGlint = properties.containsKey("useGlint") ? switch (properties.getProperty("useGlint").toLowerCase(Locale.ENGLISH)) {
                 case "true" -> true;
                 case "false" -> false;
                 default -> throw new Exception("useGlint is not a boolean");
-            };
+            } : null;
         } catch (Exception e) {
-            this.method = EnchantmentMergeMethod.AVERAGE;
-            this.cap = 8;
-            this.fade = 0.5f;
-            this.useGlint = true;
+            this.method = null;
+            this.cap = null;
+            this.fade = null;
+            this.useGlint = null;
             throw e;
         }
+    }
+
+    public void loadGlobalProperties(CITPack properties) {
+        if (properties.method != null)
+            this.method = properties.method;
+        if (properties.cap != null)
+            this.cap = properties.cap;
+        if (properties.fade != null)
+            this.fade = properties.fade;
+        if (properties.useGlint != null)
+            this.useGlint = properties.useGlint;
     }
 
     public enum EnchantmentMergeMethod {

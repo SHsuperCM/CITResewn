@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
+import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.util.*;
@@ -18,15 +19,25 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class ActiveCITs {
-    public final Collection<CIT> cits;
+    public final List<CITPack> packs;
+    public final CITPack effectiveGlobalProperties = new CITPack(null);
+
+    public final List<CIT> cits;
+
     public final Map<Item, List<CITItem>> citItems = new HashMap<>();
     public final Map<ArmorItem, List<CITArmor>> citArmor = new HashMap<>();
     public final List<CITElytra> citElytra = new ArrayList<>();
     public final List<List<CITEnchantment>> citEnchantments = new ArrayList<>();
 
 
-    public ActiveCITs(Collection<CIT> cits) {
+    public ActiveCITs(List<CITPack> packs, List<CIT> cits) {
+        this.packs = packs;
         this.cits = cits;
+
+        for (CITPack pack : packs)
+            effectiveGlobalProperties.loadGlobalProperties(pack);
+        for (CITPack pack : packs)
+            pack.loadGlobalProperties(effectiveGlobalProperties);
 
         Map<Integer, List<CITEnchantment>> citEnchantmentLayers = new TreeMap<>(); // order citEnchantments by layers
 

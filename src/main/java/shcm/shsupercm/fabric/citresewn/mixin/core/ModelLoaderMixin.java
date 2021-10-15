@@ -12,11 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shcm.shsupercm.fabric.citresewn.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
+import shcm.shsupercm.fabric.citresewn.pack.CITPack;
 import shcm.shsupercm.fabric.citresewn.pack.CITParser;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
@@ -37,11 +39,12 @@ public abstract class ModelLoaderMixin {
             return;
 
         info("Parsing CITs...");
-        Collection<CIT> parsed = CITParser.parseCITs(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
+        List<CITPack> parsedPacks = CITParser.parseCITs(resourceManager.streamResourcePacks().collect(Collectors.toCollection(ArrayList::new)));
+        List<CIT> parsed = parsedPacks.stream().flatMap(pack -> pack.cits.stream()).collect(Collectors.toCollection(ArrayList::new));
 
         if (parsed.size() > 0) {
             info("Activating CITs...");
-            CITResewn.INSTANCE.activeCITs = new ActiveCITs(parsed);
+            CITResewn.INSTANCE.activeCITs = new ActiveCITs(parsedPacks, parsed);
         } else
             info("No cit packs found.");
     }
