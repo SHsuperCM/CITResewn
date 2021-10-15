@@ -5,6 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CITEnchantment;
 
@@ -29,7 +30,7 @@ public class ItemStackMixin implements CITEnchantment.Cached {
 
     @Inject(method = "hasGlint", cancellable = true, at = @At("HEAD"))
     private void disableDefaultGlint(CallbackInfoReturnable<Boolean> cir) {
-        if (CITEnchantment.shouldApply && CITEnchantment.appliedContext != null && !CITEnchantment.appliedContext.get(0).useGlint)
+        if (CITResewn.INSTANCE.activeCITs != null && ((!CITResewn.INSTANCE.activeCITs.effectiveGlobalProperties.useGlint) || (CITEnchantment.appliedContext != null && CITEnchantment.shouldApply && !CITEnchantment.appliedContext.get(0).useGlint)))
             cir.setReturnValue(false);
     }
 }
