@@ -4,6 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.RenderPhaseAccessor;
@@ -161,13 +162,14 @@ public class CITEnchantment extends CIT {
             if (!shouldApply || appliedContext == null)
                 return null;
 
-            VertexConsumer applied = VertexConsumers.union(appliedContext.stream()
-                    .map(cit -> provider.getBuffer(cit.renderLayers.get(GlintRenderLayer.this)))
-                    .toArray(VertexConsumer[]::new));
+            VertexConsumer[] layers = new VertexConsumer[Math.min(appliedContext.size(), CITResewn.INSTANCE.activeCITs.effectiveGlobalProperties.cap)];
+
+            for (int i = 0; i < layers.length; i++)
+                layers[i] = provider.getBuffer(appliedContext.get(i).renderLayers.get(GlintRenderLayer.this));
 
             provider.getBuffer(baseLayer); // refresh base layer for armor consumer
 
-            return base == null ? applied : VertexConsumers.union(applied, base);
+            return base == null ? VertexConsumers.union(layers) : VertexConsumers.union(VertexConsumers.union(layers), base);
         }
     }
 
