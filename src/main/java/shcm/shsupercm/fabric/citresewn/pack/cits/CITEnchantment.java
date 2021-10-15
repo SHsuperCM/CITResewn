@@ -157,13 +157,15 @@ public class CITEnchantment extends CIT {
                     layer.build(false));
         }
 
-        public VertexConsumer tryApply(VertexConsumer base, VertexConsumerProvider provider) {
+        public VertexConsumer tryApply(VertexConsumer base, RenderLayer baseLayer, VertexConsumerProvider provider) {
             if (!shouldApply || appliedContext == null)
                 return null;
 
             VertexConsumer applied = VertexConsumers.union(appliedContext.stream()
                     .map(cit -> provider.getBuffer(cit.renderLayers.get(GlintRenderLayer.this)))
                     .toArray(VertexConsumer[]::new));
+
+            provider.getBuffer(baseLayer); // refresh base layer for armor consumer
 
             return base == null ? applied : VertexConsumers.union(applied, base);
         }

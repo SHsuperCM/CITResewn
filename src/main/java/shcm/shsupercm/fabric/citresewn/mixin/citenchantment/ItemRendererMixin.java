@@ -43,7 +43,7 @@ public class ItemRendererMixin {
     private static void getArmorGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CITEnchantment.shouldApply)
             return;
-        VertexConsumer vertexConsumer = solid ? CITEnchantment.GlintRenderLayer.ARMOR_GLINT.tryApply(cir.getReturnValue(), provider) : CITEnchantment.GlintRenderLayer.ARMOR_ENTITY_GLINT.tryApply(cir.getReturnValue(), provider);
+        VertexConsumer vertexConsumer = solid ? CITEnchantment.GlintRenderLayer.ARMOR_GLINT.tryApply(cir.getReturnValue(), layer, provider) : CITEnchantment.GlintRenderLayer.ARMOR_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
         if (vertexConsumer != null)
             cir.setReturnValue(vertexConsumer);
     }
@@ -52,7 +52,7 @@ public class ItemRendererMixin {
     private static void getCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CITEnchantment.shouldApply)
             return;
-        VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.GLINT.tryApply(null, provider);
+        VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
             cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getModel(), entry.getNormal()), cir.getReturnValue()));
     }
@@ -61,7 +61,7 @@ public class ItemRendererMixin {
     private static void getDirectCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CITEnchantment.shouldApply)
             return;
-        VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, provider);
+        VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
             cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getModel(), entry.getNormal()), cir.getReturnValue()));
     }
@@ -70,7 +70,7 @@ public class ItemRendererMixin {
     private static void getItemGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CITEnchantment.shouldApply)
             return;
-        VertexConsumer vertexConsumer = MinecraftClient.isFabulousGraphicsOrBetter() && layer == TexturedRenderLayers.getItemEntityTranslucentCull() ? CITEnchantment.GlintRenderLayer.GLINT_TRANSLUCENT.tryApply(cir.getReturnValue(), provider) : (solid ? CITEnchantment.GlintRenderLayer.GLINT.tryApply(cir.getReturnValue(), provider) : CITEnchantment.GlintRenderLayer.ENTITY_GLINT.tryApply(cir.getReturnValue(), provider));
+        VertexConsumer vertexConsumer = MinecraftClient.isFabulousGraphicsOrBetter() && layer == TexturedRenderLayers.getItemEntityTranslucentCull() ? CITEnchantment.GlintRenderLayer.GLINT_TRANSLUCENT.tryApply(cir.getReturnValue(), layer, provider) : (solid ? CITEnchantment.GlintRenderLayer.GLINT.tryApply(cir.getReturnValue(), layer, provider) : CITEnchantment.GlintRenderLayer.ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider));
         if (vertexConsumer != null)
             cir.setReturnValue(vertexConsumer);
     }
@@ -79,7 +79,7 @@ public class ItemRendererMixin {
     private static void getDirectItemGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CITEnchantment.shouldApply)
             return;
-        VertexConsumer vertexConsumer = solid ? CITEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(cir.getReturnValue(), provider) : CITEnchantment.GlintRenderLayer.DIRECT_ENTITY_GLINT.tryApply(cir.getReturnValue(), provider);
+        VertexConsumer vertexConsumer = solid ? CITEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(cir.getReturnValue(), layer, provider) : CITEnchantment.GlintRenderLayer.DIRECT_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
         if (vertexConsumer != null)
             cir.setReturnValue(vertexConsumer);
     }
