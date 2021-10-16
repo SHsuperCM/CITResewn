@@ -26,7 +26,7 @@ public class CITEnchantment extends CIT {
     public final Identifier textureIdentifier;
     public final float speed, rotation, duration;
     public final int layer;
-    public final boolean useGlint;
+    public final boolean useGlint, blur;
     public final Blend blend;
 
     public final Map<GlintRenderLayer, RenderLayer> renderLayers = new EnumMap<>(GlintRenderLayer.class);
@@ -50,6 +50,12 @@ public class CITEnchantment extends CIT {
                 case "true" -> true;
                 case "false" -> false;
                 default -> throw new Exception("useGlint is not a boolean");
+            };
+
+            blur = switch (properties.getProperty("blur", "true").toLowerCase(Locale.ENGLISH)) {
+                case "true" -> true;
+                case "false" -> false;
+                default -> throw new Exception("blur is not a boolean");
             };
 
             blend = Blend.valueOf(properties.getProperty("blend", "add").toUpperCase(Locale.ENGLISH));
@@ -148,7 +154,7 @@ public class CITEnchantment extends CIT {
             final float speed = enchantment.speed, rotation = enchantment.rotation;
             //noinspection ConstantConditions
             RenderLayer.MultiPhaseParameters.Builder layer = RenderLayer.MultiPhaseParameters.builder()
-                    .texture(new RenderPhase.Texture(enchantment.textureIdentifier, false, false))
+                    .texture(new RenderPhase.Texture(enchantment.textureIdentifier, enchantment.blur, false))
                     .texturing(new RenderPhase.Texturing("citresewn_glint_texturing", () -> {
                         float l = Util.getMeasuringTimeMs() * CITResewnConfig.INSTANCE().citenchantment_scroll_multiplier * speed;
                         float x = (l % 110000f) / 110000f;
