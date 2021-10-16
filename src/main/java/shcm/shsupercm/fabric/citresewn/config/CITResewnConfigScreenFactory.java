@@ -44,6 +44,13 @@ public class CITResewnConfigScreenFactory {
                 .setDefaultValue(defaultConfig.mute_warns)
                 .build());
 
+        category.addEntry(entryBuilder.startFloatField(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.title"), currentConfig.citenchantment_scroll_multiplier)
+                .setTooltip(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.tooltip"))
+                .setSaveConsumer(newConfig -> currentConfig.citenchantment_scroll_multiplier = newConfig)
+                .setDefaultValue(defaultConfig.citenchantment_scroll_multiplier)
+                .setMin(0f)
+                .build());
+
         category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)
                 .setTooltip(new TranslatableText("config.citresewn.cache_ms.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.cache_ms = newConfig * 50)

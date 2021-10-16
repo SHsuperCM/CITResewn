@@ -10,6 +10,9 @@
   "config.citresewn.mute_warns.title": "Mute loading warnings",
   "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings",
 
+  "config.citresewn.citenchantment_scroll_multiplier.title": "CIT Enchantment: Scroll Multiplier",
+  "config.citresewn.citenchantment_scroll_multiplier.tooltip": "General multiplier for the scroll speed of the glint textures added by enchantment CITs.",
+
   "config.citresewn.broken_paths.title": "Allow broken paths in resourcepacks",
   "config.citresewn.broken_paths.tooltip": "Allows packs with illegal resource paths to load.\nMay cause issues!",
 
@@ -18,6 +21,7 @@
   "config.citresewn.cache_ms.ticks.0": "REALTIME",
   "config.citresewn.cache_ms.ticks.1": "EVERY TICK",
   "config.citresewn.cache_ms.ticks.any": "EVERY %s TICKS",
+
 
   "pack.incompatible.broken_paths": "(Contains broken paths)",
   "pack.incompatible.confirm.broken_paths": "This pack contains broken paths and support for it may be dropped in the future. Contact pack author to remove this warning. (~ CIT Resewn)"

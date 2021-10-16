@@ -13,6 +13,7 @@ public class CITResewnConfig {
     public boolean enabled = true;
     public boolean mute_errors = false;
     public boolean mute_warns = false;
+    public float citenchantment_scroll_multiplier = 8f;
     public int cache_ms = 50;
     public boolean broken_paths = false;
 

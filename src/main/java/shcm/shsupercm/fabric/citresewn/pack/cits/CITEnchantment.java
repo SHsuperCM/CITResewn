@@ -1,10 +1,15 @@
 package shcm.shsupercm.fabric.citresewn.pack.cits;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.RenderPhaseAccessor;
@@ -82,72 +87,77 @@ public class CITEnchantment extends CIT {
     }
 
     public enum GlintRenderLayer {
-        ARMOR_GLINT("armor_glint", layer -> layer
+        ARMOR_GLINT("armor_glint", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.ARMOR_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .texturing(RenderPhaseAccessor.GLINT_TEXTURING())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
-        ARMOR_ENTITY_GLINT("armor_entity_glint", layer -> layer
+        ARMOR_ENTITY_GLINT("armor_entity_glint", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.ARMOR_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .texturing(RenderPhaseAccessor.ENTITY_GLINT_TEXTURING())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
-        GLINT_TRANSLUCENT("glint_translucent", layer -> layer
+        GLINT_TRANSLUCENT("glint_translucent", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.TRANSLUCENT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .target(RenderPhaseAccessor.ITEM_TARGET())
-                .texturing(RenderPhaseAccessor.GLINT_TEXTURING())),
-        GLINT("glint", layer -> layer
+                .target(RenderPhaseAccessor.ITEM_TARGET())),
+        GLINT("glint", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .texturing(RenderPhaseAccessor.GLINT_TEXTURING())),
-        DIRECT_GLINT("glint_direct", layer -> layer
+                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())),
+        DIRECT_GLINT("glint_direct", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.DIRECT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .texturing(RenderPhaseAccessor.GLINT_TEXTURING())),
-        ENTITY_GLINT("entity_glint", layer -> layer
+                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())),
+        ENTITY_GLINT("entity_glint", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .target(RenderPhaseAccessor.ITEM_TARGET())
-                .texturing(RenderPhaseAccessor.ENTITY_GLINT_TEXTURING())),
-        DIRECT_ENTITY_GLINT("entity_glint_direct", layer -> layer
+                .target(RenderPhaseAccessor.ITEM_TARGET())),
+        DIRECT_ENTITY_GLINT("entity_glint_direct", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.DIRECT_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
-                .texturing(RenderPhaseAccessor.ENTITY_GLINT_TEXTURING()));
+                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY()));
 
         public final String name;
-        protected final Consumer<RenderLayer.MultiPhaseParameters.Builder> setup;
+        private final Consumer<RenderLayer.MultiPhaseParameters.Builder> setup;
+        private final float scale;
 
-        GlintRenderLayer(String name, Consumer<RenderLayer.MultiPhaseParameters.Builder> setup) {
+        GlintRenderLayer(String name, float scale, Consumer<RenderLayer.MultiPhaseParameters.Builder> setup) {
             this.name = name;
+            this.scale = scale;
             this.setup = setup;
         }
 
         public RenderLayer build(CITEnchantment enchantment) {
+            final float speed = enchantment.speed, rotation = enchantment.rotation;
             //noinspection ConstantConditions
             RenderLayer.MultiPhaseParameters.Builder layer = RenderLayer.MultiPhaseParameters.builder()
-                    .texture(new RenderPhase.Texture(enchantment.textureIdentifier, true, false));
+                    .texture(new RenderPhase.Texture(enchantment.textureIdentifier, false, false))
+                    .texturing(new RenderPhase.Texturing("citresewn_glint_texturing", () -> {
+                        float l = Util.getMeasuringTimeMs() * CITResewnConfig.INSTANCE().citenchantment_scroll_multiplier * speed;
+                        float x = (l % 110000f) / 110000f;
+                        float y = (l % 30000f) / 30000f;
+                        Matrix4f matrix4f = Matrix4f.translate(-x, y, 0.0f);
+                        matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation + 10f));
+                        matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
+                        RenderSystem.setTextureMatrix(matrix4f);
+                    }, RenderSystem::resetTextureMatrix));
 
             this.setup.accept(layer);
 
