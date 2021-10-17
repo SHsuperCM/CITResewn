@@ -6,6 +6,7 @@ are some mods that it supports.
 You got some mod that isn't working with CIT Resewn? 
 [Submit an Issue](https://github.com/SHsuperCM/CITResewn/issues) and I'll take a look!
 
+<br>
 ## Explicit Support
 
 CIT Resewn is written specifically to allow using these mods.
@@ -20,7 +21,13 @@ CIT Resewn is listed and a button is added to access the Cloth Config screen.
 ### [Cosmetic Armor](https://www.curseforge.com/minecraft/mc-mods/cosmetic-armor-fabric)
 CITs are applied on armor in the cosmetic slots.
 
+<br>
+## Incompatible
 
+### [Eating Animation](https://www.curseforge.com/minecraft/mc-mods/eating-animation-fabric)
+Breaks `item` CITs. Follow [Theoness1/EatingAnimation#2](https://github.com/Theoness1/EatingAnimation/issues/2) for updates.
+
+<br>
 ## Recommended
 
 Some mods that should natively work with CIT Resewn.

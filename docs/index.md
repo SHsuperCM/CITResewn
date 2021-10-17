@@ -10,8 +10,8 @@ Optifine later adopted MCPatcher's features and have maintained the only working
 CIT Resewn is my shot at providing support for cit outside of Optifine.
 
 ## What the Doc Doin'
-These **(WIP)** docs should hopefully provide pack and mod authors with the information they need in 
-order to work with CITs and CIT Resewn.  
+These docs should provide pack and mod authors with the information they need in order to work with 
+CITs and CIT Resewn.  
 
 [**Some bold text will have tooltips! (hover here)**]{Hover(or click on mobile) over bold text to see these!}
 
