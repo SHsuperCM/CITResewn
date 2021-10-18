@@ -15,13 +15,12 @@ The pack's global properties can be either (ordered by priority. if one exists, 
 ## Properties
 
 All properties (and `cit.properties` itself) are optional.  
-The effects of these properties only apply to the pack they're in.
 
-**Unimplemented, follow [#15](https://github.com/SHsuperCM/CITResewn/issues/15) for updates.**
+## This section is not complete! It is still being written :/
 
 | Key | Value Type | Description | Default |
 | --- | --- | --- | --- |
 | `method` | [**Literal**]{Either: &#10 average / layered / cycle|right} | Unimplemented | `average` |
-| `cap` | Any positive whole number | Unimplemented | None |
+| `cap` | Any positive whole number | _ | None |
 | `fade` | Any positive number | Unimplemented | `0.5` |
-| `useGlint` | [**Boolean**]{Either: &#10 true / false|right} | Unimplemented | `true` |
+| `useGlint` | [**Boolean**]{Either: &#10 true / false|right} | _ | `true` |
