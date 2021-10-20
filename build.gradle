@@ -9,6 +9,7 @@ group = project.maven_group
 repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases" }
+    maven { url "https://cursemaven.com" }
 }
 
 dependencies {
@@ -17,17 +18,19 @@ dependencies {
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    modCompileOnly fabricApi.module("fabric-resource-loader-v0", "0.39.2+1.17")
+    modImplementation include(fabricApi.module("fabric-api-base", "${project.fabric_api}"))
+    modImplementation include(fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}"))
+    modImplementation include(fabricApi.module("fabric-command-api-v1", "${project.fabric_api}"))
 
-    modCompileOnly("com.terraformersmc:modmenu:2.0.6") {
+    modCompileOnly("com.terraformersmc:modmenu:${project.modmenu}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:5.0.38") {
+    modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${project.cloth}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modCompileOnly(files("libs/cosmetic-armor-1.1.0.jar"))
+    modCompileOnly("curse.maven:cosmeticarmor-436659:${project.cosmetic_armor}")
 }
 
 processResources {
