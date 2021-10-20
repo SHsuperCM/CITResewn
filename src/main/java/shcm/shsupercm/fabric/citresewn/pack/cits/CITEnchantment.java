@@ -38,7 +38,7 @@ public class CITEnchantment extends CIT {
             if (textureIdentifier == null)
                 throw new Exception("Cannot resolve texture");
 
-            speed = Float.parseFloat(properties.getProperty("speed", "0"));
+            speed = Float.parseFloat(properties.getProperty("speed", "1"));
 
             rotation = Float.parseFloat(properties.getProperty("rotation", "0"));
 
