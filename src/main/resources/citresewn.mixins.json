@@ -23,6 +23,7 @@
     "cititem.ItemStackMixin",
     "cititem.JsonUnbakedModelAccessor",
     "cititem.ModelLoaderMixin",
+    "core.ChatScreenMixin",
     "core.GroupResourcePackAccessor",
     "core.ModelLoaderMixin",
     "core.NbtCompoundAccessor",
