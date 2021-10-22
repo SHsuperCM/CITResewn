@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -77,11 +78,16 @@ public class ActiveCITs {
     public CITItem getCITItem(ItemStack stack, World world, LivingEntity entity) {
         Hand hand = entity != null && stack == entity.getOffHandStack() ? Hand.OFF_HAND : Hand.MAIN_HAND;
 
+        ((CITItem.Cached) (Object) stack).citresewn_setMojankCIT(false);
+
         List<CITItem> citItems = this.citItems.get(stack.getItem());
         if (citItems != null)
             for (CITItem citItem : citItems)
-                if (citItem.test(stack, hand, world, entity, true))
+                if (citItem.test(stack, hand, world, entity, true)) {
+                    if (stack.isOf(Items.TRIDENT) || stack.isOf(Items.SPYGLASS))
+                        ((CITItem.Cached) (Object) stack).citresewn_setMojankCIT(true);
                     return citItem;
+                }
         return null;
     }
 

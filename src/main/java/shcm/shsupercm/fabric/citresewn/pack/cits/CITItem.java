@@ -414,5 +414,8 @@ public class CITItem extends CIT {
 
     public interface Cached {
         CITItem citresewn_getCachedCITItem(Supplier<CITItem> realtime);
+
+        boolean citresewn_isMojankCIT();
+        void citresewn_setMojankCIT(boolean mojankCIT);
     }
 }
