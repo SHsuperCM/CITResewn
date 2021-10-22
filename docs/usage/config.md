@@ -2,11 +2,11 @@
 
 ## Changing the Config
 
-It is highly recommended that you use [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu) 
-and [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config) for ingame config integration.
+The config is located at `%appdata%/.minecraft/config/citresewn.json`.
 
-If you have them installed, in the main menu/pause menu go to `Mods > CIT Resewn > Config`.  
-If you do not, go to `%appdata%/.minecraft/config/` and edit `citresewn.json`.
+If you have [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config) installed, 
+run `/citresewn config` or if you have [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu) 
+installed, in the main menu/pause screen go to `Mods > CIT Resewn > Config`.
 
 ## Config Values
 

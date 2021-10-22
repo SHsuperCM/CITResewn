@@ -13,7 +13,7 @@ CIT Resewn is written specifically to allow using these mods.
 
 ### [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
 Adds a custom config screen for CIT Resewn.  
-Accessed through Mod Menu.(more access options coming soon)
+Accessed through Mod Menu or by running `/citresewn config`.
 
 ### [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu)
 CIT Resewn is listed and a button is added to access the Cloth Config screen.

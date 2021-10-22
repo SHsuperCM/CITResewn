@@ -1,8 +1,5 @@
 # Mod Assets
 
-*This feature requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-to be installed to work, specifically `fabric-resource-loader-v0`.*
-
 *If you didn't know, your mod jar is basically a resourcepack!*
 
 Example:
