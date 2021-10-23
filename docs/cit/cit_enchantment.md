@@ -17,6 +17,39 @@ The CIT must match the item in that has its glint changed.
 
 ## Effects
 
-| Key | Value Type        | Description | Default |
+| Key | Value Type                       | Description | Default |
 | --- | --- | --- | --- |
 | `texture` | [**[Texture Asset](/cit/cit_base/#asset-resolution) <br> (`.png`)**]{Examples: &#10 texture=./my_textures/custom_glint.png &#10 texture=assets/minecraft/citresewn/cit/ench/glint_3 &#10 texture=minecraft:misc/my_cool_enchanted_item_glint.png|right} | Replaces the texture of this glint layer with the resolved texture. | None |
+| `layer` | Any whole number |  | `0` |
+| `speed` | Any number |  | `1.0` |
+| `rotation` | Any number |  | `0.0` |
+| `duration` | Any number | Not implemented yet | `0.0` |
+| `blend` | [Literal or Custom](#blending-functions) |  | `add` |
+| *`useGlint`* | Boolean |  | `false` |
+| *`blur`* | Boolean |  | `false` |
+| *`r`* | Any positive number |  | `1.0` |
+| *`g`* | Any positive number |  | `1.0` |
+| *`b`* | Any positive number |  | `1.0` |
+| *`a`* | Any positive number |  | `1.0` |
+
+
+## Blending Functions
+
+### Named Functions
+
+| Function | Effect |
+| --- | --- |
+| `replace` | _ |
+| *`glint`* | _ |
+| `alpha` | _ |
+| `add` | _ |
+| `subtract` | _ |
+| `multiply` | _ |
+| `dodge` | _ |
+| `burn` | _ |
+| `screen` | _ |
+| `overlay` | _ |
+
+### Custom Function
+
+_

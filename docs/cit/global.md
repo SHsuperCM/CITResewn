@@ -16,11 +16,9 @@ The pack's global properties can be either (ordered by priority. if one exists, 
 
 All properties (and `cit.properties` itself) are optional.  
 
-## This section is not complete! It is still being written :/
-
 | Key | Value Type | Description | Default |
 | --- | --- | --- | --- |
-| `method` | [**Literal**]{Either: &#10 average / layered / cycle|right} | Unimplemented | `average` |
-| `cap` | Any positive whole number | _ | None |
-| `fade` | Any positive number | Unimplemented | `0.5` |
-| `useGlint` | [**Boolean**]{Either: &#10 true / false|right} | _ | `true` |
+| `useGlint` | [**Boolean**]{Either: &#10 true / false|right} | If false, removes the default glint texture from every item. | `true` |
+| `cap` | Any positive whole number | Controls the maximum allowed layers of CIT Enchantments per item. | None |
+| `method` | [**Literal**]{Either: &#10 average / layered / cycle|right} | Not implemented yet | `average` |
+| `fade` | Any positive number | Not implemented yet | `0.5` |
