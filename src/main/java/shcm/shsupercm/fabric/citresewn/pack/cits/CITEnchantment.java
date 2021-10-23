@@ -19,6 +19,9 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static org.lwjgl.opengl.GL11.*;
+import static com.mojang.blaze3d.systems.RenderSystem.*;
+
 public class CITEnchantment extends CIT {
     public static List<CITEnchantment> appliedContext = null;
     public static boolean shouldApply = false;
@@ -58,7 +61,7 @@ public class CITEnchantment extends CIT {
                 default -> throw new Exception("blur is not a boolean");
             };
 
-            blend = Blend.valueOf(properties.getProperty("blend", "add").toUpperCase(Locale.ENGLISH));
+            blend = Blend.getBlend(properties.getProperty("blend", "add"));
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
@@ -80,65 +83,46 @@ public class CITEnchantment extends CIT {
             ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).entityBuilders().remove(renderLayer);
     }
 
-    public enum Blend {
-        ADD,
-        SUBTRACT,
-        MULTIPLY,
-        DODGE,
-        BURN,
-        SCREEN,
-        REPLACE,
-        OVERLAY,
-        ALPHA;
-    }
-
     public enum GlintRenderLayer {
         ARMOR_GLINT("armor_glint", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.ARMOR_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
         ARMOR_ENTITY_GLINT("armor_entity_glint", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.ARMOR_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
         GLINT_TRANSLUCENT("glint_translucent", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.TRANSLUCENT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
                 .target(RenderPhaseAccessor.ITEM_TARGET())),
         GLINT("glint", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
-                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())),
+                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())),
         DIRECT_GLINT("glint_direct", 8f, layer -> layer
                 .shader(RenderPhaseAccessor.DIRECT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
-                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())),
+                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())),
         ENTITY_GLINT("entity_glint", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY())
                 .target(RenderPhaseAccessor.ITEM_TARGET())),
         DIRECT_ENTITY_GLINT("entity_glint_direct", 0.16f, layer -> layer
                 .shader(RenderPhaseAccessor.DIRECT_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
-                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .transparency(RenderPhaseAccessor.GLINT_TRANSPARENCY()));
+                .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST()));
 
         public final String name;
         private final Consumer<RenderLayer.MultiPhaseParameters.Builder> setup;
@@ -162,8 +146,9 @@ public class CITEnchantment extends CIT {
                         Matrix4f matrix4f = Matrix4f.translate(-x, y, 0.0f);
                         matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation + 10f));
                         matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
-                        RenderSystem.setTextureMatrix(matrix4f);
-                    }, RenderSystem::resetTextureMatrix));
+                        setTextureMatrix(matrix4f);
+                    }, RenderSystem::resetTextureMatrix))
+                    .transparency(enchantment.blend);
 
             this.setup.accept(layer);
 
@@ -186,6 +171,76 @@ public class CITEnchantment extends CIT {
             provider.getBuffer(baseLayer); // refresh base layer for armor consumer
 
             return base == null ? VertexConsumers.union(layers) : VertexConsumers.union(VertexConsumers.union(layers), base);
+        }
+    }
+
+    public static class Blend extends RenderPhase.Transparency {
+        private final int src;
+        private final int dst;
+
+        private Blend(String name, int src, int dst) {
+            super(name + "_glint_transparency", null, null);
+            this.src = src;
+            this.dst = dst;
+        }
+
+        @Override
+        public void startDrawing() {
+            enableBlend();
+            blendFuncSeparate(src, dst, GL_ZERO, GL_ONE);
+        }
+
+        @Override
+        public void endDrawing() {
+            defaultBlendFunc();
+            disableBlend();
+        }
+
+        public static Blend getBlend(String blendString) throws BlendFormatException {
+            try { //check named blending function
+                return Named.valueOf(blendString.toUpperCase(Locale.ENGLISH)).blend;
+            } catch (IllegalArgumentException ignored) { // create custom blending function
+                try {
+                    String[] split = blendString.split("[ ,_]+");
+                    if (split.length != 2)
+                        throw new Exception();
+
+                    int src = Integer.parseInt(split[0]), dst = Integer.parseInt(split[1]);
+                    return new Blend("custom_" + src + "_" + dst, src, dst);
+                } catch (Exception e) {
+                    throw new BlendFormatException();
+                }
+            }
+        }
+
+        private enum Named {
+            REPLACE(new Blend("replace", 0, 0) {
+                @Override
+                public void startDrawing() {
+                    disableBlend();
+                }
+            }),
+            GLINT(new Blend("glint", GL_SRC_COLOR, GL_ONE)),
+            ALPHA(new Blend("alpha", GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)),
+            ADD(new Blend("add", GL_SRC_ALPHA, GL_ONE)),
+            SUBTRACT(new Blend("subtract", GL_ONE_MINUS_DST_COLOR, GL_ZERO)),
+            MULTIPLY(new Blend("multiply", GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA)),
+            DODGE(new Blend("dodge", GL_ONE, GL_ONE)),
+            BURN(new Blend("burn", GL_ZERO, GL_ONE_MINUS_SRC_COLOR)),
+            SCREEN(new Blend("screen", GL_ONE, GL_ONE_MINUS_SRC_COLOR)),
+            OVERLAY(new Blend("overlay", GL_DST_COLOR, GL_SRC_COLOR));
+
+            public final Blend blend;
+
+            Named(Blend blend) {
+                this.blend = blend;
+            }
+        }
+
+        public static class BlendFormatException extends Exception {
+            public BlendFormatException() {
+                super("Not a valid blending method");
+            }
         }
     }
 
