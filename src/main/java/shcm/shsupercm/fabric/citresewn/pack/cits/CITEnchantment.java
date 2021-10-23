@@ -27,7 +27,7 @@ public class CITEnchantment extends CIT {
     public static boolean shouldApply = false;
 
     public final Identifier textureIdentifier;
-    public final float speed, rotation, duration;
+    public final float speed, rotation, duration, r, g, b, a;
     public final int layer;
     public final boolean useGlint, blur;
     public final Blend blend;
@@ -48,6 +48,11 @@ public class CITEnchantment extends CIT {
             duration = Float.max(0f, Float.parseFloat(properties.getProperty("duration", "0")));
 
             layer = Integer.parseInt(properties.getProperty("layer", "0"));
+
+            r = Math.max(0f, Float.parseFloat(properties.getProperty("r", "1")));
+            g = Math.max(0f, Float.parseFloat(properties.getProperty("g", "1")));
+            b = Math.max(0f, Float.parseFloat(properties.getProperty("b", "1")));
+            a = Math.max(0f, Float.parseFloat(properties.getProperty("a", "1")));
 
             useGlint = switch (properties.getProperty("useGlint", "false").toLowerCase(Locale.ENGLISH)) {
                 case "true" -> true;
@@ -135,7 +140,7 @@ public class CITEnchantment extends CIT {
         }
 
         public RenderLayer build(CITEnchantment enchantment) {
-            final float speed = enchantment.speed, rotation = enchantment.rotation;
+            final float speed = enchantment.speed, rotation = enchantment.rotation, r = enchantment.r, g = enchantment.g, b = enchantment.b, a = enchantment.a;
             //noinspection ConstantConditions
             RenderLayer.MultiPhaseParameters.Builder layer = RenderLayer.MultiPhaseParameters.builder()
                     .texture(new RenderPhase.Texture(enchantment.textureIdentifier, enchantment.blur, false))
@@ -147,7 +152,13 @@ public class CITEnchantment extends CIT {
                         matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation + 10f));
                         matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
                         setTextureMatrix(matrix4f);
-                    }, RenderSystem::resetTextureMatrix))
+
+                        setShaderColor(r, g, b, a);
+                    }, () -> {
+                        RenderSystem.resetTextureMatrix();
+
+                        setShaderColor(1f, 1f, 1f, 1f);
+                    }))
                     .transparency(enchantment.blend);
 
             this.setup.accept(layer);
