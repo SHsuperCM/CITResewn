@@ -1,4 +1,11 @@
 # Need Help / Found a Bug / Questions
+
+### Porting to 1.16 or any other version:
+See [#48](https://github.com/SHsuperCM/CITResewn/issues/48).
+
+### Porting to Forge:
+See [#56](https://github.com/SHsuperCM/CITResewn/issues/56).
+
 ### A resourcepack is not loading:
 Check the logs, they are more useful than you think!
 
