@@ -8,6 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
+import org.lwjgl.opengl.GL11;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
@@ -186,19 +187,24 @@ public class CITEnchantment extends CIT {
     }
 
     public static class Blend extends RenderPhase.Transparency {
-        private final int src;
-        private final int dst;
+        private final int src, dst, srcAlpha, dstAlpha;
 
-        private Blend(String name, int src, int dst) {
+        private Blend(String name, int src, int dst, int srcAlpha, int dstAlpha) {
             super(name + "_glint_transparency", null, null);
             this.src = src;
             this.dst = dst;
+            this.srcAlpha = srcAlpha;
+            this.dstAlpha = dstAlpha;
+        }
+
+        private Blend(String name, int src, int dst) {
+            this(name, src, dst, GL_ZERO, GL_ONE);
         }
 
         @Override
         public void startDrawing() {
             enableBlend();
-            blendFuncSeparate(src, dst, GL_ZERO, GL_ONE);
+            blendFuncSeparate(src, dst, srcAlpha, dstAlpha);
         }
 
         @Override
@@ -212,12 +218,22 @@ public class CITEnchantment extends CIT {
                 return Named.valueOf(blendString.toUpperCase(Locale.ENGLISH)).blend;
             } catch (IllegalArgumentException ignored) { // create custom blending function
                 try {
-                    String[] split = blendString.split("[ ,_]+");
-                    if (split.length != 2)
+                    String[] split = blendString.split(" ");
+                    int src, dst, srcAlpha, dstAlpha;
+                    if (split.length == 2) {
+                        src = parseGLConstant(split[0]);
+                        dst = parseGLConstant(split[1]);
+                        srcAlpha = GL_ZERO;
+                        dstAlpha = GL_ONE;
+                    } else if (split.length == 4) {
+                        src = parseGLConstant(split[0]);
+                        dst = parseGLConstant(split[1]);
+                        srcAlpha = parseGLConstant(split[2]);
+                        dstAlpha = parseGLConstant(split[3]);
+                    } else
                         throw new Exception();
 
-                    int src = Integer.parseInt(split[0]), dst = Integer.parseInt(split[1]);
-                    return new Blend("custom_" + src + "_" + dst, src, dst);
+                    return new Blend("custom_" + src + "_" + dst + "_" + srcAlpha + "_" + dstAlpha, src, dst, srcAlpha, dstAlpha);
                 } catch (Exception e) {
                     throw new BlendFormatException();
                 }
@@ -246,6 +262,14 @@ public class CITEnchantment extends CIT {
             Named(Blend blend) {
                 this.blend = blend;
             }
+        }
+
+        private static int parseGLConstant(String s) throws Exception {
+            try {
+                return GL11.class.getDeclaredField(s).getInt(null);
+            } catch (NoSuchFieldException ignored) { }
+
+            return s.startsWith("0x") ? Integer.parseInt(s.substring(2), 16) : Integer.parseInt(s);
         }
 
         public static class BlendFormatException extends Exception {
