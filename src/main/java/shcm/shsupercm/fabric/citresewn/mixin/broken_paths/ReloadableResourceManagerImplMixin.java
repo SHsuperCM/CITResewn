@@ -24,7 +24,7 @@ public class ReloadableResourceManagerImplMixin {
     @Inject(method = "reload", at = @At("RETURN"))
     public void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir) {
         if (CITResewn.INSTANCE.processingBrokenPaths = this.type == ResourceType.CLIENT_RESOURCES) {
-            CITResewn.logWarnLoading("Caution! Broken paths is enabled!");
+            CITResewn.LOG.error("[citresewn] Caution! Broken paths is enabled!");
             cir.getReturnValue().whenComplete().thenRun(() -> CITResewn.INSTANCE.processingBrokenPaths = false);
         }
     }
