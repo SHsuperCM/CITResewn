@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
@@ -29,7 +29,6 @@ import shcm.shsupercm.fabric.citresewn.pack.ResewnTextureIdentifier;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CITItem;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -155,10 +154,12 @@ public class ModelLoaderMixin {
         }
     }
 
-    @Redirect(method = "loadModelFromJson", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;"))
-    public Resource getResource(ResourceManager resourceManager, Identifier id) throws IOException {
-        if (id.getPath().endsWith(".json.json") && id.getPath().contains("cit"))
-            return resourceManager.getResource(new Identifier(id.getNamespace(), id.getPath().substring(7, id.getPath().length() - 5)));
-        return resourceManager.getResource(id);
+    @ModifyArg(method = "loadModelFromJson", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;"))
+    public Identifier fixDuplicatePrefixSuffix(Identifier original) {
+        if (original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
+            return new Identifier(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
+
+        return original;
     }
 }
