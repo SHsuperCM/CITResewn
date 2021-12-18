@@ -198,7 +198,46 @@ public class CITItem extends CIT {
                         baseIdentifier = new Identifier(baseIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + baseIdentifier.getPath());
                     GENERATED_SUB_CITS_SEEN.add(baseIdentifier);
 
-                    unbakedAssets.put(null, loadUnbakedAsset(resourceManager, baseIdentifier));
+                    JsonUnbakedModel model = loadUnbakedAsset(resourceManager, baseIdentifier);
+                    unbakedAssets.put(null, model);
+
+                    if (model.getOverrides().size() > 0 && textureOverrideMap.size() > 0) {
+                        LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
+
+                        for (ModelOverride override : model.getOverrides())
+                            overrideConditions.put(override.getModelId(), override.streamConditions().toList());
+
+                        ArrayList<Identifier> overrideModels = new ArrayList<>(overrideConditions.keySet());
+                        Collections.reverse(overrideModels);
+
+                        for (Identifier overrideModel : overrideModels) {
+                            Identifier replacement = resolvePath(baseIdentifier, overrideModel.toString(), ".json", resourceManager::containsResource);
+                            if (replacement != null) {
+                                String subTexturePath = replacement.toString().substring(0, replacement.toString().lastIndexOf('.'));
+                                final String subTextureName = subTexturePath.substring(subTexturePath.lastIndexOf('/') + 1);
+
+                                replacement = baseIdentifier;
+                                if (!GENERATED_SUB_CITS_SEEN.add(replacement)) // cit generated duplicate
+                                    replacement = new Identifier(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
+                                GENERATED_SUB_CITS_SEEN.add(replacement);
+
+                                JsonUnbakedModel jsonModel = loadUnbakedAsset(resourceManager, replacement);
+                                jsonModel.getOverrides().clear();
+
+                                ((JsonUnbakedModelAccessor) jsonModel).getTextureMap().replaceAll((layerName, texture) -> {
+                                    if (layerName != null)
+                                        try {
+                                            for (String subTexture : textureOverrideMap.keySet())
+                                                if (subTextureName.equals(subTexture))
+                                                    return textureOverrideMap.get(subTexture);
+                                        } catch (Exception ignored) { }
+                                    return texture;
+                                });
+
+                                unbakedAssets.put(overrideConditions.get(overrideModel), jsonModel);
+                            }
+                        }
+                    }
                 }
 
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
@@ -243,7 +282,13 @@ public class CITItem extends CIT {
     }
 
     private JsonUnbakedModel loadUnbakedAsset(ResourceManager resourceManager, Identifier assetIdentifier) throws Exception {
-        final Identifier identifier = !assetIdentifier.getPath().startsWith(GENERATED_SUB_CITS_PREFIX) ? assetIdentifier : new Identifier(assetIdentifier.getNamespace(), assetIdentifier.getPath().substring(assetIdentifier.getPath().substring(GENERATED_SUB_CITS_PREFIX.length()).indexOf('_') + GENERATED_SUB_CITS_PREFIX.length() + 1));
+        final Identifier identifier;
+        {
+            Identifier possibleIdentifier = assetIdentifier;
+            while (possibleIdentifier.getPath().startsWith(GENERATED_SUB_CITS_PREFIX))
+                possibleIdentifier = new Identifier(possibleIdentifier.getNamespace(), possibleIdentifier.getPath().substring(possibleIdentifier.getPath().substring(GENERATED_SUB_CITS_PREFIX.length()).indexOf('_') + GENERATED_SUB_CITS_PREFIX.length() + 1));
+            identifier = possibleIdentifier;
+        }
         JsonUnbakedModel json;
         if (identifier.getPath().endsWith(".json")) {
             InputStream is = null;
