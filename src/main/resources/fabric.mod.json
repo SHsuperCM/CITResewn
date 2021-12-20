@@ -24,7 +24,8 @@
     "citresewn.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.11.6",
+    "fabric": "*",
+    "fabricloader": "*",
     "minecraft": "1.17.x"
   }
 }
