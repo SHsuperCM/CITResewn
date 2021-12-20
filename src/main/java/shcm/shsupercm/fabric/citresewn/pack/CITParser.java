@@ -59,6 +59,9 @@ public final class CITParser { private CITParser() {}
 
         Collection<Identifier> packProperties = new ArrayList<>();
         for (String namespace : resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES)) {
+            if (!Identifier.isValid(namespace))
+                continue;
+
             packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "citresewn/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
             if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "citresewn/cit.properties")))
                 packProperties.add(new Identifier(namespace, "citresewn/cit.properties"));
