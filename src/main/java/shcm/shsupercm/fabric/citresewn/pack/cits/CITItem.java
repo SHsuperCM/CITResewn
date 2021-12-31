@@ -301,13 +301,9 @@ public class CITItem extends CIT {
                 ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layer, original) -> {
                     Optional<SpriteIdentifier> left = original.left();
                     if (left.isPresent()) {
-                        String originalPath = left.get().getTextureId().getPath();
-                        String[] split = originalPath.split("/");
-                        if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
-                            Identifier resolvedIdentifier = resolvePath(identifier, originalPath, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
-                            if (resolvedIdentifier != null)
-                                return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
-                        }
+                        Identifier resolvedIdentifier = resolvePath(identifier, left.get().getTextureId().getPath(), ".png", resourceManager::containsResource);
+                        if (resolvedIdentifier != null)
+                            return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
                     }
                     return original;
                 });
