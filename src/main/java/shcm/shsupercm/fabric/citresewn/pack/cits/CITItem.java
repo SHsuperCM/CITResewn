@@ -434,7 +434,7 @@ public class CITItem extends CIT {
 
     public static class CITOverrideList extends ModelOverrideList {
         public void override(List<ModelOverride.Condition> key, BakedModel bakedModel) {
-            Set<Identifier> conditionTypes = new HashSet<>(Arrays.asList(this.conditionTypes));
+            Set<Identifier> conditionTypes = new LinkedHashSet<>(Arrays.asList(this.conditionTypes));
             for (ModelOverride.Condition condition : key)
                 conditionTypes.add(condition.getType());
             this.conditionTypes = conditionTypes.toArray(new Identifier[0]);
