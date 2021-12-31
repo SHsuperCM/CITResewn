@@ -183,6 +183,11 @@ public abstract class CIT {
                         final Pattern pattern = Pattern.compile(matchProperty);
                         match = s -> pattern.matcher(caseSensitive ? s : s.toLowerCase()).matches();
                     } else {
+                        if (property.equals("nbt.display.color") && matchProperty.startsWith("#"))
+                            try {
+                                matchProperty = String.valueOf(Integer.parseInt(matchProperty.substring(1).toLowerCase(Locale.ENGLISH), 16));
+                            } catch (Exception ignored) { }
+
                         final String pattern = matchProperty;
                         match = s -> s.equals(pattern);
                     }
