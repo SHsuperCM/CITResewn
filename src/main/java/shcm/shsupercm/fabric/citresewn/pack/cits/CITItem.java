@@ -37,6 +37,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("deprecation")
 public class CITItem extends CIT {
     private static final String GENERATED_SUB_CITS_PREFIX = "sub_cititem_generated_";
     public static final Set<Identifier> GENERATED_SUB_CITS_SEEN = new HashSet<>();
