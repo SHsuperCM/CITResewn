@@ -1,7 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.fabricmc.fabric.impl.resource.loader.GroupResourcePack;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
@@ -49,31 +48,23 @@ public final class CITParser { private CITParser() {}
      * @return a collection of CITPacks or an empty collection if resourcepack contains none
      */
     public static Collection<CITPack> parse(ResourcePack resourcePack) {
-        if (FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0")) {
-            Collection<CITPack> group = parseFabricGroup(resourcePack);
-            if (group != null)
-                return group;
-        }
+        if (resourcePack instanceof GroupResourcePack)
+            return ((GroupResourcePackAccessor) resourcePack).getPacks().stream()
+                    .map(CITParser::parse)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList());
 
         final CITPack citPack = new CITPack(resourcePack);
 
         Collection<Identifier> packProperties = new ArrayList<>();
-        for (String namespace : resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES)) {
-            if (!Identifier.isValid(namespace))
-                continue;
-
-            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "citresewn/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
-            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "citresewn/cit.properties")))
-                packProperties.add(new Identifier(namespace, "citresewn/cit.properties"));
-
-            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "optifine/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
-            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "optifine/cit.properties")))
-                packProperties.add(new Identifier(namespace, "optifine/cit.properties"));
-
-            packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, "mcpatcher/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
-            if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, new Identifier(namespace, "mcpatcher/cit.properties")))
-                packProperties.add(new Identifier(namespace, "mcpatcher/cit.properties"));
-        }
+        for (String namespace : resourcePack.getNamespaces(ResourceType.CLIENT_RESOURCES))
+            if (Identifier.isValid(namespace))
+                for (String citRoot : new String[] { "citresewn", "optifine", "mcpatcher" }) {
+                    packProperties.addAll(resourcePack.findResources(ResourceType.CLIENT_RESOURCES, namespace, citRoot + "/cit", Integer.MAX_VALUE - 53, s -> s.endsWith(".properties")));
+                    Identifier global = new Identifier(namespace, citRoot + "/cit.properties");
+                    if (resourcePack.contains(ResourceType.CLIENT_RESOURCES, global))
+                        packProperties.add(global);
+                }
 
         boolean readGlobalProperties = false;
         for (Iterator<Identifier> iterator = packProperties.iterator(); iterator.hasNext(); ) {
@@ -118,16 +109,6 @@ public final class CITParser { private CITParser() {}
             CITResewn.info("Found " + citPack.cits.size() + " CIT" + (citPack.cits.size() == 1 ? "" : "s") + " in " + resourcePack.getName());
             return Collections.singleton(citPack);
         }
-    }
-
-    public static Collection<CITPack> parseFabricGroup(ResourcePack resourcePack) {
-        if (!(resourcePack instanceof GroupResourcePack))
-            return null;
-
-        return ((GroupResourcePackAccessor) resourcePack).getPacks().stream()
-                        .map(CITParser::parse)
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList());
     }
 
     public interface CITConstructor {
