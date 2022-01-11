@@ -179,6 +179,9 @@ public class ActiveCITs {
             return;
         }
 
+        for (CITEnchantment cit : citEnchantments)
+            cit.applyMethod(stack);
+
         CITEnchantment.appliedContext = citEnchantments;
     }
 }

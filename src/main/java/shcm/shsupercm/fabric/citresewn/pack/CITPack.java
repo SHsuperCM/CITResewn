@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.minecraft.resource.ResourcePack;
 import shcm.shsupercm.fabric.citresewn.pack.cits.CIT;
+import shcm.shsupercm.fabric.citresewn.pack.cits.CITEnchantment;
 
 import java.util.*;
 
@@ -9,7 +10,7 @@ public class CITPack {
     public final ResourcePack resourcePack;
     public final Collection<CIT> cits = new ArrayList<>();
 
-    public EnchantmentMergeMethod method = EnchantmentMergeMethod.AVERAGE;
+    public CITEnchantment.MergeMethod method = CITEnchantment.MergeMethod.AVERAGE;
     public Integer cap = 8;
     public Float fade = 0.5f;
     public Boolean useGlint = true;
@@ -20,7 +21,7 @@ public class CITPack {
 
     public void loadGlobalProperties(Properties properties) throws Exception {
         try {
-            this.method = properties.containsKey("method") ? CITPack.EnchantmentMergeMethod.valueOf(properties.getProperty("method").toUpperCase(Locale.ENGLISH)) : null;
+            this.method = properties.containsKey("method") ? CITEnchantment.MergeMethod.valueOf(properties.getProperty("method").toUpperCase(Locale.ENGLISH)) : null;
 
             if (properties.containsKey("cap")) {
                 this.cap = Integer.parseInt(properties.getProperty("cap"));
@@ -61,9 +62,4 @@ public class CITPack {
             this.useGlint = properties.useGlint;
     }
 
-    public enum EnchantmentMergeMethod {
-        AVERAGE,
-        LAYERED,
-        CYCLE
-    }
 }

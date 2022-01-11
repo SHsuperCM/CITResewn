@@ -3,6 +3,12 @@ package shcm.shsupercm.fabric.citresewn.pack.cits;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -32,6 +38,9 @@ public class CITEnchantment extends CIT {
     public final int layer;
     public final boolean useGlint, blur;
     public final Blend blend;
+
+    private final WrappedMethodIntensity methodIntensity = new WrappedMethodIntensity();
+    private final MergeMethod method;
 
     public final Map<GlintRenderLayer, RenderLayer> renderLayers = new EnumMap<>(GlintRenderLayer.class);
 
@@ -68,6 +77,8 @@ public class CITEnchantment extends CIT {
             };
 
             blend = Blend.getBlend(properties.getProperty("blend", "add"));
+
+            method = !enchantmentsAny && this.enchantments.size() > 0 ? pack.method : null;
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
@@ -80,6 +91,17 @@ public class CITEnchantment extends CIT {
             renderLayers.put(glintLayer, renderLayer);
             ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).entityBuilders().put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
         }
+    }
+
+    public void applyMethod(ItemStack stack) {
+        if (this.method != null) {
+            Map<Identifier, Integer> stackEnchantments = new LinkedHashMap<>();
+            for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
+                stackEnchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
+
+            this.methodIntensity.intensity = this.method.getIntensity(stackEnchantments, this);
+        } else
+            this.methodIntensity.intensity = 1f;
     }
 
     @Override
@@ -142,6 +164,7 @@ public class CITEnchantment extends CIT {
 
         public RenderLayer build(CITEnchantment enchantment) {
             final float speed = enchantment.speed, rotation = enchantment.rotation, r = enchantment.r, g = enchantment.g, b = enchantment.b, a = enchantment.a;
+            final WrappedMethodIntensity methodIntensity = enchantment.methodIntensity;
             //noinspection ConstantConditions
             RenderLayer.MultiPhaseParameters.Builder layer = RenderLayer.MultiPhaseParameters.builder()
                     .texture(new RenderPhase.Texture(enchantment.textureIdentifier, enchantment.blur, false))
@@ -154,7 +177,7 @@ public class CITEnchantment extends CIT {
                         matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
                         setTextureMatrix(matrix4f);
 
-                        setShaderColor(r, g, b, a);
+                        setShaderColor(r, g, b, a * methodIntensity.intensity);
                     }, () -> {
                         RenderSystem.resetTextureMatrix();
 
@@ -277,6 +300,60 @@ public class CITEnchantment extends CIT {
                 super("Not a valid blending method");
             }
         }
+    }
+
+    public enum MergeMethod {
+        AVERAGE {
+            @Override
+            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+                Identifier enchantment = null;
+                for (Identifier enchantmentMatch : cit.enchantments)
+                    if (stackEnchantments.containsKey(enchantmentMatch)) {
+                        enchantment = enchantmentMatch;
+                        break;
+                    }
+                if (enchantment == null)
+                    return 0f;
+
+                float sum = 0f;
+                for (Integer value : stackEnchantments.values())
+                    sum += value;
+
+                return (float) stackEnchantments.get(enchantment) / sum;
+            }
+        },
+        LAYERED {
+            @Override
+            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+                Identifier enchantment = null;
+                for (Identifier enchantmentMatch : cit.enchantments)
+                    if (stackEnchantments.containsKey(enchantmentMatch)) {
+                        enchantment = enchantmentMatch;
+                        break;
+                    }
+                if (enchantment == null)
+                    return 0f;
+
+                float max = 0f;
+                for (Integer value : stackEnchantments.values())
+                    if (value > max)
+                        max = value;
+
+                return (float) stackEnchantments.get(enchantment) / max;
+            }
+        },
+        CYCLE {
+            @Override
+            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+                return 1f;
+            }
+        };
+
+        public abstract float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit);
+    }
+
+    private static class WrappedMethodIntensity {
+        public float intensity = 1f;
     }
 
     public interface Cached {
