@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Serve" type="RUN_ANYTHING_CONFIGURATION" factoryName="RunAnythingFactory">
+    <option name="arguments" value="serve" />
+    <option name="command" value="mkdocs" />
+    <option name="inputText" value="" />
+    <option name="workingDirectory" value="$PROJECT_DIR$" />
+    <method v="2">
+      <option name="LaunchBrowser.Before.Run" url="http://127.0.0.1:8000/" />
+    </method>
+  </configuration>
+</component>
