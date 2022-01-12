@@ -24,7 +24,7 @@ The CIT must match the item in that has its glint changed.
 | `speed` | Any number |  | `1.0` |
 | `rotation` | Any number | Rotates the texture and scroll direction by the given degrees. | `0.0` |
 | `duration` | Any number | Not implemented yet | `0.0` |
-| `blend` | [Literal or Custom](#blending-functions) | Sets the application blending of the texture on the previous layers. | `add` |
+| `blend` | [Literal or Custom](#blending-functions) | Sets the OpenGL blending function used to apply the texture. | `add` |
 | *`useGlint`* | Boolean | Should the default enchantment glint show on the item. | `false` |
 | *`blur`* | Boolean | Should the texture be blurred before being applied. | `false` |
 | *`r`* | Any positive number | Multiplier for the texture's red component. | `1.0` |
@@ -35,21 +35,37 @@ The CIT must match the item in that has its glint changed.
 
 ## Blending Functions
 
+This section is very computer graphics and opengl heavy.
+
 ### Named Functions
 
-| Function | Effect |
+| Function | Function |
 | --- | --- |
-| `replace` | _ |
-| *`glint`* | _ |
-| `alpha` | _ |
-| `add` | _ |
-| `subtract` | _ |
-| `multiply` | _ |
-| `dodge` | _ |
-| `burn` | _ |
-| `screen` | _ |
-| `overlay` | _ |
+| `replace` | Disables blending. |
+| *`glint`* | `GL_SRC_COLOR` <br> `GL_ONE` <br> *\* Mimics the vanilla glint blending.* |
+| `alpha` | `GL_SRC_ALPHA` <br> `GL_ONE_MINUS_SRC_ALPHA` |
+| `add` | `GL_SRC_ALPHA` <br> `GL_ONE` |
+| `subtract` | `GL_ONE_MINUS_DST_COLOR` <br> `GL_ZERO` |
+| `multiply` | `GL_DST_COLOR` <br> `GL_ONE_MINUS_SRC_ALPHA` |
+| `dodge` | `GL_ONE` <br> `GL_ONE` |
+| `burn` | `GL_ZERO` <br> `GL_ONE_MINUS_SRC_COLOR` |
+| `screen` | `GL_ONE` <br> `GL_ONE_MINUS_SRC_COLOR` |
+| `overlay` | `GL_DST_COLOR` <br> `GL_SRC_COLOR` |
 
 ### Custom Function
 
-_
+Instead of using one of the named functions, you can create your own by specifying the 
+parameters that are passed onto OpenGL's `blendFuncSeparate` method.
+
+This takes either 4 or 2 parameters with the alpha factors defaulting to `GL_ZERO, GL_ONE`. <br>
+The parameters are separated by spaces and can be specified by using either a decimal constant, 
+a hexadecimal constant (with a `0x` prefix) or by a named GL11 constant name.
+
+Example:
+```properties
+# Ways of specifying a multiply blending function
+blend=multiply
+blend=GL_DST_COLOR GL_ONE_MINUS_SRC_ALPHA
+blend=774 771
+blend=0x306 0x303
+```
