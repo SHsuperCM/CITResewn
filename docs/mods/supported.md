@@ -24,6 +24,11 @@ CITs are applied on armor in the cosmetic slots.
 <br>
 ## Incompatible
 
+### [Canvas](https://www.curseforge.com/minecraft/mc-mods/canvas-renderer)
+The game crashes with both present.
+
+Support is planned eventually.
+
 ### [Eating Animation](https://www.curseforge.com/minecraft/mc-mods/eating-animation-fabric)
 Breaks `item` CITs. Follow [Theoness1/EatingAnimation#2](https://github.com/Theoness1/EatingAnimation/issues/2) for updates.
 

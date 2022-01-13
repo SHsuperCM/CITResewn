@@ -15,5 +15,8 @@ Contact the pack author and inform them.
 
 For more information on Broken Paths, read the [Broken Paths section in the config docs](/usage/config).
 
+### CIT Resewn doesn't work/crashes with another mod installed.
+Check if the mod is in the incompatible section of [Supported Mods](/mods/supported/#incompatible).
+
 ### Anything else:
 Feel free to open an [Issue](https://github.com/SHsuperCM/CITResewn/issues) or DM @SHsuperCM on the Fabric discord server for anything CIT Resewn!
