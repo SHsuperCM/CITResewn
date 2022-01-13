@@ -37,7 +37,7 @@ Breaks `item` CITs. Follow [Theoness1/EatingAnimation#2](https://github.com/Theo
 
 Some mods that should natively work with CIT Resewn.
 
-### [LambdAurora's Optifine Alternatives List](https://gist.github.com/LambdAurora/1f6a4a99af374ce500f250c6b42e8754)
+### [LambdAurora's Optifine Alternatives List](https://lambdaurora.dev/optifine_alternatives/)
 
 This list(and CIT Resewn) is an effort to ditch Optifine in favor of more dynamic, 
 open sourced and modder friendly replacements. One of Optifine's biggest problems 
