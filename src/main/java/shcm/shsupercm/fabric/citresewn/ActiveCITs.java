@@ -179,8 +179,8 @@ public class ActiveCITs {
             return;
         }
 
-        for (CITEnchantment cit : citEnchantments)
-            cit.applyMethod(stack);
+        if (effectiveGlobalProperties.method != null)
+            effectiveGlobalProperties.method.applyMethod(citEnchantments, stack);
 
         CITEnchantment.appliedContext = citEnchantments;
     }

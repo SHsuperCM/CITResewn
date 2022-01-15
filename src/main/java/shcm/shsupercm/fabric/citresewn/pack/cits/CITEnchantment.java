@@ -15,7 +15,6 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import org.lwjgl.opengl.GL11;
-import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.ex.CITParseException;
 import shcm.shsupercm.fabric.citresewn.mixin.citenchantment.BufferBuilderStorageAccessor;
@@ -28,6 +27,7 @@ import java.util.function.Supplier;
 
 import static org.lwjgl.opengl.GL11.*;
 import static com.mojang.blaze3d.systems.RenderSystem.*;
+import static shcm.shsupercm.util.logic.Loops.statelessFadingLoop;
 
 public class CITEnchantment extends CIT {
     public static List<CITEnchantment> appliedContext = null;
@@ -40,7 +40,6 @@ public class CITEnchantment extends CIT {
     public final Blend blend;
 
     private final WrappedMethodIntensity methodIntensity = new WrappedMethodIntensity();
-    private final MergeMethod method;
 
     public final Map<GlintRenderLayer, RenderLayer> renderLayers = new EnumMap<>(GlintRenderLayer.class);
 
@@ -77,8 +76,6 @@ public class CITEnchantment extends CIT {
             };
 
             blend = Blend.getBlend(properties.getProperty("blend", "add"));
-
-            method = !enchantmentsAny && this.enchantments.size() > 0 ? pack.method : null;
         } catch (Exception e) {
             throw new CITParseException(pack.resourcePack, identifier, (e.getClass() == Exception.class ? "" : e.getClass().getSimpleName() + ": ") + e.getMessage());
         }
@@ -91,17 +88,6 @@ public class CITEnchantment extends CIT {
             renderLayers.put(glintLayer, renderLayer);
             ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).entityBuilders().put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
         }
-    }
-
-    public void applyMethod(ItemStack stack) {
-        if (this.method != null) {
-            Map<Identifier, Integer> stackEnchantments = new LinkedHashMap<>();
-            for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
-                stackEnchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
-
-            this.methodIntensity.intensity = this.method.getIntensity(stackEnchantments, this);
-        } else
-            this.methodIntensity.intensity = 1f;
     }
 
     @Override
@@ -195,10 +181,10 @@ public class CITEnchantment extends CIT {
         }
 
         public VertexConsumer tryApply(VertexConsumer base, RenderLayer baseLayer, VertexConsumerProvider provider) {
-            if (!shouldApply || appliedContext == null)
+            if (!shouldApply || appliedContext == null || appliedContext.size() == 0)
                 return null;
 
-            VertexConsumer[] layers = new VertexConsumer[Math.min(appliedContext.size(), CITResewn.INSTANCE.activeCITs.effectiveGlobalProperties.cap)];
+            VertexConsumer[] layers = new VertexConsumer[Math.min(appliedContext.size(), appliedContext.get(0).pack.cap)];
 
             for (int i = 0; i < layers.length; i++)
                 layers[i] = provider.getBuffer(appliedContext.get(i).renderLayers.get(GlintRenderLayer.this));
@@ -305,51 +291,74 @@ public class CITEnchantment extends CIT {
     public enum MergeMethod {
         AVERAGE {
             @Override
-            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+            public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
                 Identifier enchantment = null;
                 for (Identifier enchantmentMatch : cit.enchantments)
                     if (stackEnchantments.containsKey(enchantmentMatch)) {
                         enchantment = enchantmentMatch;
                         break;
                     }
-                if (enchantment == null)
-                    return 0f;
 
-                float sum = 0f;
-                for (Integer value : stackEnchantments.values())
-                    sum += value;
+                if (enchantment == null) {
+                    cit.methodIntensity.intensity = 0f;
+                } else {
+                    float sum = 0f;
+                    for (Integer value : stackEnchantments.values())
+                        sum += value;
 
-                return (float) stackEnchantments.get(enchantment) / sum;
+                    cit.methodIntensity.intensity = (float) stackEnchantments.get(enchantment) / sum;
+                }
             }
         },
         LAYERED {
             @Override
-            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+            public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
                 Identifier enchantment = null;
                 for (Identifier enchantmentMatch : cit.enchantments)
                     if (stackEnchantments.containsKey(enchantmentMatch)) {
                         enchantment = enchantmentMatch;
                         break;
                     }
-                if (enchantment == null)
-                    return 0f;
+                if (enchantment == null) {
+                    cit.methodIntensity.intensity = 0f;
+                    return;
+                }
 
                 float max = 0f;
                 for (Integer value : stackEnchantments.values())
                     if (value > max)
                         max = value;
 
-                return (float) stackEnchantments.get(enchantment) / max;
+                cit.methodIntensity.intensity = (float) stackEnchantments.get(enchantment) / max;
             }
         },
         CYCLE {
             @Override
-            public float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
-                return 1f;
+            public void applyMethod(List<CITEnchantment> citEnchantments, ItemStack stack) {
+                List<Map.Entry<CITEnchantment, Float>> durations = new ArrayList<>();
+                for (CITEnchantment cit : citEnchantments)
+                    durations.add(new HashMap.SimpleEntry<>(cit, cit.duration));
+
+                for (Map.Entry<CITEnchantment, Float> intensity : statelessFadingLoop(durations, citEnchantments.get(0).pack.fade, ticks, 20).entrySet())
+                    intensity.getKey().methodIntensity.intensity = intensity.getValue();
             }
         };
 
-        public abstract float getIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit);
+        public static int ticks = 0;
+
+        public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CITEnchantment cit) {
+            cit.methodIntensity.intensity = 1f;
+        }
+
+        public void applyMethod(List<CITEnchantment> citEnchantments, ItemStack stack) {
+            Map<Identifier, Integer> stackEnchantments = new LinkedHashMap<>();
+            for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
+                stackEnchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
+
+            for (CITEnchantment cit : citEnchantments)
+                if (!cit.enchantmentsAny)
+                    applyIntensity(stackEnchantments, cit);
+        }
     }
 
     private static class WrappedMethodIntensity {

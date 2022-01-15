@@ -19,6 +19,7 @@
     "citenchantment.ItemRendererMixin",
     "citenchantment.ItemStackMixin",
     "citenchantment.RenderPhaseAccessor",
+    "citenchantment.MinecraftClientMixin",
     "cititem.ItemRendererMixin",
     "cititem.ItemStackMixin",
     "cititem.JsonUnbakedModelAccessor",
