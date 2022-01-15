@@ -32,7 +32,7 @@ public class ItemRendererMixin {
 
     private static WeakReference<BakedModel> mojankCITModel = null;
 
-    @Inject(method = "getModel", cancellable = true, at = @At("HEAD"))
+    @Inject(method = "getHeldItemModel", cancellable = true, at = @At("HEAD"))
     private void getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (!CITResewnConfig.INSTANCE().enabled || CITResewn.INSTANCE.activeCITs == null)
             return;

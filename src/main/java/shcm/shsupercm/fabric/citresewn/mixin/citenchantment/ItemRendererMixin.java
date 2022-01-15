@@ -20,7 +20,7 @@ import shcm.shsupercm.fabric.citresewn.pack.cits.CITEnchantment;
 
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
-    @Inject(method = "getModel", at = @At("TAIL"))
+    @Inject(method = "getHeldItemModel", at = @At("TAIL"))
     private void setAppliedContext(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (CITResewnConfig.INSTANCE().enabled && CITResewn.INSTANCE.activeCITs != null)
             CITResewn.INSTANCE.activeCITs.setEnchantmentAppliedContextCached(stack, world, entity);
@@ -54,7 +54,7 @@ public class ItemRendererMixin {
             return;
         VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
-            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix()), cir.getReturnValue()));
+            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getModel(), entry.getNormal()), cir.getReturnValue()));
     }
 
     @Inject(method = "getDirectCompassGlintConsumer", cancellable = true, at = @At("RETURN"))
@@ -63,7 +63,7 @@ public class ItemRendererMixin {
             return;
         VertexConsumer vertexConsumer = CITEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
-            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix()), cir.getReturnValue()));
+            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getModel(), entry.getNormal()), cir.getReturnValue()));
     }
 
     @Inject(method = "getItemGlintConsumer", cancellable = true, at = @At("RETURN"))
