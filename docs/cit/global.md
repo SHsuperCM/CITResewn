@@ -20,5 +20,5 @@ All properties (and `cit.properties` itself) are optional.
 | --- | --- | --- | --- |
 | `useGlint` | [**Boolean**]{Either: &#10 true / false|right} | If false, removes the default glint texture from every item. | `true` |
 | `cap` | Any positive whole number | Controls the maximum allowed layers of CIT Enchantments per item. | None |
-| `method` | [**Literal**]{Either: &#10 average / layered / cycle|right} | Not implemented yet | `average` |
-| `fade` | Any positive number | Not implemented yet | `0.5` |
+| `method` | [**Literal**]{Either: &#10 average / layered / cycle|right} | Determines how different CIT Enchantments mix:<br>`average`:<br>`layered`:<br>`cycle`: | `average` |
+| `fade` | Any non-negative number | Amount of time in seconds to fade between CIT Enchantments when method is set to `cycle`. | `0.5` |

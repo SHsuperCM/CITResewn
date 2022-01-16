@@ -20,10 +20,10 @@ The CIT must match the item in that has its glint changed.
 | Key | Value Type                       | Description | Default |
 | --- | --- | --- | --- |
 | `texture` | [**[Texture Asset](/cit/cit_base/#asset-resolution) <br> (`.png`)**]{Examples: &#10 texture=./my_textures/custom_glint.png &#10 texture=assets/minecraft/citresewn/cit/ench/glint_3 &#10 texture=minecraft:misc/my_cool_enchanted_item_glint.png|right} | Replaces the texture of this glint layer with the resolved texture. | None |
-| `layer` | Any whole number |  | `0` |
-| `speed` | Any number |  | `1.0` |
+| `layer` | Any whole number | - | `0` |
+| `speed` | Any number | Multiplier for the glint's scroll speed. | `1.0` |
 | `rotation` | Any number | Rotates the texture and scroll direction by the given degrees. | `0.0` |
-| `duration` | Any number | Not implemented yet | `0.0` |
+| `duration` | Any number | Amount of time in seconds to pause on this cit when the used method is `cycle`. | `0.0` |
 | `blend` | [Literal or Custom](#blending-functions) | Sets the OpenGL blending function used to apply the texture. | `add` |
 | *`useGlint`* | Boolean | Should the default enchantment glint show on the item. | `false` |
 | *`blur`* | Boolean | Should the texture be blurred before being applied. | `false` |
