@@ -11,6 +11,8 @@ import shcm.shsupercm.fabric.citresewn.mixin.core.GroupResourcePackAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.cits.*;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,7 +91,7 @@ public final class CITParser { private CITParser() {}
                 .flatMap(citIdentifier -> {
                     try (InputStream is = resourcePack.open(ResourceType.CLIENT_RESOURCES, citIdentifier)) {
                         Properties citProperties = new Properties();
-                        citProperties.load(is);
+                        citProperties.load(new InputStreamReader(is, StandardCharsets.UTF_8));
 
                         CITConstructor type = REGISTRY.get(citProperties.getProperty("type", "item"));
                         if (type == null)
