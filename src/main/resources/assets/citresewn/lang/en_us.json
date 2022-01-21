@@ -1,5 +1,6 @@
 {
   "config.citresewn.title": "CIT Resewn Configuration",
+  "config.citresewn.configure": "Configure",
 
   "config.citresewn.enabled.title": "Enabled",
   "config.citresewn.enabled.tooltip": "Should CIT Resewn load and inject cits from resourcepacks",
@@ -9,9 +10,6 @@
 
   "config.citresewn.mute_warns.title": "Mute loading warnings",
   "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings",
-
-  "config.citresewn.citenchantment_scroll_multiplier.title": "CIT Enchantment: Scroll Multiplier",
-  "config.citresewn.citenchantment_scroll_multiplier.tooltip": "General multiplier for the scroll speed of the glint textures added by enchantment CITs.",
 
   "config.citresewn.broken_paths.title": "Allow broken paths in resourcepacks",
   "config.citresewn.broken_paths.tooltip": "Allows packs with illegal resource paths to load.\nMay cause issues!",

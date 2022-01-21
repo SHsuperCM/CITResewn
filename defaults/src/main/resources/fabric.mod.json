@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "citresewn-defaults",
   "version": "${version}",
-  "name": "CIT Resewn - Defaults",
+  "name": "CIT Resewn: Defaults",
   "description": "Default types and conditions for CIT Resewn",
   "authors": [
     "SHsuperCM"
@@ -12,6 +12,12 @@
 
   "environment": "client",
   "entrypoints": {
+    "modmenu": [
+      "shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsModMenu"
+    ],
+    "citresewn-defaults:config_screen": [
+      "shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfigScreenFactory::create"
+    ]
   },
   "accessWidener" : "citresewn-defaults.accesswidener",
   "mixins": [

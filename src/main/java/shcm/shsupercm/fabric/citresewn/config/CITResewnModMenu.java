@@ -11,15 +11,8 @@ public class CITResewnModMenu implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         if (FabricLoader.getInstance().isModLoaded("cloth-config2"))
-            return new ClothConfigOpenImpl().getModConfigScreenFactory();
+            return CITResewnConfigScreenFactory::create;
 
         return parent -> new NoticeScreen(() -> MinecraftClient.getInstance().setScreen(parent), Text.of("CIT Resewn"), Text.of("CIT Resewn requires Cloth Config to be able to show the config."));
-    }
-
-    private static class ClothConfigOpenImpl implements ModMenuApi {
-        @Override
-        public ConfigScreenFactory<?> getModConfigScreenFactory() {
-            return CITResewnConfigScreenFactory::create;
-        }
     }
 }
