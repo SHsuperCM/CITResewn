@@ -11,7 +11,7 @@ import net.minecraft.util.Formatting;
 
 public class CITResewnConfigScreenFactory {
     public static Screen create(Screen parent) {
-        CITResewnConfig currentConfig = CITResewnConfig.INSTANCE(), defaultConfig = new CITResewnConfig();
+        CITResewnConfig currentConfig = CITResewnConfig.INSTANCE, defaultConfig = new CITResewnConfig();
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
@@ -42,13 +42,6 @@ public class CITResewnConfigScreenFactory {
                 .setTooltip(new TranslatableText("config.citresewn.mute_warns.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.mute_warns = newConfig)
                 .setDefaultValue(defaultConfig.mute_warns)
-                .build());
-
-        category.addEntry(entryBuilder.startFloatField(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.title"), currentConfig.citenchantment_scroll_multiplier)
-                .setTooltip(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.tooltip"))
-                .setSaveConsumer(newConfig -> currentConfig.citenchantment_scroll_multiplier = newConfig)
-                .setDefaultValue(defaultConfig.citenchantment_scroll_multiplier)
-                .setMin(0f)
                 .build());
 
         category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)

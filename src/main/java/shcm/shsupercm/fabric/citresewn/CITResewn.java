@@ -12,20 +12,11 @@ public class CITResewn implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("CITResewn");
     public static CITResewn INSTANCE;
 
-    public ActiveCITs activeCITs = null;
-
-    public CITResewnConfig config = null;
-
-
     public boolean processingBrokenPaths = false;
 
     @Override
     public void onInitializeClient() {
         INSTANCE = this;
-
-        config = CITResewnConfig.read();
-
-        CITResewnCommand.register();
     }
 
     public static void info(String message) {
@@ -33,13 +24,13 @@ public class CITResewn implements ClientModInitializer {
     }
 
     public static void logWarnLoading(String message) {
-        if (CITResewnConfig.INSTANCE().mute_warns)
+        if (CITResewnConfig.INSTANCE.mute_warns)
             return;
         LOG.error("[citresewn] " + message);
     }
 
     public static void logErrorLoading(String message) {
-        if (CITResewnConfig.INSTANCE().mute_errors)
+        if (CITResewnConfig.INSTANCE.mute_errors)
             return;
         LOG.error("{citresewn} " + message);
     }
