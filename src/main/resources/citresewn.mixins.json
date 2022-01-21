@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "plugin": "shcm.shsupercm.fabric.citresewn.config.CITResewnMixinConfiguration",
   "mixins": [
     "broken_paths.AbstractFileResourcePackMixin",

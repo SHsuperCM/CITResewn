@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "citresewn-defaults",
+  "version": "${version}",
+  "name": "CIT Resewn - Defaults",
+  "description": "Default types and conditions for CIT Resewn",
+  "authors": [
+    "SHsuperCM"
+  ],
+  "license": "MIT",
+  "icon": "assets/citresewn-defaults/logo.png",
+
+  "environment": "client",
+  "entrypoints": {
+  },
+  "accessWidener" : "citresewn-defaults.accesswidener",
+  "mixins": [
+    "citresewn-defaults.mixins.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "citresewn"
+      }
+    }
+  },
+  "depends": {
+    "citresewn": "${version}"
+  }
+}
