@@ -9,6 +9,11 @@
   ],
   "license": "MIT",
   "icon": "assets/citresewn-defaults/logo.png",
+  "contact": {
+    "homepage": "https://citresewn.shcm.io/",
+    "sources": "https://github.com/SHsuperCM/CITResewn",
+    "issues": "https://github.com/SHsuperCM/CITResewn/issues"
+  },
 
   "environment": "client",
   "entrypoints": {
@@ -32,5 +37,8 @@
   },
   "depends": {
     "citresewn": "${version}"
+  },
+  "conflicts": {
+    "eatinganimationid": "*"
   }
 }
