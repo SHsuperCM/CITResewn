@@ -24,11 +24,10 @@ public class ActiveCITs implements Disposable { private ActiveCITs() {}
             active.dispose();
             active = null;
         }
-        profiler.pop();
 
         ActiveCITs active = new ActiveCITs();
 
-        profiler.push("citresewn:load_global_properties");
+        profiler.swap("citresewn:load_global_properties");
         PackParser.loadGlobalProperties(resourceManager, active.globalProperties);
         active.globalProperties.callHandlers();
         profiler.pop();

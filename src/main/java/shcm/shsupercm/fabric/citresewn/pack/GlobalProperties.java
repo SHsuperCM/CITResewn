@@ -17,7 +17,7 @@ import java.util.Set;
 
 public class GlobalProperties extends PropertyGroup {
     public GlobalProperties() {
-        super(new Identifier("citresewn", "global_properties"));
+        super("global_properties", new Identifier("citresewn", "global_properties"));
     }
 
     @Override
@@ -26,8 +26,8 @@ public class GlobalProperties extends PropertyGroup {
     }
 
     @Override
-    public PropertyGroup load(Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
-        PropertyGroup group = PropertyGroup.tryParseGroup(identifier, is);
+    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
+        PropertyGroup group = PropertyGroup.tryParseGroup(packName, identifier, is);
         if (group != null)
             for (Map.Entry<PropertyKey, Set<PropertyValue>> entry : group.properties.entrySet())
                 this.properties.computeIfAbsent(entry.getKey(), key -> new LinkedHashSet<>()).addAll(entry.getValue());

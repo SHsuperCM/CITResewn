@@ -10,14 +10,16 @@ import java.util.*;
 public abstract class PropertyGroup {
     public final Map<PropertyKey, Set<PropertyValue>> properties = new LinkedHashMap<>();
     public final Identifier identifier;
+    public final String packName;
 
-    protected PropertyGroup(Identifier identifier) {
+    protected PropertyGroup(String packName, Identifier identifier) {
+        this.packName = packName;
         this.identifier = identifier;
     }
 
     public abstract String getExtension();
 
-    public abstract PropertyGroup load(Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException;
+    public abstract PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException;
 
     protected void put(int position, String key, String keyMetadata, String delimiter, String value) throws InvalidIdentifierException {
         Objects.requireNonNull(key);
@@ -38,11 +40,11 @@ public abstract class PropertyGroup {
         return values;
     }
 
-    public static PropertyGroup tryParseGroup(Identifier identifier, InputStream is) throws IOException {
+    public static PropertyGroup tryParseGroup(String packName, Identifier identifier, InputStream is) throws IOException {
         PropertyGroup group = null;
         if (identifier.getPath().endsWith(PropertiesGroupAdapter.EXTENSION))
-            group = new PropertiesGroupAdapter(identifier);
+            group = new PropertiesGroupAdapter(packName, identifier);
 
-        return group == null ? null : group.load(identifier, is);
+        return group == null ? null : group.load(packName, identifier, is);
     }
 }

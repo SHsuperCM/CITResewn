@@ -10,8 +10,8 @@ import java.util.Properties;
 public class PropertiesGroupAdapter extends PropertyGroup {
     public static final String EXTENSION = ".properties";
 
-    protected PropertiesGroupAdapter(Identifier identifier) {
-        super(identifier);
+    protected PropertiesGroupAdapter(String packName, Identifier identifier) {
+        super(packName, identifier);
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
     }
 
     @Override
-    public PropertyGroup load(Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
+    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
             int linePos = 0, multilineSkip = 0;
