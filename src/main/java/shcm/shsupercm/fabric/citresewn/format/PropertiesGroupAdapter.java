@@ -20,7 +20,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
     }
 
     @Override
-    public PropertyGroup load(InputStream is) throws IOException, InvalidIdentifierException {
+    public PropertyGroup load(Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
             int linePos = 0, multilineSkip = 0;

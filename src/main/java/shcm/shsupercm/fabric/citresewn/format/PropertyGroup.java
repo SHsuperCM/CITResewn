@@ -17,7 +17,7 @@ public abstract class PropertyGroup {
 
     public abstract String getExtension();
 
-    public abstract PropertyGroup load(InputStream is) throws IOException, InvalidIdentifierException;
+    public abstract PropertyGroup load(Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException;
 
     protected void put(int position, String key, String keyMetadata, String delimiter, String value) throws InvalidIdentifierException {
         Objects.requireNonNull(key);
@@ -39,14 +39,10 @@ public abstract class PropertyGroup {
     }
 
     public static PropertyGroup tryParseGroup(Identifier identifier, InputStream is) throws IOException {
-        PropertyGroup group;
+        PropertyGroup group = null;
         if (identifier.getPath().endsWith(PropertiesGroupAdapter.EXTENSION))
             group = new PropertiesGroupAdapter(identifier);
-        else
-            return null;
 
-        group.load(is);
-
-        return group;
+        return group == null ? null : group.load(identifier, is);
     }
 }

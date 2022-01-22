@@ -4,6 +4,7 @@
   "package": "shcm.shsupercm.fabric.citresewn.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ModelLoaderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
