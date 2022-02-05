@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
@@ -47,7 +48,13 @@ public class GlobalProperties extends PropertyGroup {
                     for (PropertyValue value : entry.getValue())
                         lastValue = value;
 
-                    container.getEntrypoint().globalProperty(entry.getKey().path(), lastValue);
+                    if (lastValue != null)
+                        try {
+                            container.getEntrypoint().globalProperty(entry.getKey().path(), lastValue);
+                        } catch (Exception e) {
+                            CITResewn.logErrorLoading("Errored while parsing global properties: Line " + lastValue.position() + " of " + lastValue.propertiesIdentifier() + " in " + lastValue.packName());
+                            e.printStackTrace();
+                        }
                 }
         }
     }

@@ -95,7 +95,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
 
                 int pos = linePos - multilineSkip;
                 multilineSkip = 0;
-                this.put(pos, key, keyMetadata, "=", builder.toString());
+                this.put(pos, packName, identifier, key, keyMetadata, "=", builder.toString());
             }
         }
         return this;

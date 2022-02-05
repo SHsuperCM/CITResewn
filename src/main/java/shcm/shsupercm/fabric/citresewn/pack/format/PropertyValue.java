@@ -1,4 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.pack.format;
 
-public record PropertyValue(String keyMetadata, String value, String delimiter, int position) {
+import net.minecraft.util.Identifier;
+
+public record PropertyValue(String keyMetadata,
+                            String value,
+                            String delimiter,
+                            int position,
+                            Identifier propertiesIdentifier,
+                            String packName) {
 }

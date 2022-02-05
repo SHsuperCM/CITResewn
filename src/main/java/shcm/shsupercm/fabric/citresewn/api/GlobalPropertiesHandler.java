@@ -6,5 +6,5 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 public interface GlobalPropertiesHandler {
     String ENTRYPOINT = "citresewn:global_property";
 
-    void globalProperty(String key, PropertyValue value);
+    void globalProperty(String key, PropertyValue value) throws Exception;
 }

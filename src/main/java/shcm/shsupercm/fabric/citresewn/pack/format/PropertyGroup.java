@@ -21,11 +21,11 @@ public abstract class PropertyGroup {
 
     public abstract PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException;
 
-    protected void put(int position, String key, String keyMetadata, String delimiter, String value) throws InvalidIdentifierException {
+    protected void put(int position, String packName, Identifier propertiesIdentifier, String key, String keyMetadata, String delimiter, String value) throws InvalidIdentifierException {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
 
-        this.properties.computeIfAbsent(PropertyKey.of(key), id -> new LinkedHashSet<>()).add(new PropertyValue(keyMetadata, value, delimiter, position));
+        this.properties.computeIfAbsent(PropertyKey.of(key), id -> new LinkedHashSet<>()).add(new PropertyValue(keyMetadata, value, delimiter, position, propertiesIdentifier, packName));
     }
 
     public Set<PropertyValue> get(String namespace, String... pathAliases) {
