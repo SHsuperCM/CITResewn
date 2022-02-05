@@ -20,7 +20,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
     }
 
     @Override
-    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
+    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
             int linePos = 0, multilineSkip = 0;
@@ -92,6 +92,9 @@ public class PropertiesGroupAdapter extends PropertyGroup {
 
                     builder.append(c);
                 }
+
+                if (key == null)
+                    throw new IOException("Missing separator in line " + linePos);
 
                 int pos = linePos - multilineSkip;
                 multilineSkip = 0;
