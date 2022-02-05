@@ -37,7 +37,7 @@ public class ActiveCITs implements Disposable { private ActiveCITs() {}
 
     @Override
     public void dispose() {
-        for (Disposable disposable : FabricLoader.getInstance().getEntrypoints("citresewn:dispose", Disposable.class))
+        for (Disposable disposable : FabricLoader.getInstance().getEntrypoints(Disposable.ENTRYPOINT, Disposable.class))
             disposable.dispose();
 
 

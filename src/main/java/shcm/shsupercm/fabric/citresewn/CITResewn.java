@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn;
 
+import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,13 +8,12 @@ import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
 public class CITResewn implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("CITResewn");
-    public static CITResewn INSTANCE;
-
-    public boolean processingBrokenPaths = false;
+    @Entrypoint(Entrypoint.CLIENT)
+    public static final CITResewn INSTANCE = new CITResewn();
 
     @Override
     public void onInitializeClient() {
-        INSTANCE = this;
+        info("init");
     }
 
     public static void info(String message) {

@@ -16,14 +16,6 @@
   },
 
   "environment": "client",
-  "entrypoints": {
-    "modmenu": [
-      "shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsModMenu"
-    ],
-    "citresewn-defaults:config_screen": [
-      "shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfigScreenFactory::create"
-    ]
-  },
   "accessWidener" : "citresewn-defaults.accesswidener",
   "mixins": [
     "citresewn-defaults.mixins.json"

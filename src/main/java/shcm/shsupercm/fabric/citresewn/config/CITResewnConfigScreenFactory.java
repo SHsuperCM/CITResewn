@@ -14,6 +14,8 @@ import net.minecraft.util.Formatting;
 import java.util.function.Function;
 
 public class CITResewnConfigScreenFactory {
+    public static final String DEFAULTS_CONFIG_ENTRYPOINT = "citresewn-defaults:config_screen";
+
     public static Screen create(Screen parent) {
         CITResewnConfig currentConfig = CITResewnConfig.INSTANCE, defaultConfig = new CITResewnConfig();
 
@@ -42,7 +44,7 @@ public class CITResewnConfigScreenFactory {
                 .setYesNoTextSupplier((b) -> {
                     if (b != currentScreen.prevToggle) {
                         //noinspection unchecked
-                        MinecraftClient.getInstance().setScreen((Screen) FabricLoader.getInstance().getEntrypoints("citresewn-defaults:config_screen", Function.class).stream().findAny().orElseThrow().apply(currentScreen.screen));
+                        MinecraftClient.getInstance().setScreen((Screen) FabricLoader.getInstance().getEntrypoints(DEFAULTS_CONFIG_ENTRYPOINT, Function.class).stream().findAny().orElseThrow().apply(currentScreen.screen));
 
                         currentScreen.prevToggle = b;
                     }

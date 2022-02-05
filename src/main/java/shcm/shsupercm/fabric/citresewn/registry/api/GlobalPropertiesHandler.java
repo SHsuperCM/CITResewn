@@ -4,5 +4,7 @@ import shcm.shsupercm.fabric.citresewn.format.PropertyValue;
 
 @FunctionalInterface
 public interface GlobalPropertiesHandler {
-    void globalProperty(String key, PropertyValue value);
+    String ENTRYPOINT = "citresewn:global_property";
+
+    boolean globalProperty(String key, PropertyValue value);
 }

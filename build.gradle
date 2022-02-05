@@ -1,5 +1,6 @@
 plugins {
-    id 'fabric-loom' version '0.10-SNAPSHOT' apply false
+    id 'fabric-loom' version '0.11-SNAPSHOT' apply false
+    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.4' apply false
     id 'maven-publish'
 }
 
@@ -8,6 +9,7 @@ group = project.maven_group
 
 allprojects {
     apply plugin: "fabric-loom"
+    apply plugin: "io.shcm.shsupercm.fabric.fletchingtable"
 
     repositories {
         maven { url "https://maven.shedaniel.me/" }
@@ -33,6 +35,13 @@ allprojects {
         }
 
         modCompileOnly("curse.maven:cosmeticarmor-436659:${project.cosmetic_armor}")
+
+
+        fletchingTable.shutUpDrasil18()
+    }
+
+    fletchingTable {
+        defaultMixinEnvironment = "auto"
     }
 
     processResources {
