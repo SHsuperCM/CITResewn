@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.format;
+package shcm.shsupercm.fabric.citresewn.pack.format;
 
 public record PropertyKey(String namespace, String path) {
     public static PropertyKey of(String key) {

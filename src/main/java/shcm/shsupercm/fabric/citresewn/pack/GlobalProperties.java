@@ -4,10 +4,10 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import shcm.shsupercm.fabric.citresewn.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.format.PropertyValue;
-import shcm.shsupercm.fabric.citresewn.registry.api.GlobalPropertiesHandler;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.api.GlobalPropertiesHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,11 +43,11 @@ public class GlobalProperties extends PropertyGroup {
 
             for (Map.Entry<PropertyKey, Set<PropertyValue>> entry : properties.entrySet())
                 if (entry.getKey().namespace().equals(containerNamespace)) {
-                    PropertyValue value = null;
-                    for (PropertyValue v : entry.getValue())
-                        value = v;
+                    PropertyValue lastValue = null;
+                    for (PropertyValue value : entry.getValue())
+                        lastValue = value;
 
-                    container.getEntrypoint().globalProperty(entry.getKey().path(), value);
+                    container.getEntrypoint().globalProperty(entry.getKey().path(), lastValue);
                 }
         }
     }

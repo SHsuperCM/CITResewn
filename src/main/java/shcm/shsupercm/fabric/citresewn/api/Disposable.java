@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.util;
+package shcm.shsupercm.fabric.citresewn.api;
 
 @FunctionalInterface
 public interface Disposable {

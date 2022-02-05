@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.format;
+package shcm.shsupercm.fabric.citresewn.pack.format;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;

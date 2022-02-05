@@ -14,7 +14,7 @@ import shcm.shsupercm.fabric.citresewn.pack.ActiveCITs;
 public class ModelLoaderMixin {
     @Inject(method = "<init>", at =
     @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V"))
-    private void loadCITs(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
+    private void citresewn$loadCITs(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
         profiler.push("citresewn:reloading_cits");
         ActiveCITs.load(resourceManager, profiler);
         profiler.pop();
