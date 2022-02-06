@@ -1,9 +1,11 @@
-package shcm.shsupercm.fabric.citresewn.pack;
+package shcm.shsupercm.fabric.citresewn.pack.cit;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.api.Disposable;
+import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
+import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 
 public class ActiveCITs implements Disposable { private ActiveCITs() {}
     private static ActiveCITs active = null;

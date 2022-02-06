@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shcm.shsupercm.fabric.citresewn.pack.ActiveCITs;
+import shcm.shsupercm.fabric.citresewn.pack.cit.ActiveCITs;
 
 @Mixin(ModelLoader.class)
 public class ModelLoaderMixin {
