@@ -3,7 +3,7 @@ package shcm.shsupercm.fabric.citresewn.api;
 import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class CITTypeContainer<T extends CITType> implements CITDisposable {
@@ -18,5 +18,5 @@ public abstract class CITTypeContainer<T extends CITType> implements CITDisposab
         this.id = id;
     }
 
-    public abstract void load(Collection<CIT> parsedCITs);
+    public abstract void load(List<CIT> parsedCITs);
 }

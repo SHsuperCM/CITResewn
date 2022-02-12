@@ -3,13 +3,11 @@ package shcm.shsupercm.fabric.citresewn.defaults.types;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.pack.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 
-import java.util.Collection;
 import java.util.List;
 
 public class TypeItem extends CITType {
@@ -17,7 +15,7 @@ public class TypeItem extends CITType {
     public static final Container CONTAINER = new Container();
 
     @Override
-    public void load(List<? extends CITCondition> conditions, PropertyGroup properties, GlobalProperties globalProperties) throws CITParsingException {
+    public void load(List<? extends CITCondition> conditions, PropertyGroup properties) throws CITParsingException {
 
     }
 
@@ -27,7 +25,7 @@ public class TypeItem extends CITType {
         }
 
         @Override
-        public void load(Collection<CIT> parsedCITs) {
+        public void load(List<CIT> parsedCITs) {
         }
 
         @Override

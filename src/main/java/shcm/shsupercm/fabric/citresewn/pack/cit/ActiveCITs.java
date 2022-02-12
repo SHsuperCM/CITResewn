@@ -7,6 +7,8 @@ import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 
+import java.util.*;
+
 public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
     private static ActiveCITs active = null;
 
@@ -20,6 +22,8 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
 
     public final GlobalProperties globalProperties = new GlobalProperties();
 
+    public final Map<Class<? extends CITType>, List<CIT>> cits = new IdentityHashMap<>();
+
     public static ActiveCITs load(ResourceManager resourceManager, Profiler profiler) {
         profiler.push("citresewn:disposing");
         if (active != null) {
@@ -32,6 +36,15 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
         profiler.swap("citresewn:load_global_properties");
         PackParser.loadGlobalProperties(resourceManager, active.globalProperties);
         active.globalProperties.callHandlers();
+
+        profiler.swap("citresewn:load_cits");
+        for (CIT cit : PackParser.loadCITs(resourceManager))
+            active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
+        for (Map.Entry<Class<? extends CITType>, List<CIT>> entry : active.cits.entrySet()) {
+            entry.getValue().sort(Comparator.<CIT>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
+            CITRegistry.load(entry.getKey(), entry.getValue());
+        }
+
         profiler.pop();
 
         return ActiveCITs.active = active;

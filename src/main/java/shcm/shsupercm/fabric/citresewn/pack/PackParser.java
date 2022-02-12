@@ -2,16 +2,25 @@ package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.fabricmc.fabric.impl.resource.loader.GroupResourcePack;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceNotFoundException;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.builtin.WeightCondition;
+import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.mixin.GroupResourcePackAccessor;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CITCondition;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CITRegistry;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -46,5 +55,59 @@ public class PackParser {
                 }
             }
         });
+    }
+
+    public static List<CIT> loadCITs(ResourceManager resourceManager) {
+        List<CIT> cits = new ArrayList<>();
+
+        for (String root : ROOTS)
+            for (Identifier identifier : resourceManager.findResources(root + "/cit", s -> s.endsWith(".properties"))) {
+                String packName = null;
+                try (Resource resource = resourceManager.getResource(identifier)) {
+                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = resource.getResourcePackName(), identifier, resource.getInputStream())));
+                } catch (Exception e) {
+                    CITResewn.logErrorLoading("Errored while loading cit: " + identifier + (packName == null ? "" : " from " + packName));
+                    e.printStackTrace();
+                }
+            }
+
+        return cits;
+    }
+
+
+    public static CIT parseCIT(PropertyGroup properties) throws CITParsingException {
+        CITType citType = CITRegistry.parseType(properties);
+
+        ArrayList<CITCondition> conditions = new ArrayList<>();
+
+        for (Map.Entry<PropertyKey, Set<PropertyValue>> entry : properties.properties.entrySet()) {
+            if (entry.getKey().path().equals("type") && entry.getKey().namespace().equals("citresewn"))
+                continue;
+
+            for (PropertyValue value : entry.getValue())
+                conditions.add(CITRegistry.parseCondition(entry.getKey(), value, properties));
+        }
+
+        for (CITCondition condition : new ArrayList<>(conditions))
+            for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
+                conditions.replaceAll(
+                        siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
+                                condition.modifySibling(siblingConditionType, siblingCondition) :
+                                siblingCondition);
+
+        WeightCondition weight = new WeightCondition();
+
+        conditions.removeIf(condition -> {
+            if (condition instanceof WeightCondition weightCondition) {
+                weight.weight = weightCondition.weight;
+                return true;
+            }
+
+            return condition == null;
+        });
+
+        citType.load(conditions, properties);
+
+        return new CIT(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.weight);
     }
 }

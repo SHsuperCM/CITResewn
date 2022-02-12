@@ -1,7 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.pack.cit;
 
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
@@ -9,11 +8,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public abstract class CITCondition {
-    public abstract void load(PropertyValue value, PropertyGroup properties, GlobalProperties globalProperties) throws CITParsingException;
-
-    public Set<Class<? extends CITType>> acceptedTypes() {
-        return null;
-    }
+    public abstract void load(PropertyValue value, PropertyGroup properties) throws CITParsingException;
 
     public Set<Class<? extends CITCondition>> siblingConditions() {
         return Collections.emptySet();
