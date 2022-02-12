@@ -8,7 +8,7 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
-import shcm.shsupercm.fabric.citresewn.api.GlobalPropertiesHandler;
+import shcm.shsupercm.fabric.citresewn.api.CITGlobalProperties;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,7 +37,7 @@ public class GlobalProperties extends PropertyGroup {
     }
 
     public void callHandlers() {
-        for (EntrypointContainer<GlobalPropertiesHandler> container : FabricLoader.getInstance().getEntrypointContainers("citresewn:cit_global_properties", GlobalPropertiesHandler.class)) {
+        for (EntrypointContainer<CITGlobalProperties> container : FabricLoader.getInstance().getEntrypointContainers("citresewn:cit_global_properties", CITGlobalProperties.class)) {
             String containerNamespace = container.getProvider().getMetadata().getId();
             if (containerNamespace.equals("citresewn-defaults"))
                 containerNamespace = "citresewn";

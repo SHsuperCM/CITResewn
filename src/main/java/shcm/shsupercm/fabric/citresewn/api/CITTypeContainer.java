@@ -1,0 +1,22 @@
+package shcm.shsupercm.fabric.citresewn.api;
+
+import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
+
+import java.util.Collection;
+import java.util.function.Supplier;
+
+public abstract class CITTypeContainer<T extends CITType> implements CITDisposable {
+    public static final String ENTRYPOINT = "citresewn:type";
+    public final Class<T> type;
+    public final Supplier<T> createType;
+    public final String id;
+
+    public CITTypeContainer(Class<T> type, Supplier<T> createType, String id) {
+        this.type = type;
+        this.createType = createType;
+        this.id = id;
+    }
+
+    public abstract void load(Collection<CIT> parsedCITs);
+}

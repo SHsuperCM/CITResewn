@@ -41,7 +41,7 @@ public class PackParser {
                     globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
                 } catch (ResourceNotFoundException ignored) {
                 } catch (IOException e) {
-                    CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " in " + pack.getName());
+                    CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
                     e.printStackTrace();
                 }
             }

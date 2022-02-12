@@ -5,6 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
+import shcm.shsupercm.fabric.citresewn.pack.cit.CITRegistry;
 
 public class CITResewn implements ClientModInitializer {
     public static final Logger LOG = LogManager.getLogger("CITResewn");
@@ -13,7 +14,7 @@ public class CITResewn implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        info("init");
+        CITRegistry.registerAll();
     }
 
     public static void info(String message) {

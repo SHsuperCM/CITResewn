@@ -1,7 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.api;
 
 @FunctionalInterface
-public interface Disposable {
+public interface CITDisposable {
     String ENTRYPOINT = "citresewn:dispose";
 
     void dispose();
