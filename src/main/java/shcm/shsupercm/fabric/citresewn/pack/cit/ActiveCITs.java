@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
+import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 
@@ -42,7 +43,11 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
             active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
         for (Map.Entry<Class<? extends CITType>, List<CIT>> entry : active.cits.entrySet()) {
             entry.getValue().sort(Comparator.<CIT>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
-            CITRegistry.load(entry.getKey(), entry.getValue());
+            for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
+                if (typeContainer.type == entry.getKey()) {
+                    typeContainer.load(entry.getValue());
+                    break;
+                }
         }
 
         profiler.pop();
@@ -55,6 +60,7 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
         for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
             disposable.dispose();
 
-
+        for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
+            typeContainer.dispose();
     }
 }

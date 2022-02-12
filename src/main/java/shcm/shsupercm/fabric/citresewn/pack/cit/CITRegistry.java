@@ -16,8 +16,8 @@ import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
 import static shcm.shsupercm.fabric.citresewn.CITResewn.logWarnLoading;
 
 public class CITRegistry {
-    private static final Map<Identifier, CITTypeContainer<? extends CITType>> TYPES = new HashMap<>();
-    private static final Map<PropertyKey, CITConditionContainer<? extends CITCondition>> CONDITIONS = new HashMap<>();
+    public static final Map<Identifier, CITTypeContainer<? extends CITType>> TYPES = new HashMap<>();
+    public static final Map<PropertyKey, CITConditionContainer<? extends CITCondition>> CONDITIONS = new HashMap<>();
 
     public static void registerAll() {
         info("Registering CIT Conditions");
@@ -38,14 +38,6 @@ public class CITRegistry {
 
             TYPES.put(new Identifier(namespace, entrypointContainer.getEntrypoint().id), (CITTypeContainer<? extends CITType>) entrypointContainer.getEntrypoint());
         }
-    }
-
-    public static void load(Class<? extends CITType> type, List<CIT> cits) {
-        for (CITTypeContainer<? extends CITType> typeContainer : TYPES.values())
-            if (typeContainer.type == type) {
-                typeContainer.load(cits);
-                break;
-            }
     }
 
     public static CITCondition parseCondition(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
