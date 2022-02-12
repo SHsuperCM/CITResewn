@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.builtin.WeightCondition;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.ex.UnknownCITTypeException;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
@@ -51,7 +52,7 @@ public class CITRegistry {
                 continue;
 
             for (PropertyValue value : entry.getValue())
-                conditions.add(parseCondition(properties, entry.getKey(), value));
+                conditions.add(parseCondition(entry.getKey(), value, properties, globalProperties));
         }
 
         for (CITCondition condition : new ArrayList<>(conditions))
@@ -60,15 +61,24 @@ public class CITRegistry {
                         siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
                             condition.modifySibling(siblingConditionType, siblingCondition) :
                             siblingCondition);
-        
-        conditions.removeIf(Objects::isNull);
+
+        WeightCondition weight = new WeightCondition();
+
+        conditions.removeIf(condition -> {
+            if (condition instanceof WeightCondition weightCondition) {
+                weight.weight = weightCondition.weight;
+                return true;
+            }
+
+            return condition == null;
+        });
 
         citType.load(conditions, properties, globalProperties);
 
-        return new CIT(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]));
+        return new CIT(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.weight);
     }
 
-    public static CITCondition parseCondition(PropertyGroup properties, PropertyKey key, PropertyValue value) throws CITParsingException {
+    public static CITCondition parseCondition(PropertyKey key, PropertyValue value, PropertyGroup properties, GlobalProperties globalProperties) throws CITParsingException {
         CITConditionContainer<? extends CITCondition> conditionContainer = CONDITIONS.get(key);
         if (conditionContainer == null) {
             logWarnLoading("Skipping condition: " + CITParsingException.descriptionOf("Unknown condition type", properties, value.position()));
@@ -76,7 +86,7 @@ public class CITRegistry {
         }
 
         CITCondition condition = conditionContainer.createCondition.get();
-        condition.load(value);
+        condition.load(value, properties, globalProperties);
         return condition;
     }
 

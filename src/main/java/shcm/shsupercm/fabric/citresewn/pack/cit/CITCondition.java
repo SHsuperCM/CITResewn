@@ -1,13 +1,15 @@
 package shcm.shsupercm.fabric.citresewn.pack.cit;
 
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
+import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.Collections;
 import java.util.Set;
 
 public abstract class CITCondition {
-    public abstract void load(PropertyValue value) throws CITParsingException;
+    public abstract void load(PropertyValue value, PropertyGroup properties, GlobalProperties globalProperties) throws CITParsingException;
 
     public Set<Class<? extends CITType>> acceptedTypes() {
         return null;
@@ -22,4 +24,12 @@ public abstract class CITCondition {
     }
 
     public abstract boolean test(CITContext context);
+
+    protected int parseInteger(PropertyValue value, PropertyGroup properties) throws CITParsingException {
+        try {
+            return Integer.parseInt(value.value());
+        } catch (NumberFormatException e) {
+            throw new CITParsingException("\"" + value.value() + "\" is not a valid integer", properties, value.position());
+        }
+    }
 }

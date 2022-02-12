@@ -7,12 +7,14 @@ public class CIT {
     public final String packName;
     public final CITType type;
     public final CITCondition[] conditions;
+    public final int weight;
 
-    public CIT(Identifier propertiesIdentifier, String packName, CITType type, CITCondition[] conditions) {
+    public CIT(Identifier propertiesIdentifier, String packName, CITType type, CITCondition[] conditions, int weight) {
         this.propertiesIdentifier = propertiesIdentifier;
         this.packName = packName;
         this.type = type;
         this.conditions = conditions;
+        this.weight = weight;
     }
 
     public boolean test(CITContext context) {
