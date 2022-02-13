@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.defaults.types;
+package shcm.shsupercm.fabric.citresewn.defaults.cit.types;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;

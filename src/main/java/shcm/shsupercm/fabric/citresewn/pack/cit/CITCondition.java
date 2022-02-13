@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.pack.cit;
 
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
@@ -19,6 +20,10 @@ public abstract class CITCondition {
     }
 
     public abstract boolean test(CITContext context);
+
+    protected void warn(String message, PropertyValue value, PropertyGroup properties) {
+        CITResewn.logWarnLoading("Warning: " + CITParsingException.descriptionOf(message, properties, value.position()));
+    }
 
     protected int parseInteger(PropertyValue value, PropertyGroup properties) throws CITParsingException {
         try {

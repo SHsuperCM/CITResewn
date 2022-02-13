@@ -10,7 +10,8 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 public class WeightCondition extends CITCondition {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
-    public static final CITConditionContainer<WeightCondition> CONTAINER = new CITConditionContainer<>(WeightCondition.class, WeightCondition::new, "weight");
+    public static final CITConditionContainer<WeightCondition> CONTAINER = new CITConditionContainer<>(WeightCondition.class, WeightCondition::new,
+            "weight");
 
     public int weight = 0;
 
