@@ -26,11 +26,11 @@ public class TypeItem extends CITType {
             super(TypeItem.class, TypeItem::new, "item");
         }
 
-        public Map<Item, Set<CIT>> loaded = new IdentityHashMap<>();
+        public Map<Item, Set<CIT<TypeItem>>> loaded = new IdentityHashMap<>();
 
         @Override
-        public void load(List<CIT> parsedCITs) {
-            for (CIT cit : parsedCITs)
+        public void load(List<CIT<TypeItem>> parsedCITs) {
+            for (CIT<TypeItem> cit : parsedCITs)
                 for (CITCondition condition : cit.conditions)
                     if (condition instanceof ConditionItems items)
                         for (Item item : items.items)

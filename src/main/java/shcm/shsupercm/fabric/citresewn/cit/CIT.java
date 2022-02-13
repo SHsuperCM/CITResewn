@@ -2,14 +2,14 @@ package shcm.shsupercm.fabric.citresewn.cit;
 
 import net.minecraft.util.Identifier;
 
-public class CIT {
+public class CIT<T extends CITType> {
     public final Identifier propertiesIdentifier;
     public final String packName;
-    public final CITType type;
+    public final T type;
     public final CITCondition[] conditions;
     public final int weight;
 
-    public CIT(Identifier propertiesIdentifier, String packName, CITType type, CITCondition[] conditions, int weight) {
+    public CIT(Identifier propertiesIdentifier, String packName, T type, CITCondition[] conditions, int weight) {
         this.propertiesIdentifier = propertiesIdentifier;
         this.packName = packName;
         this.type = type;

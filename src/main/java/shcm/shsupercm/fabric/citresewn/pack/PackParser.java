@@ -57,8 +57,8 @@ public class PackParser {
         });
     }
 
-    public static List<CIT> loadCITs(ResourceManager resourceManager) {
-        List<CIT> cits = new ArrayList<>();
+    public static List<CIT<?>> loadCITs(ResourceManager resourceManager) {
+        List<CIT<?>> cits = new ArrayList<>();
 
         for (String root : ROOTS)
             for (Identifier identifier : resourceManager.findResources(root + "/cit", s -> s.endsWith(".properties"))) {
@@ -75,7 +75,7 @@ public class PackParser {
     }
 
 
-    public static CIT parseCIT(PropertyGroup properties) throws CITParsingException {
+    public static CIT<?> parseCIT(PropertyGroup properties) throws CITParsingException {
         CITType citType = CITRegistry.parseType(properties);
 
         ArrayList<CITCondition> conditions = new ArrayList<>();
@@ -108,6 +108,6 @@ public class PackParser {
 
         citType.load(conditions, properties);
 
-        return new CIT(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.weight);
+        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.weight);
     }
 }

@@ -23,7 +23,7 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
 
     public final GlobalProperties globalProperties = new GlobalProperties();
 
-    public final Map<Class<? extends CITType>, List<CIT>> cits = new IdentityHashMap<>();
+    public final Map<Class<? extends CITType>, List<CIT<?>>> cits = new IdentityHashMap<>();
 
     public static ActiveCITs load(ResourceManager resourceManager, Profiler profiler) {
         profiler.push("citresewn:disposing");
@@ -39,13 +39,13 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
         active.globalProperties.callHandlers();
 
         profiler.swap("citresewn:load_cits");
-        for (CIT cit : PackParser.loadCITs(resourceManager))
+        for (CIT<?> cit : PackParser.loadCITs(resourceManager))
             active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
-        for (Map.Entry<Class<? extends CITType>, List<CIT>> entry : active.cits.entrySet()) {
-            entry.getValue().sort(Comparator.<CIT>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
+        for (Map.Entry<Class<? extends CITType>, List<CIT<?>>> entry : active.cits.entrySet()) {
+            entry.getValue().sort(Comparator.<CIT<?>>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
             for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
                 if (typeContainer.type == entry.getKey()) {
-                    typeContainer.load(entry.getValue());
+                    typeContainer.loadUntyped(entry.getValue());
                     break;
                 }
         }

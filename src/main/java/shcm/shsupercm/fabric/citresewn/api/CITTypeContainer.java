@@ -18,5 +18,10 @@ public abstract class CITTypeContainer<T extends CITType> implements CITDisposab
         this.id = id;
     }
 
-    public abstract void load(List<CIT> parsedCITs);
+    public abstract void load(List<CIT<T>> parsedCITs);
+
+    @SuppressWarnings("unchecked")
+    public final void loadUntyped(List<?> parsedCITs) {
+        load((List<CIT<T>>) parsedCITs);
+    }
 }
