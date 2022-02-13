@@ -1,6 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.api;
 
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITCondition;
+import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 
 import java.util.function.Supplier;
 

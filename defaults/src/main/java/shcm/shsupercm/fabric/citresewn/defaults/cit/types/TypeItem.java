@@ -5,9 +5,9 @@ import net.minecraft.item.Item;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITCondition;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
+import shcm.shsupercm.fabric.citresewn.cit.CIT;
+import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
+import shcm.shsupercm.fabric.citresewn.cit.CITType;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 
 import java.util.*;

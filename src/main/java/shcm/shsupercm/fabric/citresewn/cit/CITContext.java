@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.pack.cit;
+package shcm.shsupercm.fabric.citresewn.cit;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;

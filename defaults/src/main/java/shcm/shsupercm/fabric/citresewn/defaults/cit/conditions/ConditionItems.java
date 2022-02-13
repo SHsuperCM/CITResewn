@@ -7,8 +7,8 @@ import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITCondition;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITContext;
+import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
+import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 

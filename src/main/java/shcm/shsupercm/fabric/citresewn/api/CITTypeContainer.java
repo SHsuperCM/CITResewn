@@ -1,7 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.api;
 
-import shcm.shsupercm.fabric.citresewn.pack.cit.CIT;
-import shcm.shsupercm.fabric.citresewn.pack.cit.CITType;
+import shcm.shsupercm.fabric.citresewn.cit.CIT;
+import shcm.shsupercm.fabric.citresewn.cit.CITType;
 
 import java.util.List;
 import java.util.function.Supplier;

@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.pack.cit;
+package shcm.shsupercm.fabric.citresewn.cit;
 
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;

@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.pack.cit;
+package shcm.shsupercm.fabric.citresewn.cit;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
