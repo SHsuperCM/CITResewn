@@ -93,7 +93,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                     builder.append(c);
                 }
 
-                if (key == null)
+                if (key == null) //todo handle : separator
                     throw new IOException("Missing separator in line " + linePos);
 
                 int pos = linePos - multilineSkip;

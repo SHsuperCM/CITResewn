@@ -16,6 +16,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class PackParser {
                 Identifier identifier = new Identifier("minecraft", root + "/cit.properties");
                 try {
                     globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
-                } catch (ResourceNotFoundException ignored) {
+                } catch (FileNotFoundException ignored) {
                 } catch (IOException e) {
                     CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
                     e.printStackTrace();
@@ -65,6 +66,8 @@ public class PackParser {
                 String packName = null;
                 try (Resource resource = resourceManager.getResource(identifier)) {
                     cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = resource.getResourcePackName(), identifier, resource.getInputStream())));
+                } catch (CITParsingException e) {
+                    CITResewn.logErrorLoading(e.getMessage());
                 } catch (Exception e) {
                     CITResewn.logErrorLoading("Errored while loading cit: " + identifier + (packName == null ? "" : " from " + packName));
                     e.printStackTrace();
@@ -73,7 +76,6 @@ public class PackParser {
 
         return cits;
     }
-
 
     public static CIT<?> parseCIT(PropertyGroup properties) throws CITParsingException {
         CITType citType = CITRegistry.parseType(properties);
@@ -89,11 +91,12 @@ public class PackParser {
         }
 
         for (CITCondition condition : new ArrayList<>(conditions))
-            for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
-                conditions.replaceAll(
-                        siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
-                                condition.modifySibling(siblingConditionType, siblingCondition) :
-                                siblingCondition);
+            if (condition != null)
+                for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
+                    conditions.replaceAll(
+                            siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
+                                    condition.modifySibling(siblingConditionType, siblingCondition) :
+                                    siblingCondition);
 
         WeightCondition weight = new WeightCondition();
 
