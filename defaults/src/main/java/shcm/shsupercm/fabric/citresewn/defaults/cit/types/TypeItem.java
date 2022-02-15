@@ -57,7 +57,7 @@ public class TypeItem extends CITType {
     public CITOverrideList bakedSubModels = new CITOverrideList();
 
     @Override
-    public void load(List<? extends CITCondition> conditions, PropertyGroup properties) throws CITParsingException {
+    public void load(List<? extends CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         for (CITCondition condition : conditions)
             if (condition instanceof ConditionItems conditionItems)
                 items.addAll(Arrays.asList(conditionItems.items));
