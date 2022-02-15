@@ -8,6 +8,6 @@ public class CITParsingException extends Exception {
     }
 
     public static String descriptionOf(String message, PropertyGroup propertyGroup, int position) {
-        return message + " at " + position + " in " + propertyGroup.identifier.toString() + " from " + propertyGroup.packName;
+        return message + (position != -1 ? " line " + position : "") + " in " + propertyGroup.identifier.toString() + " from " + propertyGroup.packName;
     }
 }

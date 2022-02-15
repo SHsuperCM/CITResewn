@@ -40,9 +40,11 @@ public abstract class PropertyGroup {
         return values;
     }
 
-    public PropertyValue getLast(String namespace, String... pathAliases) {
+    public PropertyValue getLastWithoutMetadata(String namespace, String... pathAliases) {
         PropertyValue value = null;
-        for (Iterator<PropertyValue> iterator = get(namespace, pathAliases).iterator(); iterator.hasNext(); value = iterator.next());
+        for (PropertyValue next : get(namespace, pathAliases))
+            if (next.keyMetadata() == null)
+                value = next;
 
         return value;
     }

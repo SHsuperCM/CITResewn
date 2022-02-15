@@ -55,7 +55,7 @@ public class CITRegistry {
     public static CITType parseType(PropertyGroup properties) throws CITParsingException {
         Identifier type = new Identifier("citresewn", "item");
 
-        PropertyValue propertiesType = properties.getLast("citresewn", "type");
+        PropertyValue propertiesType = properties.getLastWithoutMetadata("citresewn", "type");
         if (propertiesType != null) {
             String value = propertiesType.value();
             if (!value.contains(":"))

@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -13,7 +14,7 @@ public class CITContext {
 
     public CITContext(ItemStack stack, World world, LivingEntity entity) {
         this.stack = stack;
-        this.world = world;
+        this.world = world == null ? MinecraftClient.getInstance().world : world;
         this.entity = entity;
     }
 

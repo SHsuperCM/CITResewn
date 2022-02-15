@@ -9,8 +9,20 @@ import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem;
 public class ItemStackMixin implements TypeItem.CITCacheItem {
     private final CITCache.Single<TypeItem> citresewn$cacheTypeItem = new CITCache.Single<>(TypeItem.CONTAINER::getRealTimeCIT);
 
+    private boolean citresewn$mojankCITTypeItem = false;
+
     @Override
     public CITCache.Single<TypeItem> citresewn$getCacheTypeItem() {
         return this.citresewn$cacheTypeItem;
+    }
+
+    @Override
+    public boolean citresewn$isMojankCITTypeItem() {
+        return this.citresewn$mojankCITTypeItem;
+    }
+
+    @Override
+    public void citresewn$setMojankCITTypeItem(boolean mojankCITTypeItem) {
+        this.citresewn$mojankCITTypeItem = mojankCITTypeItem;
     }
 }
