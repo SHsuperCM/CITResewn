@@ -117,7 +117,7 @@ public class ModelLoaderMixin {
                         String originalPath = left.get().getTextureId().getPath();
                         String[] split = originalPath.split("/");
                         if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
-                            Identifier resolvedIdentifier = CITType.resolvePath(id, originalPath, ".png", identifier -> resourceManager.containsResource(identifier));
+                            Identifier resolvedIdentifier = CITType.resolveAsset(id, originalPath, "textures", ".png", resourceManager);
                             if (resolvedIdentifier != null)
                                 return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
                         }
@@ -129,7 +129,7 @@ public class ModelLoaderMixin {
                 if (parentId != null) {
                     String[] parentIdPathSplit = parentId.getPath().split("/");
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
-                        parentId = CITType.resolvePath(id, parentId.getPath(), ".json", identifier -> resourceManager.containsResource(identifier));
+                        parentId = CITType.resolveAsset(id, parentId.getPath(), "models", ".json", resourceManager);
                         if (parentId != null)
                             ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
                     }
@@ -138,7 +138,7 @@ public class ModelLoaderMixin {
                 json.getOverrides().replaceAll(override -> {
                     String[] modelIdPathSplit = override.getModelId().getPath().split("/");
                     if (override.getModelId().getPath().startsWith("./") || (modelIdPathSplit.length > 2 && modelIdPathSplit[1].equals("cit"))) {
-                        Identifier resolvedOverridePath = CITType.resolvePath(id, override.getModelId().getPath(), ".json", identifier -> resourceManager.containsResource(identifier));
+                        Identifier resolvedOverridePath = CITType.resolveAsset(id, override.getModelId().getPath(), "models", ".json", resourceManager);
                         if (resolvedOverridePath != null)
                             return new ModelOverride(new ResewnItemModelIdentifier(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
                     }

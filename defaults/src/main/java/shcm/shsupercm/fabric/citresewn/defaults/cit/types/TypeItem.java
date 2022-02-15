@@ -70,18 +70,18 @@ public class TypeItem extends CITType {
         boolean containsTexture = modelProp == null && !properties.get("citresewn", "texture", "tile").isEmpty();
 
         if (!containsTexture) {
-            assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+            assetIdentifier = resolveAsset(properties.identifier, modelProp, "models", ".json", resourceManager);
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);
             else if (modelProp != null) {
-                assetIdentifier = resolvePath(identifier, modelProp, ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                assetIdentifier = resolveAsset(properties.identifier, modelProp, "models", ".json", resourceManager);
                 if (assetIdentifier != null)
                     assetIdentifiers.put(null, assetIdentifier);
             }
         }
 
         for (PropertyValue property : properties.get("citresewn", "model")) {
-            Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+            Identifier subIdentifier = resolveAsset(properties.identifier, property, "models", ".json", resourceManager);
             if (subIdentifier == null)
                 throw new CITParsingException("Cannot resolve path", properties, property.position());
 
@@ -93,12 +93,12 @@ public class TypeItem extends CITType {
         if (assetIdentifiers.size() == 0) { // attempt to load texture
             isTexture = true;
             PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture", "tile");
-            assetIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+            assetIdentifier = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
             if (assetIdentifier != null)
                 assetIdentifiers.put(null, assetIdentifier);
 
             for (PropertyValue property : properties.get("citresewn", "texture", "tile")) {
-                Identifier subIdentifier = resolvePath(identifier, properties.getProperty(property), ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                Identifier subIdentifier = resolveAsset(properties.identifier, property, "textures", ".png", resourceManager);
                 if (subIdentifier == null)
                     throw new CITParsingException("Cannot resolve path", properties, property.position());
 
@@ -109,7 +109,7 @@ public class TypeItem extends CITType {
         } else { // attempt to load textureOverrideMap from textures
             PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture", "tile");
             if (textureProp != null) {
-                assetIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                assetIdentifier = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
                 if (assetIdentifier != null)
                     textureOverrideMap.put(null, Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(assetIdentifier))));
                 else
@@ -118,7 +118,7 @@ public class TypeItem extends CITType {
 
             for (PropertyValue property : properties.get("citresewn", "texture", "tile")) {
                 textureProp = property;
-                Identifier subIdentifier = resolvePath(identifier, textureProp, ".png", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                Identifier subIdentifier = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
                 if (subIdentifier == null)
                     throw new CITParsingException("Cannot resolve path", properties, property.position());
 
@@ -206,7 +206,7 @@ public class TypeItem extends CITType {
                         Collections.reverse(overrideModels);
 
                         for (Identifier overrideModel : overrideModels) {
-                            Identifier replacement = resolvePath(baseIdentifier, overrideModel.toString(), ".json", resourceManager::containsResource);
+                            Identifier replacement = resolveAsset(baseIdentifier, overrideModel.toString(), "models", ".json", resourceManager);
                             if (replacement != null) {
                                 String subTexturePath = replacement.toString().substring(0, replacement.toString().lastIndexOf('.'));
                                 final String subTextureName = subTexturePath.substring(subTexturePath.lastIndexOf('/') + 1);
@@ -294,7 +294,7 @@ public class TypeItem extends CITType {
                 ((JsonUnbakedModelAccessor) json).getTextureMap().replaceAll((layer, original) -> {
                     Optional<SpriteIdentifier> left = original.left();
                     if (left.isPresent()) {
-                        Identifier resolvedIdentifier = resolvePath(identifier, left.get().getTextureId().getPath(), ".png", resourceManager::containsResource);
+                        Identifier resolvedIdentifier = resolveAsset(identifier, left.get().getTextureId().getPath(), "textures", ".png", resourceManager);
                         if (resolvedIdentifier != null)
                             return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
                     }
@@ -329,7 +329,7 @@ public class TypeItem extends CITType {
                 if (parentId != null) {
                     String[] parentIdPathSplit = parentId.getPath().split("/");
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
-                        parentId = resolvePath(identifier, parentId.getPath(), ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                        parentId = resolveAsset(identifier, parentId.getPath(), "models", ".json", resourceManager);
                         if (parentId != null)
                             ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
                     }
@@ -338,7 +338,7 @@ public class TypeItem extends CITType {
                 json.getOverrides().replaceAll(override -> {
                     String[] modelIdPathSplit = override.getModelId().getPath().split("/");
                     if (override.getModelId().getPath().startsWith("./") || (modelIdPathSplit.length > 2 && modelIdPathSplit[1].equals("cit"))) {
-                        Identifier resolvedOverridePath = resolvePath(identifier, override.getModelId().getPath(), ".json", id -> pack.resourcePack.contains(ResourceType.CLIENT_RESOURCES, id));
+                        Identifier resolvedOverridePath = resolveAsset(identifier, override.getModelId().getPath(), "models", ".json", resourceManager);
                         if (resolvedOverridePath != null)
                             return new ModelOverride(new ResewnItemModelIdentifier(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
                     }
