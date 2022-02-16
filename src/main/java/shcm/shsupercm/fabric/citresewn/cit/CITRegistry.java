@@ -4,6 +4,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.AlwaysFailCondition;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.ex.UnknownCITTypeException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
@@ -43,8 +44,8 @@ public class CITRegistry {
     public static CITCondition parseCondition(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
         CITConditionContainer<? extends CITCondition> conditionContainer = CONDITIONS.get(key);
         if (conditionContainer == null) {
-            logWarnLoading("Skipping condition: " + CITParsingException.descriptionOf("Unknown condition type", properties, value.position()));
-            return null;
+            logWarnLoading(CITParsingException.descriptionOf("Unknown condition type", properties, value.position()));
+            return new AlwaysFailCondition();
         }
 
         CITCondition condition = conditionContainer.createCondition.get();
