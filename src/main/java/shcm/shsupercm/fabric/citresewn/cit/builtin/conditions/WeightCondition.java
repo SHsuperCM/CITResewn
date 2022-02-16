@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.cit.builtin;
+package shcm.shsupercm.fabric.citresewn.cit.builtin.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;

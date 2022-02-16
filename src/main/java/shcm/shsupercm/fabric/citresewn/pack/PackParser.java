@@ -5,7 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
-import shcm.shsupercm.fabric.citresewn.cit.builtin.WeightCondition;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.WeightCondition;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.mixin.GroupResourcePackAccessor;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;

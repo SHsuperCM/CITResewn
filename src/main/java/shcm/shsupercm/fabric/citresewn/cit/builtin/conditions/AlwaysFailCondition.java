@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.cit.builtin;
+package shcm.shsupercm.fabric.citresewn.cit.builtin.conditions;
 
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
