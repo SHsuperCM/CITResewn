@@ -82,8 +82,12 @@ public class PackParser {
 
         ArrayList<CITCondition> conditions = new ArrayList<>();
 
+        Set<PropertyKey> ignoredProperties = citType.typeProperties();
+
         for (Map.Entry<PropertyKey, Set<PropertyValue>> entry : properties.properties.entrySet()) {
             if (entry.getKey().path().equals("type") && entry.getKey().namespace().equals("citresewn"))
+                continue;
+            if (ignoredProperties.contains(entry.getKey()))
                 continue;
 
             for (PropertyValue value : entry.getValue())

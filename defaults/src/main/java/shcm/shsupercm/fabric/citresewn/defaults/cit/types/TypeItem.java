@@ -17,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.IOUtils;
@@ -30,6 +29,7 @@ import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnTextureIdentifier;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item.JsonUnbakedModelAccessor;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.io.InputStream;
@@ -55,6 +55,11 @@ public class TypeItem extends CITType {
 
     public BakedModel bakedModel = null;
     public CITOverrideList bakedSubModels = new CITOverrideList();
+
+    @Override
+    public Set<PropertyKey> typeProperties() {
+        return Set.of(PropertyKey.of("model"), PropertyKey.of("texture"), PropertyKey.of("tile"));
+    }
 
     @Override
     public void load(List<? extends CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {

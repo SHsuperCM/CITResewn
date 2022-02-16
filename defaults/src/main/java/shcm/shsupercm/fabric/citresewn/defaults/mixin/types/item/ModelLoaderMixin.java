@@ -54,7 +54,7 @@ public class ModelLoaderMixin {
         if (!ActiveCITs.isActive())
             return;
 
-        info("Loading CITItem models...");
+        info("Loading item CIT models...");
         CONTAINER.loaded.values().stream() // todo remove streams usage
                 .flatMap(Collection::stream)
                 .distinct().forEach(cit -> {
@@ -80,8 +80,8 @@ public class ModelLoaderMixin {
         if (!ActiveCITs.isActive())
             return;
 
-        profiler.push("citresewn:item_linking");
-        info("Linking baked models to CITItems...");
+        profiler.push("citresewn:type_item_linking");
+        info("Linking baked models to item CITs...");
 
         CONTAINER.loaded.values().stream() // todo remove streams usage
                 .flatMap(Collection::stream)
