@@ -374,6 +374,8 @@ public class TypeItem extends CITType {
     }
 
     public Identifier fixDeprecatedSubItem(String subItem, PropertyGroup properties, int position) {
+        if (subItem == null)
+            return null;
         String replacement = switch (subItem) {
             case "bow_pulling_standby" -> "bow";
             case "crossbow_standby" -> "crossbow";

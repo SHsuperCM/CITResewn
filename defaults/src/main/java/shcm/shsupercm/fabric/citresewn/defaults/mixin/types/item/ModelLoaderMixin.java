@@ -1,6 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item;
 
 import com.mojang.datafixers.util.Either;
+import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelLoader;
 import net.minecraft.client.render.model.SpriteAtlasManager;
@@ -46,8 +47,10 @@ public class ModelLoaderMixin {
     @Shadow @Final private Map<Identifier, UnbakedModel> unbakedModels;
     @Shadow @Final private Map<Identifier, BakedModel> bakedModels;
 
-    @Inject(method = "addModel", at = @At("TAIL"))
-    public void citresewn$addTypeItemModels(ModelIdentifier eventModelId, CallbackInfo ci) { if (eventModelId != ModelLoader.MISSING_ID) return;
+    @Inject(method = "<init>", at =
+    @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
+    public void citresewn$addTypeItemModels(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
+        profiler.swap("citresewn:type_item_models");
         if (!ActiveCITs.isActive())
             return;
 
