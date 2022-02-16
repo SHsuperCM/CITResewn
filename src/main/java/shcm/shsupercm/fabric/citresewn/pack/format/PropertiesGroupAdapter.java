@@ -47,6 +47,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                 StringBuilder builder = new StringBuilder();
 
                 String key = null, keyMetadata = null;
+                final boolean checkColonSeparator = !line.contains("=");
 
                 for (int i = 0; i < line.length(); i++) {
                     char c = line.charAt(i);
@@ -75,7 +76,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                             default -> c;
                         };
 
-                    } else if (key == null && c == '=') {
+                    } else if (key == null && (c == '=' || (checkColonSeparator && c == ':'))) {
                         key = builder.toString().stripTrailing();
                         int metadataIndex = key.indexOf('.');
                         if (metadataIndex >= 0) {
@@ -89,11 +90,10 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                         continue;
                     }
 
-
                     builder.append(c);
                 }
 
-                if (key == null) //todo handle : separator
+                if (key == null)
                     throw new IOException("Missing separator in line " + linePos);
 
                 int pos = linePos - multilineSkip;
