@@ -99,7 +99,7 @@ public class PackParser {
                 for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
                     conditions.replaceAll(
                             siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
-                                    condition.modifySibling(siblingConditionType, siblingCondition) :
+                                    condition.modifySibling(siblingCondition) :
                                     siblingCondition);
 
         WeightCondition weight = new WeightCondition();

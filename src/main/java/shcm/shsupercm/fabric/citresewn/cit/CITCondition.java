@@ -15,7 +15,7 @@ public abstract class CITCondition {
         return Collections.emptySet();
     }
 
-    public <T extends CITCondition> T modifySibling(Class<? extends CITCondition> siblingType, T sibling) {
+    public <T extends CITCondition> T modifySibling(T sibling) {
         return sibling;
     }
 
