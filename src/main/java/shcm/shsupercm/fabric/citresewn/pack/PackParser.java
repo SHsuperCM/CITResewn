@@ -106,7 +106,7 @@ public class PackParser {
 
         conditions.removeIf(condition -> {
             if (condition instanceof WeightCondition weightCondition) {
-                weight.weight = weightCondition.weight;
+                weight.setWeight(weightCondition.getWeight());
                 return true;
             }
 
@@ -115,6 +115,6 @@ public class PackParser {
 
         citType.load(conditions, properties, resourceManager);
 
-        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.weight);
+        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.getWeight());
     }
 }

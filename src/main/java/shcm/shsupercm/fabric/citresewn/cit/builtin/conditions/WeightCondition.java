@@ -8,20 +8,25 @@ import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
-public class WeightCondition extends CITCondition {
+public class WeightCondition extends IntegerCondition {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<WeightCondition> CONTAINER = new CITConditionContainer<>(WeightCondition.class, WeightCondition::new,
             "weight");
 
-    public int weight = 0;
+    public WeightCondition() {
+        super(false, true, false);
+    }
 
-    @Override
-    public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
-        this.weight = parseInteger(value, properties);
+    public int getWeight() {
+        return this.min;
+    }
+
+    public void setWeight(int weight) {
+        this.min = weight;
     }
 
     @Override
-    public boolean test(CITContext context) {
-        return true;
+    protected int getValue(CITContext context) {
+        return 0;
     }
 }

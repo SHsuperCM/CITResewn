@@ -24,12 +24,4 @@ public abstract class CITCondition {
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
         CITResewn.logWarnLoading("Warning: " + CITParsingException.descriptionOf(message, properties, value.position()));
     }
-
-    protected int parseInteger(PropertyValue value, PropertyGroup properties) throws CITParsingException {
-        try {
-            return Integer.parseInt(value.value());
-        } catch (NumberFormatException e) {
-            throw new CITParsingException("\"" + value.value() + "\" is not a valid integer", properties, value.position());
-        }
-    }
 }

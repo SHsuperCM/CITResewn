@@ -3,6 +3,10 @@ package shcm.shsupercm.fabric.citresewn.ex;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 
 public class CITParsingException extends Exception {
+    public CITParsingException(String message, PropertyGroup propertyGroup, int position, Throwable throwable) {
+        super("Errored while parsing CIT: " + descriptionOf(message, propertyGroup, position), throwable);
+    }
+
     public CITParsingException(String message, PropertyGroup propertyGroup, int position) {
         super("Errored while parsing CIT: " + descriptionOf(message, propertyGroup, position));
     }
