@@ -44,7 +44,7 @@ public class CITRegistry {
     public static CITCondition parseCondition(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
         CITConditionContainer<? extends CITCondition> conditionContainer = CONDITIONS.get(key);
         if (conditionContainer == null) {
-            logWarnLoading(CITParsingException.descriptionOf("Unknown condition type", properties, value.position()));
+            logWarnLoading(CITParsingException.descriptionOf("Unknown condition type \"" + key.toString() + "\"", properties, value.position()));
             return new AlwaysFailCondition();
         }
 

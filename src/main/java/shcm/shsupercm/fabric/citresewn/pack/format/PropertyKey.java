@@ -11,4 +11,9 @@ public record PropertyKey(String namespace, String path) {
         }
         return new PropertyKey(split[0], split[1]);
     }
+
+    @Override
+    public String toString() {
+        return namespace + ":" + path;
+    }
 }
