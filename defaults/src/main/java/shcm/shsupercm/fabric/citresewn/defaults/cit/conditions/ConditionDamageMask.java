@@ -11,7 +11,7 @@ import java.util.Set;
 public class ConditionDamageMask extends IntegerCondition {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<ConditionDamageMask> CONTAINER = new CITConditionContainer<>(ConditionDamageMask.class, ConditionDamageMask::new,
-            "damageMask");
+            "damage_mask", "damageMask");
 
     public ConditionDamageMask() {
         super(false, false, false);
