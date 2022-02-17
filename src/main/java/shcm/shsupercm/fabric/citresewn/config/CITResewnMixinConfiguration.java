@@ -29,7 +29,7 @@ public class CITResewnMixinConfiguration implements IMixinConfigPlugin {
         if (mixinClassName.startsWith("broken_paths"))
             return broken_paths;
 
-        if (mixinClassName.equals("core.GroupResourcePackAccessor"))
+        if (mixinClassName.equals("GroupResourcePackAccessor"))
             return FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0");
 
         return true;
