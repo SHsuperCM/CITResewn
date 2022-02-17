@@ -14,7 +14,9 @@ public abstract class EnumCondition<T extends Enum<? extends EnumCondition.Alias
 
     protected T value;
 
-    protected abstract T getValue(CITContext context);
+    protected T getValue(CITContext context) {
+        throw new AssertionError();
+    }
 
     protected EnumCondition(Supplier<T[]> values, boolean ignoreCase) {
         this.values = values;

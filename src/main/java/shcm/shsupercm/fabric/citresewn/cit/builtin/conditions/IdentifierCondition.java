@@ -11,7 +11,9 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 public abstract class IdentifierCondition extends CITCondition {
     protected Identifier value;
 
-    protected abstract Identifier getValue(CITContext context);
+    protected Identifier getValue(CITContext context) {
+        throw new AssertionError();
+    }
 
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {

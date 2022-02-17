@@ -6,25 +6,25 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
-import static java.lang.Double.*;
+import static java.lang.Long.*;
 
-public abstract class DoubleCondition extends CITCondition {
+public abstract class LongCondition extends CITCondition {
     protected final boolean supportsRanges, supportsNegatives, supportsPercentages;
 
-    protected double min, max;
+    protected long min, max;
     protected boolean range = false, percentage = false;
 
-    protected DoubleCondition(boolean supportsRanges, boolean supportsNegatives, boolean supportsPercentages) {
+    protected LongCondition(boolean supportsRanges, boolean supportsNegatives, boolean supportsPercentages) {
         this.supportsRanges = supportsRanges;
         this.supportsNegatives = supportsNegatives;
         this.supportsPercentages = supportsPercentages;
     }
 
-    protected double getValue(CITContext context) {
+    protected long getValue(CITContext context) {
         throw new AssertionError();
     }
 
-    protected double getPercentageTotalValue(CITContext context) {
+    protected long getPercentageTotalValue(CITContext context) {
         throw new AssertionError();
     }
 
@@ -40,32 +40,32 @@ public abstract class DoubleCondition extends CITCondition {
                     switch (strValue.length() - strValue.replace("-", "").length()) { // dashesCount
                         case 0 -> {
                             range = false;
-                            min = parseDouble(strValue);
+                            min = parseLong(strValue);
                         }
                         case 1 -> {
                             if (strValue.startsWith("-")) {
                                 range = false;
-                                min = parseDouble(strValue);
+                                min = parseLong(strValue);
                             } else if (strValue.endsWith("-")) {
-                                min = parseDouble(strValue.substring(0, strValue.length() - 1));
+                                min = parseLong(strValue.substring(0, strValue.length() - 1));
                                 max = MAX_VALUE;
                             } else {
                                 String[] split = strValue.split("-");
-                                min = parseDouble(split[0]);
-                                max = parseDouble(split[1]);
+                                min = parseLong(split[0]);
+                                max = parseLong(split[1]);
                             }
                         }
                         case 2 -> {
                             if (strValue.startsWith("--")) {
                                 min = MIN_VALUE;
-                                max = parseDouble(strValue.substring(1));
+                                max = parseLong(strValue.substring(1));
                             } else if (strValue.startsWith("-") && strValue.endsWith("-")) {
-                                min = parseDouble(strValue.substring(0, strValue.length() - 1));
+                                min = parseLong(strValue.substring(0, strValue.length() - 1));
                                 max = MAX_VALUE;
                             } else if (strValue.startsWith("-") && !strValue.endsWith("-") && !strValue.contains("--")) {
                                 int lastDash = strValue.lastIndexOf('-');
-                                min = parseDouble(strValue.substring(0, lastDash));
-                                max = parseDouble(strValue.substring(lastDash + 1));
+                                min = parseLong(strValue.substring(0, lastDash));
+                                max = parseLong(strValue.substring(lastDash + 1));
                             } else
                                 throw new CITParsingException("Could not parse range", properties, value.position());
                         }
@@ -75,8 +75,8 @@ public abstract class DoubleCondition extends CITCondition {
                                 if (split.length != 2 || split[0].isEmpty() || split[1].isEmpty())
                                     throw new CITParsingException("Could not parse range", properties, value.position());
 
-                                min = parseDouble(split[0]);
-                                max = -parseDouble(split[1]);
+                                min = parseLong(split[0]);
+                                max = -parseLong(split[1]);
                             } else
                                 throw new CITParsingException("Could not parse range", properties, value.position());
                         }
@@ -90,22 +90,22 @@ public abstract class DoubleCondition extends CITCondition {
                         String[] split = strValue.split("-");
                         switch (split.length) {
                             case 1 -> {
-                                min = parseDouble(split[0]);
+                                min = parseLong(split[0]);
                                 max = MAX_VALUE;
                             }
                             case 2 -> {
                                 if (strValue.endsWith("-"))
                                     throw new CITParsingException("Could not parse range", properties, value.position());
-                                min = split[0].isEmpty() ? MIN_VALUE : parseDouble(split[0]);
-                                max = split[1].isEmpty() ? MAX_VALUE : parseDouble(split[1]);
+                                min = split[0].isEmpty() ? MIN_VALUE : parseLong(split[0]);
+                                max = split[1].isEmpty() ? MAX_VALUE : parseLong(split[1]);
                             }
                             default -> throw new CITParsingException("Could not parse range", properties, value.position());
                         }
                     } else
-                        min = parseDouble(strValue);
+                        min = parseLong(strValue);
                 }
             } else {
-                min = parseDouble(strValue);
+                min = parseLong(strValue);
                 if (!supportsNegatives && min < 0)
                     throw new CITParsingException("Negatives are not allowed", properties, value.position());
             }
@@ -117,17 +117,17 @@ public abstract class DoubleCondition extends CITCondition {
                     throw new CITParsingException("Could not parse range", properties, value.position());
             }
         } catch (Exception e) {
-            throw e instanceof CITParsingException citE ? citE : new CITParsingException("Could not parse double", properties, value.position(), e);
+            throw e instanceof CITParsingException citE ? citE : new CITParsingException("Could not parse long", properties, value.position(), e);
         }
     }
 
     @Override
     public boolean test(CITContext context) {
-        double value = getValue(context);
+        long value = getValue(context);
 
         if (percentage) {
-            double percentValue = 100d * value / getPercentageTotalValue(context);
-            return range ? min <= percentValue && percentValue <= max : percentValue == min;
+            double percentValue = 100d * (double) value / (double) getPercentageTotalValue(context);
+            return range ? min <= percentValue && percentValue <= max : percentValue == (double) min;
         } else
             return range ? min <= value && value <= max : value == min;
     }

@@ -9,7 +9,9 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 public abstract class BooleanCondition extends CITCondition {
     protected boolean value;
 
-    protected abstract boolean getValue(CITContext context);
+    protected boolean getValue(CITContext context) {
+        throw new AssertionError();
+    }
 
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {

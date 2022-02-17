@@ -20,10 +20,12 @@ public abstract class IntegerCondition extends CITCondition {
         this.supportsPercentages = supportsPercentages;
     }
 
-    protected abstract int getValue(CITContext context);
+    protected int getValue(CITContext context) {
+        throw new AssertionError();
+    }
 
     protected int getPercentageTotalValue(CITContext context) {
-        return 0;
+        throw new AssertionError();
     }
 
     @Override
@@ -127,6 +129,6 @@ public abstract class IntegerCondition extends CITCondition {
             double percentValue = 100d * (double) value / (double) getPercentageTotalValue(context);
             return range ? min <= percentValue && percentValue <= max : percentValue == (double) min;
         } else
-            return range ? min <= value && value <= max : value == (double) min;
+            return range ? min <= value && value <= max : value == min;
     }
 }

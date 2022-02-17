@@ -20,10 +20,12 @@ public abstract class FloatCondition extends CITCondition {
         this.supportsPercentages = supportsPercentages;
     }
 
-    protected abstract float getValue(CITContext context);
+    protected float getValue(CITContext context) {
+        throw new AssertionError();
+    }
 
     protected float getPercentageTotalValue(CITContext context) {
-        return 0;
+        throw new AssertionError();
     }
 
     @Override
