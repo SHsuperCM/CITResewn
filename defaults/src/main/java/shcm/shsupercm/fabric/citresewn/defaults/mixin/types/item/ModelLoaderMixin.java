@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
+import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITType;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
@@ -54,23 +55,20 @@ public class ModelLoaderMixin {
             return;
 
         info("Loading item CIT models...");
-        CONTAINER.loaded.values().stream() // todo remove streams usage
-                .flatMap(Collection::stream)
-                .distinct().forEach(cit -> {
-                    try {
-                        cit.type.loadUnbakedAssets(resourceManager);
+        for (CIT<TypeItem> cit : CONTAINER.loaded)
+            try {
+                cit.type.loadUnbakedAssets(resourceManager);
 
-                        for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
-                            ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
-                            this.unbakedModels.put(id, unbakedModel);
-                            this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
-                            this.modelsToBake.put(id, unbakedModel);
-                        }
-                    } catch (Exception e) {
-                        CITResewn.logErrorLoading("Errored loading model in " + cit.propertiesIdentifier + " from " + cit.packName);
-                        e.printStackTrace();
-                    }
-                });
+                for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
+                    ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
+                    this.unbakedModels.put(id, unbakedModel);
+                    this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
+                    this.modelsToBake.put(id, unbakedModel);
+                }
+            } catch (Exception e) {
+                CITResewn.logErrorLoading("Errored loading model in " + cit.propertiesIdentifier + " from " + cit.packName);
+                e.printStackTrace();
+            }
 
         TypeItem.GENERATED_SUB_CITS_SEEN.clear();
     }
@@ -83,9 +81,7 @@ public class ModelLoaderMixin {
         profiler.push("citresewn:type_item_linking");
         info("Linking baked models to item CITs...");
 
-        CONTAINER.loaded.values().stream() // todo remove streams usage
-                .flatMap(Collection::stream)
-                .distinct().forEach(cit -> {
+        for (CIT<TypeItem> cit : CONTAINER.loaded) {
             for (Map.Entry<List<ModelOverride.Condition>, JsonUnbakedModel> citModelEntry : cit.type.unbakedAssets.entrySet()) {
                 if (citModelEntry.getKey() == null) {
                     cit.type.bakedModel = this.bakedModels.get(new ResewnItemModelIdentifier(citModelEntry.getValue().id));
@@ -98,7 +94,7 @@ public class ModelLoaderMixin {
                 }
             }
             cit.type.unbakedAssets = null;
-        });
+        }
 
         profiler.pop();
     }

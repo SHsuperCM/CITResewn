@@ -467,21 +467,24 @@ public class TypeItem extends CITType {
             super(TypeItem.class, TypeItem::new, "item");
         }
 
-        public Map<Item, Set<CIT<TypeItem>>> loaded = new IdentityHashMap<>();
+        public Set<CIT<TypeItem>> loaded = new HashSet<>();
+        public Map<Item, Set<CIT<TypeItem>>> loadedTyped = new IdentityHashMap<>();
 
         @Override
         public void load(List<CIT<TypeItem>> parsedCITs) {
+            loaded.addAll(parsedCITs);
             for (CIT<TypeItem> cit : parsedCITs)
                 for (CITCondition condition : cit.conditions)
                     if (condition instanceof ConditionItems items)
                         for (Item item : items.items)
                             if (item != null)
-                                loaded.computeIfAbsent(item, i -> new LinkedHashSet<>()).add(cit);
+                                loadedTyped.computeIfAbsent(item, i -> new LinkedHashSet<>()).add(cit);
         }
 
         @Override
         public void dispose() {
             loaded.clear();
+            loadedTyped.clear();
         }
 
         public CIT<TypeItem> getCIT(CITContext context, int seed) {
@@ -491,7 +494,7 @@ public class TypeItem extends CITType {
         public CIT<TypeItem> getRealTimeCIT(CITContext context) {
             ((CITCacheItem) (Object) context.stack).citresewn$setMojankCITTypeItem(false);
 
-            Set<CIT<TypeItem>> loadedForItemType = loaded.get(context.stack.getItem());
+            Set<CIT<TypeItem>> loadedForItemType = loadedTyped.get(context.stack.getItem());
             if (loadedForItemType != null)
                 for (CIT<TypeItem> cit : loadedForItemType)
                     if (cit.test(context)) {
