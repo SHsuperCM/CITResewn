@@ -80,7 +80,7 @@ public class PackParser {
     public static CIT<?> parseCIT(PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         CITType citType = CITRegistry.parseType(properties);
 
-        ArrayList<CITCondition> conditions = new ArrayList<>();
+        List<CITCondition> conditions = new ArrayList<>();
 
         Set<PropertyKey> ignoredProperties = citType.typeProperties();
 

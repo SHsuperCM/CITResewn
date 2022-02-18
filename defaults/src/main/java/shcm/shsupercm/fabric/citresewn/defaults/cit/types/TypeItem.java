@@ -62,7 +62,7 @@ public class TypeItem extends CITType {
     }
 
     @Override
-    public void load(List<? extends CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
+    public void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         for (CITCondition condition : conditions)
             if (condition instanceof ConditionItems conditionItems)
                 items.addAll(Arrays.asList(conditionItems.items));

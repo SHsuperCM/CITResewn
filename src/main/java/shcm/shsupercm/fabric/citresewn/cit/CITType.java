@@ -13,7 +13,7 @@ import java.util.*;
 public abstract class CITType {
     public abstract Set<PropertyKey> typeProperties();
 
-    public abstract void load(List<? extends CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
+    public abstract void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
         CITResewn.logWarnLoading("Warning: " + CITParsingException.descriptionOf(message, properties, value.position()));
