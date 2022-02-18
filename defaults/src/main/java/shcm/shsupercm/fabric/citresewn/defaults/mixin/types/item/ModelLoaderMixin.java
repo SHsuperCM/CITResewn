@@ -9,7 +9,6 @@ import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverride;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
@@ -68,7 +67,8 @@ public class ModelLoaderMixin {
                             this.modelsToBake.put(id, unbakedModel);
                         }
                     } catch (Exception e) {
-                        CITResewn.logErrorLoading(e.getMessage());
+                        CITResewn.logErrorLoading("Errored loading model in " + cit.propertiesIdentifier + " from " + cit.packName);
+                        e.printStackTrace();
                     }
                 });
 
