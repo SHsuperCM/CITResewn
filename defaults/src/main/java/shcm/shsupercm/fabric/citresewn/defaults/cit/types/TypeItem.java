@@ -68,7 +68,16 @@ public class TypeItem extends CITType {
                 items.addAll(Arrays.asList(conditionItems.items));
 
         if (this.items.size() == 0)
-            throw new CITParsingException("Not targeting any item type", properties, -1);
+            try {
+                Identifier propertiesName = new Identifier(properties.stripName());
+                if (!Registry.ITEM.containsId(propertiesName))
+                    throw new Exception();
+                Item item = Registry.ITEM.get(propertiesName);
+                conditions.add(new ConditionItems(item));
+                this.items.add(item);
+            } catch (Exception ignored) {
+                throw new CITParsingException("Not targeting any item type", properties, -1);
+            }
 
         Identifier assetIdentifier;
         PropertyValue modelProp = properties.getLastWithoutMetadata("citresewn", "model");

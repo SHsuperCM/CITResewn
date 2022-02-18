@@ -26,6 +26,11 @@ public class ConditionItems extends ListCondition<ConditionItems.ItemCondition> 
         super(ItemCondition.class, ItemCondition::new);
     }
 
+    public ConditionItems(Item... items) {
+        this();
+        this.items = items;
+    }
+
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
         super.load(value, properties);

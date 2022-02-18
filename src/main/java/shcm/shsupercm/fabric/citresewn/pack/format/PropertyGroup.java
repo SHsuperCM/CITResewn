@@ -49,6 +49,10 @@ public abstract class PropertyGroup {
         return value;
     }
 
+    public String stripName() {
+        return identifier.getPath().substring(identifier.getPath().lastIndexOf('/') + 1, identifier.getPath().length() - getExtension().length());
+    }
+
     public static PropertyGroup tryParseGroup(String packName, Identifier identifier, InputStream is) throws IOException {
         PropertyGroup group = null;
         if (identifier.getPath().endsWith(PropertiesGroupAdapter.EXTENSION))
