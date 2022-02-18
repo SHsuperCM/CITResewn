@@ -1,5 +1,8 @@
 accessWidener v1 named
 
+# ConditionNBT
+accessible   field   net/minecraft/nbt/NbtCompound entries Ljava/util/Map;
+
 # TypeItem
 accessible   class   net/minecraft/client/render/model/json/ModelOverrideList$BakedOverride
 accessible   class   net/minecraft/client/render/model/json/ModelOverrideList$InlinedCondition
