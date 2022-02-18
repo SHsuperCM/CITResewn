@@ -98,7 +98,7 @@ public class PackParser {
             if (condition != null)
                 for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
                     conditions.replaceAll(
-                            siblingCondition -> siblingConditionType == siblingCondition.getClass() ?
+                            siblingCondition -> siblingCondition != null && siblingConditionType == siblingCondition.getClass() ?
                                     condition.modifySibling(siblingCondition) :
                                     siblingCondition);
 
