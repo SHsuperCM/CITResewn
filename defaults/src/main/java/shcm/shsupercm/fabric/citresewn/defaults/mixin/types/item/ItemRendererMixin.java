@@ -29,11 +29,15 @@ import java.lang.ref.WeakReference;
 
 import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem.CONTAINER;
 
+/**
+ * Do not go through this class, it looks awful because it was ported from a "proof of concept".<br>
+ * The whole type will be rewritten at some point.
+ */
 @Mixin(ItemRenderer.class)
 public class ItemRendererMixin {
     @Shadow @Final private ItemModels models;
 
-    private static WeakReference<BakedModel> mojankCITModel = null;
+    private WeakReference<BakedModel> citresewn$mojankCITModel = null;
 
     @Inject(method = "getModel", cancellable = true, at = @At("HEAD"))
     private void citresewn$getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
@@ -55,19 +59,19 @@ public class ItemRendererMixin {
         if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
             return;
 
-        mojankCITModel = null;
+        citresewn$mojankCITModel = null;
         if (((TypeItem.CITCacheItem) (Object) stack).citresewn$isMojankCITTypeItem()) {
             boolean bl = renderMode == ModelTransformation.Mode.GUI || renderMode == ModelTransformation.Mode.GROUND || renderMode == ModelTransformation.Mode.FIXED;
             if (bl)
-                mojankCITModel = new WeakReference<>(model);
+                citresewn$mojankCITModel = new WeakReference<>(model);
             else { // rendered in hand model of trident/spyglass
                 if (stack.isOf(Items.TRIDENT))
-                    mojankCITModel = new WeakReference<>(this.models.getModelManager().getModel(new ModelIdentifier("minecraft:trident_in_hand#inventory")));
+                    citresewn$mojankCITModel = new WeakReference<>(this.models.getModelManager().getModel(new ModelIdentifier("minecraft:trident_in_hand#inventory")));
                 else if (stack.isOf(Items.SPYGLASS))
-                    mojankCITModel = new WeakReference<>(this.models.getModelManager().getModel(new ModelIdentifier("minecraft:spyglass_in_hand#inventory")));
+                    citresewn$mojankCITModel = new WeakReference<>(this.models.getModelManager().getModel(new ModelIdentifier("minecraft:spyglass_in_hand#inventory")));
             }
         } else
-            mojankCITModel = null;
+            citresewn$mojankCITModel = null;
     }
 
     @ModifyVariable(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "LOAD", ordinal = 0, target = "Lnet/minecraft/client/render/model/BakedModel;getTransformation()Lnet/minecraft/client/render/model/json/ModelTransformation;"), argsOnly = true)
@@ -75,8 +79,8 @@ public class ItemRendererMixin {
         if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
             return original;
 
-        if (mojankCITModel != null)
-            return mojankCITModel.get();
+        if (citresewn$mojankCITModel != null)
+            return citresewn$mojankCITModel.get();
 
         return original;
     }

@@ -4,9 +4,6 @@ import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.EnumCondition;
-import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 public class ConditionHand extends EnumCondition<ConditionHand.Hand> {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
@@ -34,23 +31,19 @@ public class ConditionHand extends EnumCondition<ConditionHand.Hand> {
     }
 
     protected enum Hand implements EnumCondition.Aliased {
-        MAINHAND {
-            @Override
-            public String[] getAliases() {
-                return new String[] { "main", "mainhand", "main_hand" };
-            }
-        },
-        OFFHAND {
-            @Override
-            public String[] getAliases() {
-                return new String[] { "off", "offhand", "off_hand" };
-            }
-        },
-        ANY {
-            @Override
-            public String[] getAliases() {
-                return new String[] { "any", "either", "*" };
-            }
+        MAINHAND("main", "mainhand", "main_hand"),
+        OFFHAND("off", "offhand", "off_hand"),
+        ANY("any", "either", "*");
+
+        private final String[] aliases;
+
+        Hand(String... aliases) {
+            this.aliases = aliases;
+        }
+
+        @Override
+        public String[] getAliases() {
+            return this.aliases;
         }
     }
 }
