@@ -18,10 +18,14 @@ public class CIT<T extends CITType> {
     }
 
     public boolean test(CITContext context) {
-        for (CITCondition condition : conditions)
-            if (!condition.test(context))
-                return false;
+        try {
+            for (CITCondition condition : conditions)
+                if (!condition.test(context))
+                    return false;
 
-        return true;
+            return true;
+        } catch (Exception ignored) {
+            return false;
+        }
     }
 }

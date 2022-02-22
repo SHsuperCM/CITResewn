@@ -24,9 +24,4 @@ public class WeightCondition extends IntegerCondition {
     public void setWeight(int weight) {
         this.min = weight;
     }
-
-    @Override
-    protected int getValue(CITContext context) {
-        return 0;
-    }
 }

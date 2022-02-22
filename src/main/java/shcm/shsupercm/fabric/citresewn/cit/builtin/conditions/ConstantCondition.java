@@ -6,7 +6,13 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
-public class AlwaysFailCondition extends CITCondition {
+public class ConstantCondition extends CITCondition {
+    public final boolean value;
+
+    public ConstantCondition(boolean value) {
+        this.value = value;
+    }
+
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
 
@@ -14,6 +20,6 @@ public class AlwaysFailCondition extends CITCondition {
 
     @Override
     public boolean test(CITContext context) {
-        return false;
+        return value;
     }
 }
