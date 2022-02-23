@@ -49,6 +49,14 @@ public abstract class PropertyGroup {
         return value;
     }
 
+    public PropertyValue getLastWithoutMetadataOrDefault(String defaultValue, String namespace, String... pathAliases) {
+        PropertyValue property = getLastWithoutMetadata(namespace, pathAliases);
+        if (property == null)
+            property = new PropertyValue(null, defaultValue, "=", -1, this.identifier, this.packName);
+
+        return property;
+    }
+
     public String stripName() {
         return identifier.getPath().substring(identifier.getPath().lastIndexOf('/') + 1, identifier.getPath().length() - getExtension().length());
     }

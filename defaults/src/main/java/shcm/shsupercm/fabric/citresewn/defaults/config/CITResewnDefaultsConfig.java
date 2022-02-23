@@ -8,7 +8,7 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 import java.io.*;
 
 public class CITResewnDefaultsConfig {
-
+    public float type_enchantment_scroll_multiplier = 1f;
 
     private static final File FILE = new File("config/citresewn-defaults.json");
 
