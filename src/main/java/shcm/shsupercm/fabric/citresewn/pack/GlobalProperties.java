@@ -37,7 +37,7 @@ public class GlobalProperties extends PropertyGroup {
     }
 
     public void callHandlers() {
-        for (EntrypointContainer<CITGlobalProperties> container : FabricLoader.getInstance().getEntrypointContainers("citresewn:cit_global_properties", CITGlobalProperties.class)) {
+        for (EntrypointContainer<CITGlobalProperties> container : FabricLoader.getInstance().getEntrypointContainers(CITGlobalProperties.ENTRYPOINT, CITGlobalProperties.class)) {
             String containerNamespace = container.getProvider().getMetadata().getId();
             if (containerNamespace.equals("citresewn-defaults"))
                 containerNamespace = "citresewn";

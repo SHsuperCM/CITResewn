@@ -4,14 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.resource.ResourceManager;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3f;
 import org.lwjgl.opengl.GL11;
+import shcm.shsupercm.fabric.citresewn.api.CITGlobalProperties;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionEnchantments;
 import shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.RenderPhaseAccessor;
@@ -19,6 +28,7 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.util.logic.Loops;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
@@ -28,6 +38,7 @@ import static com.mojang.blaze3d.systems.RenderSystem.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class TypeEnchantment extends CITType {
+    @Entrypoint(CITGlobalProperties.ENTRYPOINT)
     @Entrypoint(CITTypeContainer.ENTRYPOINT)
     public static final Container CONTAINER = new Container();
 
@@ -55,7 +66,8 @@ public class TypeEnchantment extends CITType {
     public Blend blend;
 
     public final Map<GlintRenderLayer, RenderLayer> renderLayers = new EnumMap<>(GlintRenderLayer.class);
-    private final WrappedMethodIntensity methodIntensity = new WrappedMethodIntensity();
+    private final MergeMethodIntensity methodIntensity = new MergeMethodIntensity();
+    private Set<Identifier> enchantmentChecks = null;
 
     @Override
     public void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
@@ -88,6 +100,14 @@ public class TypeEnchantment extends CITType {
         } catch (Exception e) {
             throw new CITParsingException("Could not parse blending method", properties, blendProp.position(), e);
         }
+
+        for (CITCondition condition : conditions)
+            if (condition instanceof ConditionEnchantments enchantments) {
+                if (enchantmentChecks == null && enchantments.getEnchantments().length > 0)
+                    enchantmentChecks = new HashSet<>();
+
+                enchantmentChecks.addAll(Arrays.asList(enchantments.getEnchantments()));
+            }
     }
 
     private float parseFloatOrDefault(float defaultValue, String propertyName, PropertyGroup properties) throws CITParsingException {
@@ -101,10 +121,15 @@ public class TypeEnchantment extends CITType {
         }
     }
 
-    public static class Container extends CITTypeContainer<TypeEnchantment> {
+    public static class Container extends CITTypeContainer<TypeEnchantment> implements CITGlobalProperties {
         public Container() {
             super(TypeEnchantment.class, TypeEnchantment::new, "enchantment");
         }
+
+        public boolean globalUseGlint = true;
+        public int globalCap = Integer.MAX_VALUE;
+        public MergeMethodIntensity.MergeMethod globalMergeMethod = MergeMethodIntensity.MergeMethod.AVERAGE;
+        public float globalFade = 0.5f;
 
         public List<CIT<TypeEnchantment>> loaded = new ArrayList<>();
         public List<List<CIT<TypeEnchantment>>> loadedLayered = new ArrayList<>();
@@ -134,6 +159,26 @@ public class TypeEnchantment extends CITType {
         }
 
         @Override
+        public void globalProperty(String key, PropertyValue value) throws Exception {
+            switch (key) {
+                case "useGlint" -> {
+                    globalUseGlint = Boolean.parseBoolean(value.value());
+                    if (!globalUseGlint && !"false".equalsIgnoreCase(value.value()))
+                        throw new Exception("Could not parse boolean");
+                }
+                case "cap" -> {
+                    globalCap = Integer.parseInt(value.value());
+                }
+                case "method" -> {
+                    globalMergeMethod = MergeMethodIntensity.MergeMethod.parse(value.value());
+                }
+                case "fade" -> {
+                    globalFade = Float.parseFloat(value.value());
+                }
+            }
+        }
+
+        @Override
         public void dispose() {
             appliedContext = null;
 
@@ -143,6 +188,11 @@ public class TypeEnchantment extends CITType {
 
             loaded.clear();
             loadedLayered.clear();
+
+            globalUseGlint = true;
+            globalCap = Integer.MAX_VALUE;
+            globalMergeMethod = MergeMethodIntensity.MergeMethod.AVERAGE;
+            globalFade = 0.5f;
         }
 
         public void apply() {
@@ -155,7 +205,7 @@ public class TypeEnchantment extends CITType {
         }
 
         public boolean shouldNotApplyDefaultGlint() {
-            return apply && !defaultGlint;
+            return !globalUseGlint || (apply && !defaultGlint);
         }
 
         public Container setContext(CITContext context) {
@@ -181,6 +231,8 @@ public class TypeEnchantment extends CITType {
 
             if (appliedContext.isEmpty())
                 appliedContext = null;
+            else
+                globalMergeMethod.applyMethod(appliedContext, context);
 
             return this;
         }
@@ -252,9 +304,9 @@ public class TypeEnchantment extends CITType {
         public RenderLayer build(TypeEnchantment enchantment, Identifier propertiesIdentifier) {
             class Texturing implements Runnable {
                 private final float speed, rotation, r, g, b, a;
-                private final WrappedMethodIntensity methodIntensity;
+                private final MergeMethodIntensity methodIntensity;
 
-                Texturing(float speed, float rotation, float r, float g, float b, float a, WrappedMethodIntensity methodIntensity) {
+                Texturing(float speed, float rotation, float r, float g, float b, float a, MergeMethodIntensity methodIntensity) {
                     this.speed = speed;
                     this.rotation = rotation;
                     this.r = r;
@@ -300,7 +352,7 @@ public class TypeEnchantment extends CITType {
             if (!CONTAINER.apply || CONTAINER.appliedContext == null || CONTAINER.appliedContext.size() == 0)
                 return null;
 
-            VertexConsumer[] layers = new VertexConsumer[Math.min(CONTAINER.appliedContext.size(), Integer.MAX_VALUE /*todo cap global property*/)];
+            VertexConsumer[] layers = new VertexConsumer[Math.min(CONTAINER.appliedContext.size(), CONTAINER.globalCap)];
 
             for (int i = 0; i < layers.length; i++)
                 layers[i] = provider.getBuffer(CONTAINER.appliedContext.get(i).type.renderLayers.get(GlintRenderLayer.this));
@@ -311,8 +363,90 @@ public class TypeEnchantment extends CITType {
         }
     }
 
-    private static class WrappedMethodIntensity {
+    public static class MergeMethodIntensity {
         public float intensity = 1f;
+
+        public enum MergeMethod {
+            NONE,
+            AVERAGE {
+                @Override
+                public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CIT<TypeEnchantment> cit) {
+                    Identifier enchantment = null;
+                    for (Identifier enchantmentMatch : cit.type.enchantmentChecks)
+                        if (stackEnchantments.containsKey(enchantmentMatch)) {
+                            enchantment = enchantmentMatch;
+                            break;
+                        }
+
+                    if (enchantment == null) {
+                        cit.type.methodIntensity.intensity = 0f;
+                    } else {
+                        float sum = 0f;
+                        for (Integer value : stackEnchantments.values())
+                            sum += value;
+
+                        cit.type.methodIntensity.intensity = (float) stackEnchantments.get(enchantment) / sum;
+                    }
+                }
+            },
+            LAYERED {
+                @Override
+                public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CIT<TypeEnchantment> cit) {
+                    Identifier enchantment = null;
+                    for (Identifier enchantmentMatch : cit.type.enchantmentChecks)
+                        if (stackEnchantments.containsKey(enchantmentMatch)) {
+                            enchantment = enchantmentMatch;
+                            break;
+                        }
+                    if (enchantment == null) {
+                        cit.type.methodIntensity.intensity = 0f;
+                        return;
+                    }
+
+                    float max = 0f;
+                    for (Integer value : stackEnchantments.values())
+                        if (value > max)
+                            max = value;
+
+                    cit.type.methodIntensity.intensity = (float) stackEnchantments.get(enchantment) / max;
+                }
+            },
+            CYCLE {
+                @Override
+                public void applyMethod(List<CIT<TypeEnchantment>> citEnchantments, CITContext context) {
+                    List<Map.Entry<CIT<TypeEnchantment>, Float>> durations = new ArrayList<>();
+                    for (CIT<TypeEnchantment> cit : citEnchantments)
+                        durations.add(new HashMap.SimpleEntry<>(cit, cit.type.duration));
+
+                    for (Map.Entry<CIT<TypeEnchantment>, Float> intensity : Loops.statelessFadingLoop(durations, CONTAINER.globalFade, ticks, 20).entrySet())
+                        intensity.getKey().type.methodIntensity.intensity = intensity.getValue();
+                }
+            };
+
+            public static int ticks = 0;
+
+            public void applyIntensity(Map<Identifier, Integer> stackEnchantments, CIT<TypeEnchantment> cit) {
+                cit.type.methodIntensity.intensity = 1f;
+            }
+
+            public void applyMethod(List<CIT<TypeEnchantment>> citEnchantments, CITContext context) {
+                Map<Identifier, Integer> stackEnchantments = context.enchantments();
+
+                for (CIT<TypeEnchantment> cit : citEnchantments)
+                    if (cit.type.enchantmentChecks != null)
+                        applyIntensity(stackEnchantments, cit);
+            }
+
+            public static MergeMethod parse(String value) {
+                return switch (value.toLowerCase(Locale.ROOT)) {
+                    case "none" -> NONE;
+                    case "average" -> AVERAGE;
+                    case "layered" -> LAYERED;
+                    case "cycle" -> CYCLE;
+                    default -> throw new IllegalArgumentException("Unknown merge method");
+                };
+            }
+        }
     }
 
     public static class Blend extends RenderPhase.Transparency {
