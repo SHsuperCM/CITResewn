@@ -60,11 +60,9 @@ public class TypeEnchantment extends CITType {
     @Override
     public void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture");
-        if (textureProp == null)
-            throw new CITParsingException("No texture specified", properties, -1);
         this.texture = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
         if (this.texture == null)
-            throw new CITParsingException("Could not resolve texture", properties, textureProp.position());
+            throw textureProp == null ? new CITParsingException("No texture specified", properties, -1) : new CITParsingException("Could not resolve texture", properties, textureProp.position());
 
         PropertyValue layerProp = properties.getLastWithoutMetadataOrDefault("0", "citresewn", "layer");
         try {
@@ -73,13 +71,13 @@ public class TypeEnchantment extends CITType {
             throw new CITParsingException("Could not parse integer", properties, layerProp.position(), e);
         }
 
-        this.speed = parseFloatOrZero("speed", properties);
-        this.rotation = parseFloatOrZero("rotation", properties);
-        this.duration = parseFloatOrZero("duration", properties);
-        this.r = parseFloatOrZero("r", properties);
-        this.g = parseFloatOrZero("g", properties);
-        this.b = parseFloatOrZero("b", properties);
-        this.a = parseFloatOrZero("a", properties);
+        this.speed = parseFloatOrDefault(1f, "speed", properties);
+        this.rotation = parseFloatOrDefault(10f, "rotation", properties);
+        this.duration = Math.max(0f, parseFloatOrDefault(0f, "duration", properties));
+        this.r = Math.max(0f, parseFloatOrDefault(1f, "r", properties));
+        this.g = Math.max(0f, parseFloatOrDefault(1f, "g", properties));
+        this.b = Math.max(0f, parseFloatOrDefault(1f, "b", properties));
+        this.a = Math.max(0f, parseFloatOrDefault(1f, "a", properties));
 
         this.useGlint = Boolean.parseBoolean(properties.getLastWithoutMetadataOrDefault("false", "citresewn", "useGlint").value());
         this.blur = Boolean.parseBoolean(properties.getLastWithoutMetadataOrDefault("true", "citresewn", "blur").value());
@@ -92,10 +90,10 @@ public class TypeEnchantment extends CITType {
         }
     }
 
-    private float parseFloatOrZero(String propertyName, PropertyGroup properties) throws CITParsingException {
+    private float parseFloatOrDefault(float defaultValue, String propertyName, PropertyGroup properties) throws CITParsingException {
         PropertyValue property = properties.getLastWithoutMetadata("citresewn", propertyName);
         if (property == null)
-            return 0f;
+            return defaultValue;
         try {
             return Float.parseFloat(property.value());
         } catch (Exception e) {
@@ -112,7 +110,7 @@ public class TypeEnchantment extends CITType {
         public List<List<CIT<TypeEnchantment>>> loadedLayered = new ArrayList<>();
 
         private List<CIT<TypeEnchantment>> appliedContext = null;
-        public boolean shouldApply = false;
+        private boolean apply = false, defaultGlint = false;
 
         @Override
         public void load(List<CIT<TypeEnchantment>> parsedCITs) {
@@ -147,11 +145,25 @@ public class TypeEnchantment extends CITType {
             loadedLayered.clear();
         }
 
-        public void setContext(CITContext context) {
-            if (context == null) {
-                appliedContext = null;
-                return;
-            }
+        public void apply() {
+            if (appliedContext != null)
+                apply = true;
+        }
+
+        public boolean shouldApply() {
+            return apply;
+        }
+
+        public boolean shouldNotApplyDefaultGlint() {
+            return apply && !defaultGlint;
+        }
+
+        public Container setContext(CITContext context) {
+            apply = false;
+            defaultGlint = false;
+            appliedContext = null;
+            if (context == null)
+                return this;
 
             List<WeakReference<CIT<TypeEnchantment>>> cits = ((CITCacheEnchantment) (Object) context.stack).citresewn$getCacheTypeEnchantment().get(context);
 
@@ -160,12 +172,17 @@ public class TypeEnchantment extends CITType {
                 for (WeakReference<CIT<TypeEnchantment>> citRef : cits)
                     if (citRef != null) {
                         CIT<TypeEnchantment> cit = citRef.get();
-                        if (cit != null)
+                        if (cit != null) {
                             appliedContext.add(cit);
+                            if (cit.type.useGlint)
+                                defaultGlint = true;
+                        }
                     }
 
             if (appliedContext.isEmpty())
                 appliedContext = null;
+
+            return this;
         }
 
         public List<CIT<TypeEnchantment>> getRealTimeCIT(CITContext context) {
@@ -233,21 +250,37 @@ public class TypeEnchantment extends CITType {
         }
 
         public RenderLayer build(TypeEnchantment enchantment, Identifier propertiesIdentifier) {
-            final float speed = enchantment.speed, rotation = enchantment.rotation, r = enchantment.r, g = enchantment.g, b = enchantment.b, a = enchantment.a;
-            final WrappedMethodIntensity methodIntensity = enchantment.methodIntensity;
+            class Texturing implements Runnable {
+                private final float speed, rotation, r, g, b, a;
+                private final WrappedMethodIntensity methodIntensity;
+
+                Texturing(float speed, float rotation, float r, float g, float b, float a, WrappedMethodIntensity methodIntensity) {
+                    this.speed = speed;
+                    this.rotation = rotation;
+                    this.r = r;
+                    this.g = g;
+                    this.b = b;
+                    this.a = a;
+                    this.methodIntensity = methodIntensity;
+                }
+
+                @Override
+                public void run() {
+                    float l = Util.getMeasuringTimeMs() * CITResewnDefaultsConfig.INSTANCE.type_enchantment_scroll_multiplier * speed;
+                    float x = (l % 110000f) / 110000f;
+                    float y = (l % 30000f) / 30000f;
+                    Matrix4f matrix4f = Matrix4f.translate(-x, y, 0.0f);
+                    matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
+                    matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
+                    setTextureMatrix(matrix4f);
+
+                    setShaderColor(r, g, b, a * methodIntensity.intensity);
+                }
+            }
+
             RenderLayer.MultiPhaseParameters.Builder layer = RenderLayer.MultiPhaseParameters.builder()
                     .texture(new RenderPhase.Texture(enchantment.texture, enchantment.blur, false))
-                    .texturing(new RenderPhase.Texturing("citresewn_glint_texturing", () -> {
-                        float l = Util.getMeasuringTimeMs() * CITResewnDefaultsConfig.INSTANCE.type_enchantment_scroll_multiplier * speed;
-                        float x = (l % 110000f) / 110000f;
-                        float y = (l % 30000f) / 30000f;
-                        Matrix4f matrix4f = Matrix4f.translate(-x, y, 0.0f);
-                        matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation + 10f));
-                        matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
-                        setTextureMatrix(matrix4f);
-
-                        setShaderColor(r, g, b, a * methodIntensity.intensity);
-                    }, () -> {
+                    .texturing(new RenderPhase.Texturing("citresewn_glint_texturing", new Texturing(enchantment.speed, enchantment.rotation, enchantment.r, enchantment.g, enchantment.b, enchantment.a, enchantment.methodIntensity), () -> {
                         RenderSystem.resetTextureMatrix();
 
                         setShaderColor(1f, 1f, 1f, 1f);
@@ -264,7 +297,7 @@ public class TypeEnchantment extends CITType {
         }
 
         public VertexConsumer tryApply(VertexConsumer base, RenderLayer baseLayer, VertexConsumerProvider provider) {
-            if (!CONTAINER.shouldApply || CONTAINER.appliedContext == null || CONTAINER.appliedContext.size() == 0)
+            if (!CONTAINER.apply || CONTAINER.appliedContext == null || CONTAINER.appliedContext.size() == 0)
                 return null;
 
             VertexConsumer[] layers = new VertexConsumer[Math.min(CONTAINER.appliedContext.size(), Integer.MAX_VALUE /*todo cap global property*/)];
