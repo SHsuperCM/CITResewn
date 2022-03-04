@@ -1,6 +1,8 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.types;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.item.ElytraItem;
+import net.minecraft.item.Item;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
@@ -27,8 +29,11 @@ public class TypeElytra extends CITType {
 
     @Override
     public void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
-        if (conditions.removeIf(condition -> condition instanceof ConditionItems))
-            warn("Type elytra does not support the items condition", null, properties);
+        for (CITCondition condition : conditions)
+            if (condition instanceof ConditionItems items)
+                for (Item item : items.items)
+                    if (!(item instanceof ElytraItem))
+                        warn("Non elytra item type condition", null, properties);
 
         texture = resolveAsset(properties.identifier, properties.getLastWithoutMetadata("citresewn", "texture"), "textures", ".png", resourceManager);
         if (texture == null)
