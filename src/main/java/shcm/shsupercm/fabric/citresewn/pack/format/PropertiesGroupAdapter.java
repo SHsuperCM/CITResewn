@@ -1,11 +1,9 @@
 package shcm.shsupercm.fabric.citresewn.pack.format;
 
 import net.minecraft.util.Identifier;
-import net.minecraft.util.InvalidIdentifierException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 public class PropertiesGroupAdapter extends PropertyGroup {
     public static final String EXTENSION = ".properties";
@@ -44,6 +42,8 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                     line = line.substring(0, line.length() - 1) + "\\n" + nextLine;
                 }
 
+                line = line.stripTrailing();
+
                 StringBuilder builder = new StringBuilder();
 
                 String key = null, keyMetadata = null;
@@ -59,18 +59,12 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                             case 'f' -> '\f';
                             case 't' -> '\t';
                             case 'u' -> {
-                                if (i + 4 >= line.length())
-                                    yield c;
-
-                                //todo implement manually
-                                java.util.Properties properties = new Properties();
-                                properties.load(new StringReader("k=\\u" + line.charAt(i + 1) + line.charAt(i + 2) + line.charAt(i + 3) + line.charAt(i + 4)));
-                                String k = properties.getProperty("k");
-                                if (k.length() == 1) {
+                                try {
                                     i += 4;
-                                    yield k.charAt(0);
+                                    yield (char) Integer.parseInt(line.substring(i - 3, i + 1), 16);
+                                } catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
+                                    throw new IOException("Malformatted escaped unicode character");
                                 }
-                                yield c;
                             }
 
                             default -> c;
