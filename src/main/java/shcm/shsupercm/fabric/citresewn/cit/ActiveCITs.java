@@ -61,6 +61,6 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
             disposable.dispose();
 
         for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
-            typeContainer.dispose();
+            typeContainer.unload();
     }
 }

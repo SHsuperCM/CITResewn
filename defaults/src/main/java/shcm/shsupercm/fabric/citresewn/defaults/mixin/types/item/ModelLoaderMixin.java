@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
@@ -41,7 +40,7 @@ public class ModelLoaderMixin {
     @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
     public void citresewn$addTypeItemModels(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
         profiler.swap("citresewn:type_item_models");
-        if (!ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         info("Loading item CIT models...");
@@ -65,7 +64,7 @@ public class ModelLoaderMixin {
 
     @Inject(method = "upload", at = @At("RETURN"))
     public void citresewn$linkTypeItemModels(TextureManager textureManager, Profiler profiler, CallbackInfoReturnable<SpriteAtlasManager> cir) {
-        if (!ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         profiler.push("citresewn:type_item_linking");
@@ -92,7 +91,7 @@ public class ModelLoaderMixin {
     @ModifyArg(method = "loadModelFromJson", at =
     @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;"))
     public Identifier citresewn$fixDuplicatePrefixSuffix(Identifier original) {
-        if (original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
+        if (CONTAINER.active() && original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
             return new Identifier(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
 
         return original;

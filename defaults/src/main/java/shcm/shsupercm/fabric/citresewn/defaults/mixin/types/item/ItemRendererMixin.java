@@ -19,10 +19,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
-import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem;
 
 import java.lang.ref.WeakReference;
@@ -41,7 +39,7 @@ public class ItemRendererMixin {
 
     @Inject(method = "getModel", cancellable = true, at = @At("HEAD"))
     private void citresewn$getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-        if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         CITContext context = new CITContext(stack, world, entity);
@@ -56,7 +54,7 @@ public class ItemRendererMixin {
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
     private void citresewn$fixMojankCITsContext(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         citresewn$mojankCITModel = null;
@@ -76,10 +74,7 @@ public class ItemRendererMixin {
 
     @ModifyVariable(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At(value = "LOAD", ordinal = 0, target = "Lnet/minecraft/client/render/model/BakedModel;getTransformation()Lnet/minecraft/client/render/model/json/ModelTransformation;"), argsOnly = true)
     private BakedModel citresewn$fixMojankCITs(BakedModel original) {
-        if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
-            return original;
-
-        if (citresewn$mojankCITModel != null)
+        if (CONTAINER.active() && citresewn$mojankCITModel != null)
             return citresewn$mojankCITModel.get();
 
         return original;

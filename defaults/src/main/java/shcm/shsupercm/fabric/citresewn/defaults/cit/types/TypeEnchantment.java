@@ -4,14 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Matrix4f;
@@ -181,6 +174,7 @@ public class TypeEnchantment extends CITType {
         @Override
         public void dispose() {
             appliedContext = null;
+            apply = false;
 
             for (CIT<TypeEnchantment> cit : loaded)
                 for (RenderLayer renderLayer : cit.type.renderLayers.values())
@@ -201,7 +195,7 @@ public class TypeEnchantment extends CITType {
         }
 
         public boolean shouldApply() {
-            return apply;
+            return apply && active();
         }
 
         public boolean shouldNotApplyDefaultGlint() {

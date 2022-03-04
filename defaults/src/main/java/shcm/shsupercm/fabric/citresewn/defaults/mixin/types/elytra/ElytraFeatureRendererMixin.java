@@ -8,14 +8,15 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
-import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeElytra;
 
 import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeElytra.CONTAINER;
@@ -28,7 +29,7 @@ public class ElytraFeatureRendererMixin {
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At("HEAD"))
     public void citresewn$render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
-        if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         ItemStack equippedStack = livingEntity.getEquippedStack(EquipmentSlot.CHEST);

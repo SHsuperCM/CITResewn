@@ -14,9 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
-import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeEnchantment;
 
 import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeEnchantment.CONTAINER;
@@ -25,19 +23,19 @@ import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeEnchantment
 public class ItemRendererMixin {
     @Inject(method = "getModel", at = @At("HEAD"))
     private void citresewn$enchantment$setAppliedContext(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-        if (CITResewnConfig.INSTANCE.enabled && ActiveCITs.isActive())
+        if (CONTAINER.active())
             CONTAINER.setContext(new CITContext(stack, world, entity));
     }
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
     private void citresewn$enchantment$startApplyingItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        if (CITResewnConfig.INSTANCE.enabled && ActiveCITs.isActive())
+        if (CONTAINER.active())
             CONTAINER.apply();
     }
 
     @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("RETURN"))
     private void citresewn$enchantment$stopApplyingItem(ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        if (CITResewnConfig.INSTANCE.enabled && ActiveCITs.isActive())
+        if (CONTAINER.active())
             CONTAINER.setContext(null);
     }
 

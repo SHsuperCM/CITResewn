@@ -14,10 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
-import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeArmor;
 
 import java.util.Map;
@@ -31,7 +29,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
     @Inject(method = "renderArmor", at = @At("HEAD"))
     public void citresewn$renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T entity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
         citresewn$cachedTextures = null;
-        if (!CITResewnConfig.INSTANCE.enabled || !ActiveCITs.isActive())
+        if (!CONTAINER.active())
             return;
 
         ItemStack equippedStack = entity.getEquippedStack(armorSlot);
