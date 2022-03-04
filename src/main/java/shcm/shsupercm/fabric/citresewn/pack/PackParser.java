@@ -43,7 +43,7 @@ public class PackParser {
         });
     }
 
-    public static void loadGlobalProperties(ResourceManager resourceManager, GlobalProperties globalProperties) {
+    public static GlobalProperties loadGlobalProperties(ResourceManager resourceManager, GlobalProperties globalProperties) {
         forEachPack(resourceManager, pack -> {
             for (String root : ROOTS) {
                 Identifier identifier = new Identifier("minecraft", root + "/cit.properties");
@@ -56,6 +56,7 @@ public class PackParser {
                 }
             }
         });
+        return globalProperties;
     }
 
     public static List<CIT<?>> loadCITs(ResourceManager resourceManager) {

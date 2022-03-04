@@ -5,6 +5,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 
@@ -32,14 +33,19 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
             active = null;
         }
 
+        if (!CITResewnConfig.INSTANCE.enabled) {
+            profiler.pop();
+            return null;
+        }
+
         ActiveCITs active = new ActiveCITs();
 
         profiler.swap("citresewn:load_global_properties");
-        PackParser.loadGlobalProperties(resourceManager, active.globalProperties);
-        active.globalProperties.callHandlers();
+        PackParser.loadGlobalProperties(resourceManager, active.globalProperties).callHandlers();
 
         profiler.swap("citresewn:load_cits");
-        for (CIT<?> cit : PackParser.loadCITs(resourceManager))
+        List<CIT<?>> cits = PackParser.loadCITs(resourceManager);
+        for (CIT<?> cit : cits)
             active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
         for (Map.Entry<Class<? extends CITType>, List<CIT<?>>> entry : active.cits.entrySet()) {
             entry.getValue().sort(Comparator.<CIT<?>>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
@@ -52,7 +58,10 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
 
         profiler.pop();
 
-        return ActiveCITs.active = active;
+        if (!cits.isEmpty())
+            ActiveCITs.active = active;
+
+        return ActiveCITs.active;
     }
 
     @Override
