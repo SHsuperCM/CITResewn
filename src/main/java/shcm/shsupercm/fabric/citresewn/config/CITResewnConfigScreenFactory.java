@@ -37,20 +37,23 @@ public class CITResewnConfigScreenFactory {
                 .setDefaultValue(defaultConfig.enabled)
                 .build());
 
-        class CurrentScreen { Screen screen; boolean prevToggle = false; } final CurrentScreen currentScreen = new CurrentScreen();
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.defaults.title"), false)
-                .setTooltip(new TranslatableText("config.citresewn.defaults.tooltip"))
-                .setYesNoTextSupplier((b) -> {
-                    if (b != currentScreen.prevToggle) {
-                        //noinspection unchecked
-                        MinecraftClient.getInstance().setScreen((Screen) FabricLoader.getInstance().getEntrypoints(DEFAULTS_CONFIG_ENTRYPOINT, Function.class).stream().findAny().orElseThrow().apply(currentScreen.screen));
+        if (FabricLoader.getInstance().isModLoaded("citresewn-defaults")) {
+            class CurrentScreen { boolean prevToggle = false; } final CurrentScreen currentScreen = new CurrentScreen();
+            category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn-defaults.title"), false)
+                    .setTooltip(new TranslatableText("config.citresewn-defaults.tooltip"))
 
-                        currentScreen.prevToggle = b;
-                    }
+                    .setYesNoTextSupplier((b) -> {
+                        if (b != currentScreen.prevToggle) {
+                            //noinspection unchecked
+                            MinecraftClient.getInstance().setScreen((Screen) FabricLoader.getInstance().getEntrypoints(DEFAULTS_CONFIG_ENTRYPOINT, Function.class).stream().findAny().orElseThrow().apply(create(parent)));
 
-                    return new TranslatableText("config.citresewn.configure");
-                })
-                .build());
+                            currentScreen.prevToggle = b;
+                        }
+
+                        return new TranslatableText("config.citresewn.configure");
+                    })
+                    .build());
+        }
 
         category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_errors.title"), currentConfig.mute_errors)
                 .setTooltip(new TranslatableText("config.citresewn.mute_errors.tooltip"))
@@ -67,7 +70,7 @@ public class CITResewnConfigScreenFactory {
         category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)
                 .setTooltip(new TranslatableText("config.citresewn.cache_ms.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.cache_ms = newConfig * 50)
-                .setDefaultValue(currentConfig.cache_ms / 50)
+                .setDefaultValue(defaultConfig.cache_ms / 50)
                 .setTextGetter(ticks -> {
                     if (ticks <= 1)
                         return new TranslatableText("config.citresewn.cache_ms.ticks." + ticks).formatted(Formatting.AQUA);
@@ -90,6 +93,6 @@ public class CITResewnConfigScreenFactory {
                 .requireRestart()
                 .build());
 
-        return currentScreen.screen = builder.build();
+        return builder.build();
     }
 }
