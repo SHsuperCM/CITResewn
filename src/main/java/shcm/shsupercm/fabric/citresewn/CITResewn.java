@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
@@ -15,6 +16,9 @@ public class CITResewn implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CITRegistry.registerAll();
+
+        if (FabricLoader.getInstance().isModLoaded("fabric-command-api-v1"))
+            CITResewnCommand.register();
     }
 
     public static void info(String message) {
