@@ -21,11 +21,11 @@ public abstract class PropertyGroup {
 
     public abstract PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException;
 
-    protected void put(int position, String packName, Identifier propertiesIdentifier, String key, String keyMetadata, String delimiter, String value) throws InvalidIdentifierException {
+    protected void put(int position, String packName, Identifier propertiesIdentifier, String key, String keyMetadata, PropertySeparator separator, String value) throws InvalidIdentifierException {
         Objects.requireNonNull(key);
         Objects.requireNonNull(value);
 
-        this.properties.computeIfAbsent(PropertyKey.of(key), id -> new LinkedHashSet<>()).add(new PropertyValue(keyMetadata, value, delimiter, position, propertiesIdentifier, packName));
+        this.properties.computeIfAbsent(PropertyKey.of(key), id -> new LinkedHashSet<>()).add(new PropertyValue(keyMetadata, value, separator, position, propertiesIdentifier, packName));
     }
 
     public Set<PropertyValue> get(String namespace, String... pathAliases) {
@@ -52,7 +52,7 @@ public abstract class PropertyGroup {
     public PropertyValue getLastWithoutMetadataOrDefault(String defaultValue, String namespace, String... pathAliases) {
         PropertyValue property = getLastWithoutMetadata(namespace, pathAliases);
         if (property == null)
-            property = new PropertyValue(null, defaultValue, "=", -1, this.identifier, this.packName);
+            property = new PropertyValue(null, defaultValue, PropertySeparator.EQUALS, -1, this.identifier, this.packName);
 
         return property;
     }

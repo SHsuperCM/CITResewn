@@ -39,7 +39,7 @@ public abstract class ListCondition<T extends CITCondition> extends CITCondition
 
         for (String conditionValue : delimiter.split(value.value())) {
             T condition = conditionSupplier.get();
-            condition.load(new PropertyValue(value.keyMetadata(), conditionValue, value.delimiter(), value.position(), value.propertiesIdentifier(), value.packName()), properties);
+            condition.load(new PropertyValue(value.keyMetadata(), conditionValue, value.separator(), value.position(), value.propertiesIdentifier(), value.packName()), properties);
             conditions.add(condition);
         }
 
