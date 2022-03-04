@@ -44,7 +44,7 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
         PackParser.loadGlobalProperties(resourceManager, active.globalProperties).callHandlers();
 
         profiler.swap("citresewn:load_cits");
-        List<CIT<?>> cits = PackParser.loadCITs(resourceManager);
+        List<CIT<?>> cits = PackParser.parseCITs(resourceManager);
         for (CIT<?> cit : cits)
             active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
         for (Map.Entry<Class<? extends CITType>, List<CIT<?>>> entry : active.cits.entrySet()) {

@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn.pack;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
@@ -16,6 +17,10 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Property group representation of the global cit.properties file.
+ * @see PackParser#loadGlobalProperties(ResourceManager, GlobalProperties)
+ */
 public class GlobalProperties extends PropertyGroup {
     public GlobalProperties() {
         super("global_properties", new Identifier("citresewn", "global_properties"));
@@ -36,6 +41,12 @@ public class GlobalProperties extends PropertyGroup {
         return this;
     }
 
+    /**
+     * Calls all {@link CITGlobalProperties} handler entrypoints for every global property they're associated with.<br>
+     * Global properties are matched to their entrypoints by mod id and it's the handler responsibility to filter the properties.
+     *
+     * @see CITGlobalProperties
+     */
     public void callHandlers() {
         for (EntrypointContainer<CITGlobalProperties> container : FabricLoader.getInstance().getEntrypointContainers(CITGlobalProperties.ENTRYPOINT, CITGlobalProperties.class)) {
             String containerNamespace = container.getProvider().getMetadata().getId();

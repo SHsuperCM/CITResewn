@@ -24,12 +24,27 @@ import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.arg
 import static net.fabricmc.fabric.api.client.command.v1.ClientCommandManager.literal;
 import static net.minecraft.text.Text.of;
 
+/**
+ * Logic for the /citresewn client command. Only enabled when Fabric API is present.<br>
+ * Structure:
+ * <pre>
+ * /citresewn - General info command
+ * /citresewn config - Opens the config gui(only when Cloth Config is present)
+ * /citresewn analyze pack &lt;pack&gt; - Displays data for the given loaded cit pack.
+ * </pre>
+ */
 public class CITResewnCommand {
+    /**
+     * @see shcm.shsupercm.fabric.citresewn.mixin.ChatScreenMixin
+     */
     public static boolean openConfig = false;
 
-    public static void register() {
+    /**
+     * Registers
+     */
+    static void register() {
         ClientCommandManager.DISPATCHER.register(literal("citresewn")
-                .executes(context -> {
+                .executes(context -> { //citresewn
                     context.getSource().sendFeedback(of("CIT Resewn v" + FabricLoader.getInstance().getModContainer("citresewn").orElseThrow().getMetadata().getVersion() + ":"));
                     context.getSource().sendFeedback(of("  Registered: " + CITRegistry.TYPES.values().stream().distinct().count() + " types and " + CITRegistry.CONDITIONS.values().stream().distinct().count() + " conditions"));
 
@@ -43,15 +58,15 @@ public class CITResewnCommand {
                     return 1;
                 })
                 .then(literal("config")
-                        .executes(context -> {
+                        .executes(context -> { //citresewn config
                             openConfig = true;
 
                             return 1;
                         }))
                 .then(literal("analyze")
                         .then(literal("pack")
-                                .then(argument("pack", new CITPackArgument())
-                                        .executes(context -> {
+                                .then(argument("pack", new LoadedCITPackArgument())
+                                        .executes(context -> { //citresewn analyze <pack>
                                             final String pack = context.getArgument("pack", String.class);
                                             if (ActiveCITs.isActive()) {
                                                 context.getSource().sendFeedback(of("Analyzed CIT data of \"" + pack + "\u00a7r\":"));
@@ -102,7 +117,10 @@ public class CITResewnCommand {
         );
     }
 
-    private static class CITPackArgument implements ArgumentType<String> {
+    /**
+     * Greedy string argument that is limited to cit pack names loaded in {@link shcm.shsupercm.fabric.citresewn.cit.ActiveCITs}.
+     */
+    private static class LoadedCITPackArgument implements ArgumentType<String> {
         @Override
         public String parse(StringReader reader) throws CommandSyntaxException {
             StringBuilder builder = new StringBuilder();

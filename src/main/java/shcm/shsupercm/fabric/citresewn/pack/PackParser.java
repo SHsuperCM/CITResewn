@@ -25,14 +25,29 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class PackParser {
+/**
+ * Utility parsing methods for packs.
+ */
+public final class PackParser { private PackParser() {}
+    /**
+     * Possible CIT roots in resourcepacks ordered in ascending order of priority.
+     */
     private static final String[] ROOTS = new String[] { "mcpatcher", "optifine", "citresewn" };
+
+    /**
+     * Gets all resourcepacks from {@link GroupResourcePack} or null if not a group or Fabric API is not present.
+     */
     private static final Function<ResourcePack, List<ResourcePack>> PARSE_FAPI_GROUPS =
             FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0") ?
                     parentPack -> parentPack instanceof GroupResourcePack ? ((GroupResourcePackAccessor) parentPack).getPacks() : null
                     : parentPack -> null;
 
-    private static void forEachPack(ResourceManager resourceManager, Consumer<ResourcePack> run) {
+    /**
+     * Iterates over each loaded pack taking into account grouped packs.
+     * @param resourceManager the manager that contains the packs
+     * @param run resourcepack pack consumer
+     */
+    public static void forEachPack(ResourceManager resourceManager, Consumer<ResourcePack> run) {
         resourceManager.streamResourcePacks().forEachOrdered(pack -> {
             List<ResourcePack> grouped = PARSE_FAPI_GROUPS.apply(pack);
             if (grouped != null)
@@ -43,6 +58,14 @@ public class PackParser {
         });
     }
 
+    /**
+     * Loads a merged global property group from loaded packs making sure to respect order.
+     *
+     * @see GlobalProperties#callHandlers()
+     * @param resourceManager the manager that contains the packs
+     * @param globalProperties global property group to parse into
+     * @return globalProperties
+     */
     public static GlobalProperties loadGlobalProperties(ResourceManager resourceManager, GlobalProperties globalProperties) {
         forEachPack(resourceManager, pack -> {
             for (String root : ROOTS) {
@@ -59,7 +82,12 @@ public class PackParser {
         return globalProperties;
     }
 
-    public static List<CIT<?>> loadCITs(ResourceManager resourceManager) {
+    /**
+     * Attempts parsing all CITs out of all loaded packs.
+     * @param resourceManager the manager that contains the packs
+     * @return unordered list of successfully parsed CITs
+     */
+    public static List<CIT<?>> parseCITs(ResourceManager resourceManager) {
         List<CIT<?>> cits = new ArrayList<>();
 
         for (String root : ROOTS)
@@ -78,6 +106,13 @@ public class PackParser {
         return cits;
     }
 
+    /**
+     * Attempts parsing a CIT from a property group.
+     * @param properties property group representation of the CIT
+     * @param resourceManager the manager that contains the the property group, used to resolve relative assets
+     * @return the successfully parsed CIT
+     * @throws CITParsingException if the CIT failed parsing for any reason
+     */
     public static CIT<?> parseCIT(PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         CITType citType = CITRegistry.parseType(properties);
 
