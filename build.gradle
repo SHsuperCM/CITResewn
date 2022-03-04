@@ -34,10 +34,10 @@ allprojects {
             exclude(group: "net.fabricmc.fabric-api")
         }
 
-        modCompileOnly("curse.maven:cosmeticarmor-436659:${project.cosmetic_armor}")
+        //modCompileOnly("curse.maven:cosmeticarmor-436659:${project.cosmetic_armor}")
 
 
-        fletchingTable.shutUpDrasil18()
+        //fletchingTable.shutUpDrasil18()
     }
 
     fletchingTable {
