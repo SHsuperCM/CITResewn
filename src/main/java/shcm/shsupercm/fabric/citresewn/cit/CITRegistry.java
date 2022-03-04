@@ -20,6 +20,9 @@ public class CITRegistry {
     public static final Map<Identifier, CITTypeContainer<? extends CITType>> TYPES = new HashMap<>();
     public static final Map<PropertyKey, CITConditionContainer<? extends CITCondition>> CONDITIONS = new HashMap<>();
 
+    private static final Map<Class<? extends CITType>, Identifier> TYPE_TO_ID = new IdentityHashMap<>();
+    private static final Map<Class<? extends CITCondition>, PropertyKey> CONDITION_TO_ID = new IdentityHashMap<>();
+
     public static void registerAll() {
         info("Registering CIT Conditions");
         for (var entrypointContainer : FabricLoader.getInstance().getEntrypointContainers(CITConditionContainer.ENTRYPOINT, CITConditionContainer.class)) {
@@ -27,8 +30,13 @@ public class CITRegistry {
             if (namespace.equals("citresewn-defaults"))
                 namespace = "citresewn";
 
-            for (String alias : entrypointContainer.getEntrypoint().aliases)
-                CONDITIONS.put(new PropertyKey(namespace, alias), (CITConditionContainer<? extends CITCondition>) entrypointContainer.getEntrypoint());
+            for (String alias : entrypointContainer.getEntrypoint().aliases) {
+                final PropertyKey key = new PropertyKey(namespace, alias);
+                CITConditionContainer<?> container = entrypointContainer.getEntrypoint();
+
+                CONDITIONS.put(key, container);
+                CONDITION_TO_ID.putIfAbsent(container.createCondition.get().getClass(), key);
+            }
         }
 
         info("Registering CIT Types");
@@ -37,7 +45,11 @@ public class CITRegistry {
             if (namespace.equals("citresewn-defaults"))
                 namespace = "citresewn";
 
-            TYPES.put(new Identifier(namespace, entrypointContainer.getEntrypoint().id), (CITTypeContainer<? extends CITType>) entrypointContainer.getEntrypoint());
+            final Identifier id = new Identifier(namespace, entrypointContainer.getEntrypoint().id);
+            CITTypeContainer<?> container = entrypointContainer.getEntrypoint();
+
+            TYPES.put(id, container);
+            TYPE_TO_ID.putIfAbsent(container.createType.get().getClass(), id);
         }
     }
 
@@ -70,5 +82,13 @@ public class CITRegistry {
             throw new UnknownCITTypeException(properties, propertiesType == null ? -1 : propertiesType.position());
 
         return typeContainer.createType.get();
+    }
+
+    public static Identifier idOfType(Class<? extends CITType> clazz) {
+        return TYPE_TO_ID.get(clazz);
+    }
+
+    public static PropertyKey idOfCondition(Class<? extends CITCondition> clazz) {
+        return CONDITION_TO_ID.get(clazz);
     }
 }
