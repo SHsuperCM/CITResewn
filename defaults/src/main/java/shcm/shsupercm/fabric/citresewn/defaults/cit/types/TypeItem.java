@@ -40,8 +40,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Do not go through this class, it looks awful because it was ported from a "proof of concept".<br>
- * The whole type will be rewritten at some point.
+ * ///// PORTED FROM BETA \\\\\
+ * This shit was ported from the
+ * beta and will be rewritten at
+ * some point!
+ * \\\\\                  /////
  */
 public class TypeItem extends CITType {
     @Entrypoint(CITTypeContainer.ENTRYPOINT)

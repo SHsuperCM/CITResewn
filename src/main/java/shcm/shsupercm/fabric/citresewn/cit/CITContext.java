@@ -11,23 +11,47 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Holds momentary information to be used for CITs' condition matching and type effects.
+ */
 public class CITContext {
+    /**
+     * The main item stack to check for the CIT.
+     */
     public final ItemStack stack;
+
+    /**
+     * The item's containing world(defaults to {@link MinecraftClient#world} if null)
+     */
     public final World world;
+
+    /**
+     * The item's associated living entity if present. (null if not relevant)
+     */
+    @Nullable
     public final LivingEntity entity;
 
+    /**
+     * Cached enchantment map from {@link #stack}.
+     * @see #enchantments()
+     */
     private Map<Identifier, Integer> enchantments = null;
 
-    public CITContext(ItemStack stack, World world, LivingEntity entity) {
+    public CITContext(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
         this.stack = stack;
         this.world = world == null ? MinecraftClient.getInstance().world : world;
         this.entity = entity;
     }
 
+    /**
+     * @see #enchantments
+     * @return a map of this context item's enchantments
+     */
     public Map<Identifier, Integer> enchantments() {
         if (this.enchantments == null) {
             this.enchantments = new LinkedHashMap<>();

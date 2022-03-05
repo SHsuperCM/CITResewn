@@ -3,6 +3,7 @@ package shcm.shsupercm.fabric.citresewn.cit;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
@@ -10,9 +11,25 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.*;
 
+/**
+ * Instanced parent for CIT Types that are applied to items when conditions pass.
+ * @see CITTypeContainer
+ * @see CIT
+ */
 public abstract class CITType {
+    /**
+     * Used to determine which property keys are not conditions.
+     * @return a set of property keys used by this type
+     */
     public abstract Set<PropertyKey> typeProperties();
 
+    /**
+     * Loads the given property group into the type.
+     * @param conditions conditions that were parsed out of the property group
+     * @param properties group of properties to be read into this type
+     * @param resourceManager the CIT's containing resource manager
+     * @throws CITParsingException if errored while parsing the type
+     */
     public abstract void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
@@ -20,6 +37,12 @@ public abstract class CITType {
     }
 
     /**
+     * ///// PORTED FROM BETA \\\\\
+     * This shit was ported from the
+     * beta and will be rewritten at
+     * some point!
+     * \\\\\                  /////
+     *
      * Takes a defined path and resolves it to an identifier pointing to the resourcepack's path of the specified extension(returns null if no path can be resolved).<br>
      * If definedPath is null, will try to resolve a relative file with the same name as the rootIdentifier with the extension, otherwise: <br>
      * definedPath will be formatted to replace "\\" with "/" the extension will be appended if not there already. <br>
