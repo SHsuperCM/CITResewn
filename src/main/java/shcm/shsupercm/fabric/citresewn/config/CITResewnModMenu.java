@@ -8,6 +8,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.NoticeScreen;
 import net.minecraft.text.Text;
 
+/**
+ * Mod Menu config button integration.
+ */
 @Entrypoint("modmenu")
 public class CITResewnModMenu implements ModMenuApi {
     @Override

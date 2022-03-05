@@ -12,9 +12,22 @@ import net.minecraft.util.Formatting;
 
 import java.util.function.Function;
 
+/**
+ * Cloth Config integration to CIT Resewn's config
+ * @see CITResewnConfig
+ */
 public class CITResewnConfigScreenFactory {
+    /**
+     * Used to get CIT Resewn - Defaults's Cloth Config implementation.
+     */
     public static final String DEFAULTS_CONFIG_ENTRYPOINT = "citresewn-defaults:config_screen";
 
+    /**
+     * Creates a Cloth Config screen for the current active config instance.
+     * @param parent parent to return to from the config screen
+     * @return the config screen
+     * @throws NoClassDefFoundError if Cloth Config is not present
+     */
     public static Screen create(Screen parent) {
         CITResewnConfig currentConfig = CITResewnConfig.INSTANCE, defaultConfig = new CITResewnConfig();
 

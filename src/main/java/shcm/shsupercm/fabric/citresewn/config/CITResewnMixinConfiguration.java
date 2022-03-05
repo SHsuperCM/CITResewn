@@ -8,9 +8,17 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Mixin configuration for CIT Resewn's mixins.
+ */
 public class CITResewnMixinConfiguration implements IMixinConfigPlugin {
     private static final String MIXINS_ROOT = "shcm.shsupercm.fabric.citresewn.mixin";
 
+    /**
+     * Is Broken Paths enabled in config.
+     * @see BrokenPaths
+     * @see CITResewnConfig#broken_paths
+     */
     private boolean broken_paths;
 
     @Override
