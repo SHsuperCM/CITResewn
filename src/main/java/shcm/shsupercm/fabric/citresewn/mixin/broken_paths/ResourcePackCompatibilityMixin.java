@@ -7,7 +7,13 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import shcm.shsupercm.fabric.citresewn.config.BrokenPaths;
 
+/**
+ * Adds a resourcepack compatibility error message when broken paths are enabled and are detected in a pack.
+ * @see BrokenPaths
+ * @see AbstractFileResourcePackMixin
+ */
 @Mixin(ResourcePackCompatibility.class)
 public abstract class ResourcePackCompatibilityMixin {
     private static final ResourcePackCompatibility BROKEN_PATHS = ResourcePackCompatibility("BROKEN_PATHS", -1, "broken_paths");
@@ -19,7 +25,7 @@ public abstract class ResourcePackCompatibilityMixin {
     }
 
     @Inject(method = "from(ILnet/minecraft/resource/ResourceType;)Lnet/minecraft/resource/ResourcePackCompatibility;", cancellable = true, at = @At("HEAD"))
-    private static void redirectBrokenPathsCompatibility(int packVersion, ResourceType type, CallbackInfoReturnable<ResourcePackCompatibility> cir) {
+    private static void citresewn$brokenpaths$redirectBrokenPathsCompatibility(int packVersion, ResourceType type, CallbackInfoReturnable<ResourcePackCompatibility> cir) {
         if (packVersion == Integer.MAX_VALUE - 53)
             cir.setReturnValue(BROKEN_PATHS);
     }

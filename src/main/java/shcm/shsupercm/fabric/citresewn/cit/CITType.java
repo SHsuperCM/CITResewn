@@ -16,7 +16,7 @@ public abstract class CITType {
     public abstract void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
-        CITResewn.logWarnLoading("Warning: " + CITParsingException.descriptionOf(message, properties, value == null ? -1 : value.position()));
+        CITResewn.logWarnLoading("Warning: " + properties.messageWithDescriptorOf(message, value == null ? -1 : value.position()));
     }
 
     /**

@@ -22,6 +22,6 @@ public abstract class CITCondition {
     public abstract boolean test(CITContext context);
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
-        CITResewn.logWarnLoading("Warning: " + CITParsingException.descriptionOf(message, properties, value.position()));
+        CITResewn.logWarnLoading("Warning: " + properties.messageWithDescriptorOf(message, value.position()));
     }
 }

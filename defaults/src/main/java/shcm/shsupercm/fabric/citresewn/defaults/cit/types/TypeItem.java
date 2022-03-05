@@ -406,7 +406,7 @@ public class TypeItem extends CITType {
         };
 
         if (replacement != null) {
-            CITResewn.logWarnLoading(CITParsingException.descriptionOf("Warning: Using deprecated sub item id \"" + subItem + "\" instead of \"" + replacement + "\"", properties, position));
+            CITResewn.logWarnLoading(properties.messageWithDescriptorOf("Warning: Using deprecated sub item id \"" + subItem + "\" instead of \"" + replacement + "\"", position));
 
             return new Identifier("minecraft", "item/" + replacement);
         }

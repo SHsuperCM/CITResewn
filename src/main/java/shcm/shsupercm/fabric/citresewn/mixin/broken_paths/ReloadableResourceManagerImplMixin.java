@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.BrokenPaths;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -19,12 +20,17 @@ import java.util.concurrent.Executor;
 
 import static shcm.shsupercm.fabric.citresewn.config.BrokenPaths.processingBrokenPaths;
 
+/**
+ * Starts/Stops broken paths logic.
+ * @see BrokenPaths
+ * @see IdentifierMixin
+ */
 @Mixin(ReloadableResourceManagerImpl.class)
 public class ReloadableResourceManagerImplMixin {
     @Shadow @Final private ResourceType type;
 
     @Inject(method = "reload", at = @At("RETURN"))
-    public void onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir) {
+    public void citresewn$brokenpaths$onReload(Executor prepareExecutor, Executor applyExecutor, CompletableFuture<Unit> initialStage, List<ResourcePack> packs, CallbackInfoReturnable<ResourceReload> cir) {
         if (processingBrokenPaths = this.type == ResourceType.CLIENT_RESOURCES) {
             CITResewn.LOG.error("[citresewn] Caution! Broken paths is enabled!");
             cir.getReturnValue().whenComplete().thenRun(() -> processingBrokenPaths = false);

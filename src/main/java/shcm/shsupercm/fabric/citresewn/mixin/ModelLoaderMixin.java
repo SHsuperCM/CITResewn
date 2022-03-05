@@ -10,8 +10,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
 
+/**
+ * Initializes the (re)loading of active cits in the resource manager.
+ * @see ActiveCITs
+ */
 @Mixin(ModelLoader.class)
 public class ModelLoaderMixin {
+    /**
+     * @see ActiveCITs#load(ResourceManager, Profiler)
+     */
     @Inject(method = "<init>", at =
     @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V"))
     private void citresewn$loadCITs(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {

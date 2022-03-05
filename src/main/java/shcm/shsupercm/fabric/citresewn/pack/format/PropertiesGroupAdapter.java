@@ -1,6 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.pack.format;
 
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +19,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
     }
 
     @Override
-    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException {
+    public PropertyGroup load(String packName, Identifier identifier, InputStream is) throws IOException, InvalidIdentifierException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
             String line;
             int linePos = 0, multilineSkip = 0;
