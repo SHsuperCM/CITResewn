@@ -74,6 +74,9 @@ public final class PackParser { private PackParser() {}
                     globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
                 } catch (FileNotFoundException ignored) {
                 } catch (IOException e) {
+                    // fixes log spam from Lambda Better Grass
+                    if (pack.getClass().getSimpleName().equals("LBGResourcePack")) continue;
+
                     CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
                     e.printStackTrace();
                 }

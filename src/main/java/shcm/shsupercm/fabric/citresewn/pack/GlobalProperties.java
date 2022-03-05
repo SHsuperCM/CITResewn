@@ -28,7 +28,7 @@ public class GlobalProperties extends PropertyGroup {
 
     @Override
     public String getExtension() {
-        return "";
+        return ".properties";
     }
 
     @Override
