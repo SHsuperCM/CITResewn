@@ -23,6 +23,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 import shcm.shsupercm.util.logic.Loops;
 
+import javax.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;
@@ -152,21 +153,21 @@ public class TypeEnchantment extends CITType {
         }
 
         @Override
-        public void globalProperty(String key, PropertyValue value) throws Exception {
+        public void globalProperty(String key, @Nullable PropertyValue value) throws Exception {
             switch (key) {
                 case "useGlint" -> {
-                    globalUseGlint = Boolean.parseBoolean(value.value());
+                    globalUseGlint = value == null ? true : Boolean.parseBoolean(value.value());
                     if (!globalUseGlint && !"false".equalsIgnoreCase(value.value()))
                         throw new Exception("Could not parse boolean");
                 }
                 case "cap" -> {
-                    globalCap = Integer.parseInt(value.value());
+                    globalCap = value == null ? Integer.MAX_VALUE : Integer.parseInt(value.value());
                 }
                 case "method" -> {
-                    globalMergeMethod = MergeMethodIntensity.MergeMethod.parse(value.value());
+                    globalMergeMethod = value == null ? MergeMethodIntensity.MergeMethod.AVERAGE : MergeMethodIntensity.MergeMethod.parse(value.value());
                 }
                 case "fade" -> {
-                    globalFade = Float.parseFloat(value.value());
+                    globalFade = value == null ? 0.5f : Float.parseFloat(value.value());
                 }
             }
         }
@@ -182,11 +183,6 @@ public class TypeEnchantment extends CITType {
 
             loaded.clear();
             loadedLayered.clear();
-
-            globalUseGlint = true;
-            globalCap = Integer.MAX_VALUE;
-            globalMergeMethod = MergeMethodIntensity.MergeMethod.AVERAGE;
-            globalFade = 0.5f;
         }
 
         public void apply() {

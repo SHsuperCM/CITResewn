@@ -62,9 +62,16 @@ public class ActiveCITs { private ActiveCITs() {}
 	 */
     public static void load(ResourceManager resourceManager, Profiler profiler) {
         profiler.push("citresewn:disposing");
-        disposeAll();
+        for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
+            disposable.dispose();
+
+        for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
+            typeContainer.unload();
+
         if (active != null) {
-			//todo send reset calls to global properties with null value
+            active.globalProperties.properties.replaceAll((key, value) -> Set.of());
+            active.globalProperties.callHandlers();
+
             active = null;
         }
 
@@ -95,18 +102,5 @@ public class ActiveCITs { private ActiveCITs() {}
 
         if (!cits.isEmpty())
             ActiveCITs.active = active;
-    }
-
-	/**
-	 * Cleans up any registered disposable element.
-	 * @see CITDisposable
-	 * @see CITTypeContainer
-	 */
-    public static void disposeAll() {
-        for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
-            disposable.dispose();
-
-        for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
-            typeContainer.unload();
     }
 }

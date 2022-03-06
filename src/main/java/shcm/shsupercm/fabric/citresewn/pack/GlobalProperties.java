@@ -19,6 +19,7 @@ import java.util.Set;
 
 /**
  * Property group representation of the global cit.properties file.
+ * @see CITGlobalProperties
  * @see PackParser#loadGlobalProperties(ResourceManager, GlobalProperties)
  */
 public class GlobalProperties extends PropertyGroup {
@@ -59,13 +60,12 @@ public class GlobalProperties extends PropertyGroup {
                     for (PropertyValue value : entry.getValue())
                         lastValue = value;
 
-                    if (lastValue != null)
-                        try {
-                            container.getEntrypoint().globalProperty(entry.getKey().path(), lastValue);
-                        } catch (Exception e) {
-                            CITResewn.logErrorLoading("Errored while parsing global properties: Line " + lastValue.position() + " of " + lastValue.propertiesIdentifier() + " in " + lastValue.packName());
-                            e.printStackTrace();
-                        }
+                    try {
+                        container.getEntrypoint().globalProperty(entry.getKey().path(), lastValue);
+                    } catch (Exception e) {
+                        CITResewn.logErrorLoading(lastValue == null ? "Errored while disposing global properties" : "Errored while parsing global properties: Line " + lastValue.position() + " of " + lastValue.propertiesIdentifier() + " in " + lastValue.packName());
+                        e.printStackTrace();
+                    }
                 }
         }
     }
