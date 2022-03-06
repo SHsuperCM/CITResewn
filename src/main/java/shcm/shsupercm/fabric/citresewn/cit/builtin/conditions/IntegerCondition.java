@@ -8,10 +8,23 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import static java.lang.Integer.*;
 
+/**
+ * Common condition parser for integers with optional support for ranges, negatives and percentages.
+ */
 public abstract class IntegerCondition extends CITCondition {
+    /**
+     * Whether this condition should accept given ranges/negatives/percentages.
+     */
     protected final boolean supportsRanges, supportsNegatives, supportsPercentages;
 
+    /**
+     * If ranges are accepted, parsed minimum/maximum integers. If not, minimum is the parsed value.
+     */
     protected int min, max;
+
+    /**
+     * Whether the parsed value is a range/percentage.
+     */
     protected boolean range = false, percentage = false;
 
     protected IntegerCondition(boolean supportsRanges, boolean supportsNegatives, boolean supportsPercentages) {
@@ -20,12 +33,22 @@ public abstract class IntegerCondition extends CITCondition {
         this.supportsPercentages = supportsPercentages;
     }
 
+    /**
+	 * Converts the given context to an integer to compare the parsed value to.
+     * @param context context to retrieve the compared value from
+	 * @return the integer value associated with the given context
+     */
     protected int getValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
+	/**
+	 * Converts the given context to a max integer to be used when percentages are enabled.
+     * @param context context to retrieve the max value from
+	 * @return the max integer value associated with the given context
+     */
     protected int getPercentageTotalValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
     @Override

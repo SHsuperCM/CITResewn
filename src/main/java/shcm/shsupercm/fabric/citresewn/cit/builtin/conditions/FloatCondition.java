@@ -8,10 +8,23 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import static java.lang.Float.*;
 
+/**
+ * Common condition parser for floats with optional support for ranges, negatives and percentages.
+ */
 public abstract class FloatCondition extends CITCondition {
+	/**
+     * Whether this condition should accept given ranges/negatives/percentages.
+     */
     protected final boolean supportsRanges, supportsNegatives, supportsPercentages;
 
+    /**
+     * If ranges are accepted, parsed minimum/maximum float. If not, minimum is the parsed value.
+     */
     protected float min, max;
+	
+    /**
+     * Whether the parsed value is a range/percentage.
+     */
     protected boolean range = false, percentage = false;
 
     protected FloatCondition(boolean supportsRanges, boolean supportsNegatives, boolean supportsPercentages) {
@@ -20,12 +33,22 @@ public abstract class FloatCondition extends CITCondition {
         this.supportsPercentages = supportsPercentages;
     }
 
+    /**
+	 * Converts the given context to a float to compare the parsed value to.
+     * @param context context to retrieve the compared value from
+	 * @return the float value associated with the given context
+     */
     protected float getValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
+	/**
+	 * Converts the given context to a max float to be used when percentages are enabled.
+     * @param context context to retrieve the max value from
+	 * @return the max float value associated with the given context
+     */
     protected float getPercentageTotalValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
     @Override

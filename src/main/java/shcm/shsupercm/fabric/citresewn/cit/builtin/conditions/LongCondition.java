@@ -8,10 +8,23 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import static java.lang.Long.*;
 
+/**
+ * Common condition parser for longs with optional support for ranges, negatives and percentages.
+ */
 public abstract class LongCondition extends CITCondition {
+	/**
+     * Whether this condition should accept given ranges/negatives/percentages.
+     */
     protected final boolean supportsRanges, supportsNegatives, supportsPercentages;
 
+    /**
+     * If ranges are accepted, parsed minimum/maximum longs. If not, minimum is the parsed value.
+     */
     protected long min, max;
+	
+    /**
+     * Whether the parsed value is a range/percentage.
+     */
     protected boolean range = false, percentage = false;
 
     protected LongCondition(boolean supportsRanges, boolean supportsNegatives, boolean supportsPercentages) {
@@ -20,12 +33,22 @@ public abstract class LongCondition extends CITCondition {
         this.supportsPercentages = supportsPercentages;
     }
 
+    /**
+	 * Converts the given context to a long to compare the parsed value to.
+     * @param context context to retrieve the compared value from
+	 * @return the long value associated with the given context
+     */
     protected long getValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
+	/**
+	 * Converts the given context to a max long to be used when percentages are enabled.
+     * @param context context to retrieve the max value from
+	 * @return the max llong value associated with the given context
+     */
     protected long getPercentageTotalValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
     @Override

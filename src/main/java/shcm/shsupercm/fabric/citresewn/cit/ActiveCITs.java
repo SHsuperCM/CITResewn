@@ -8,34 +8,69 @@ import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
+import shcm.shsupercm.fabric.citresewn.mixin.ModelLoaderMixin;
 
 import java.util.*;
 
-public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
+/**
+ * Holds and manages the currently loaded CITs.
+ * @see #getActive()
+ * @see ModelLoaderMixin
+ */
+public class ActiveCITs { private ActiveCITs() {}
+	/**
+	 * @see #load(ResourceManager, Profiler)
+	 * @see #getActive()
+	 * @see #isActive()
+	 */
     private static ActiveCITs active = null;
 
+	/**
+	 * @see #isActive()
+	 * @return the current active CITs manager or null if none are loaded
+	 */
     public static ActiveCITs getActive() {
         return active;
     }
-
+	
+	/**
+	 * @see #getActive()
+	 * @return whether there are active; loaded CITs
+	 */
     public static boolean isActive() {
         return active != null;
     }
 
+	/**
+	 * Currently effective global properties merged from all loaded packs.
+	 */
     public final GlobalProperties globalProperties = new GlobalProperties();
 
+	/**
+	 * All loaded CITs ordered by their type's class and their weight.
+	 */
     public final Map<Class<? extends CITType>, List<CIT<?>>> cits = new IdentityHashMap<>();
 
-    public static ActiveCITs load(ResourceManager resourceManager, Profiler profiler) {
+	/**
+	 * Attempts to load/activate CITs from packs in the given resource manager, disposing of any previously loaded CITs if present.
+	 * @see ModelLoaderMixin
+	 * @see PackParser#loadGlobalProperties(ResourceManager, GlobalProperties)
+	 * @see GlobalProperties#callHandlers()
+	 * @see PackParser#parseCITs(ResourceManager)
+	 * @param resourceManager manager containing resourcepacks with possible CITs
+	 * @param profiler loading profiler that was pushed once into "citresewn:reloading_cits" and would pop after
+	 */
+    public static void load(ResourceManager resourceManager, Profiler profiler) {
         profiler.push("citresewn:disposing");
+        disposeAll();
         if (active != null) {
-            active.dispose();
+			//todo send reset calls to global properties with null value
             active = null;
         }
 
         if (!CITResewnConfig.INSTANCE.enabled) {
             profiler.pop();
-            return null;
+            return;
         }
 
         ActiveCITs active = new ActiveCITs();
@@ -60,12 +95,14 @@ public class ActiveCITs implements CITDisposable { private ActiveCITs() {}
 
         if (!cits.isEmpty())
             ActiveCITs.active = active;
-
-        return ActiveCITs.active;
     }
 
-    @Override
-    public void dispose() {
+	/**
+	 * Cleans up any registered disposable element.
+	 * @see CITDisposable
+	 * @see CITTypeContainer
+	 */
+    public static void disposeAll() {
         for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
             disposable.dispose();
 

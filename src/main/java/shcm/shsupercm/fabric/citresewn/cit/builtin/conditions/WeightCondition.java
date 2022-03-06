@@ -8,6 +8,11 @@ import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
+/**
+ * Internal condition used to determine the priority CITs get tested in.<br>
+ * Weights default to 0 and higher weights get chosen over lower weights.<br>
+ * When two conflicting CITs have the same weight, their path in the resourcepack is used as a tie breaker.
+ */
 public class WeightCondition extends IntegerCondition {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<WeightCondition> CONTAINER = new CITConditionContainer<>(WeightCondition.class, WeightCondition::new,

@@ -6,11 +6,22 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
+/**
+ * Common condition parser for booleans.
+ */
 public abstract class BooleanCondition extends CITCondition {
+	/**
+     * Parsed boolean.
+     */
     protected boolean value;
 
+    /**
+	 * Converts the given context to a boolean to compare the parsed value to.
+     * @param context context to retrieve the compared value from
+	 * @return the boolean value associated with the given context
+     */
     protected boolean getValue(CITContext context) {
-        throw new AssertionError();
+        throw new AssertionError("Not implemented by this condition");
     }
 
     @Override
