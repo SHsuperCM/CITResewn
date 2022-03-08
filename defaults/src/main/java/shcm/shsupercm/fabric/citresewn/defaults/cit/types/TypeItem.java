@@ -438,12 +438,13 @@ public class TypeItem extends CITType {
     }
 
     public BakedModel getItemModel(CITContext context, int seed) {
+        ClientWorld world = context.world instanceof ClientWorld clientWorld ? clientWorld : null;
         // get sub items or bakedModel if no sub item matches @Nullable
-        BakedModel bakedModel = bakedSubModels.apply(this.bakedModel, context.stack, (ClientWorld) context.world, context.entity, seed);
+        BakedModel bakedModel = bakedSubModels.apply(this.bakedModel, context.stack, world, context.entity, seed);
 
         // apply model overrides
         if (bakedModel != null && bakedModel.getOverrides() != null)
-            bakedModel = bakedModel.getOverrides().apply(bakedModel, context.stack, (ClientWorld) context.world, context.entity, seed);
+            bakedModel = bakedModel.getOverrides().apply(bakedModel, context.stack, world, context.entity, seed);
 
         return bakedModel;
     }
