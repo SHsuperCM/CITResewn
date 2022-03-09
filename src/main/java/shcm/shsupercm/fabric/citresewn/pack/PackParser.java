@@ -49,7 +49,10 @@ public final class PackParser { private PackParser() {}
      */
     public static void forEachPack(ResourceManager resourceManager, Consumer<ResourcePack> run) {
         resourceManager.streamResourcePacks().forEachOrdered(pack -> {
-            List<ResourcePack> grouped = PARSE_FAPI_GROUPS.apply(pack);
+            List<ResourcePack> grouped = null;
+            try {
+                grouped = PARSE_FAPI_GROUPS.apply(pack);
+            } catch (Exception ignored) { }
             if (grouped != null)
                 for (ResourcePack subPack : grouped)
                     run.accept(subPack);
