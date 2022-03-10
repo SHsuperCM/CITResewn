@@ -1,13 +1,13 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
-import net.fabricmc.fabric.impl.resource.loader.GroupResourcePack;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resource.*;
+import net.minecraft.resource.Resource;
+import net.minecraft.resource.ResourceManager;
+import net.minecraft.resource.ResourcePack;
+import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.WeightCondition;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.mixin.GroupResourcePackAccessor;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITRegistry;
@@ -18,48 +18,17 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Utility parsing methods for packs.
  */
 public final class PackParser { private PackParser() {}
     /**
-     * Possible CIT roots in resourcepacks ordered in ascending order of priority.
+     * Possible CIT roots in resourcepacks ordered in increasing order of priority.
      */
     private static final String[] ROOTS = new String[] { "mcpatcher", "optifine", "citresewn" };
-
-    /**
-     * Gets all resourcepacks from {@link GroupResourcePack} or null if not a group or Fabric API is not present.
-     */
-    private static final Function<ResourcePack, List<ResourcePack>> PARSE_FAPI_GROUPS =
-            FabricLoader.getInstance().isModLoaded("fabric-resource-loader-v0") ?
-                    parentPack -> parentPack instanceof GroupResourcePack ? ((GroupResourcePackAccessor) parentPack).getPacks() : null
-                    : parentPack -> null;
-
-    /**
-     * Iterates over each loaded pack taking into account grouped packs.
-     * @param resourceManager the manager that contains the packs
-     * @param run resourcepack pack consumer
-     */
-    public static void forEachPack(ResourceManager resourceManager, Consumer<ResourcePack> run) {
-        resourceManager.streamResourcePacks().forEachOrdered(pack -> {
-            List<ResourcePack> grouped = null;
-            try {
-                grouped = PARSE_FAPI_GROUPS.apply(pack);
-            } catch (Exception ignored) { }
-            if (grouped != null)
-                for (ResourcePack subPack : grouped)
-                    run.accept(subPack);
-            else
-                run.accept(pack);
-        });
-    }
 
     /**
      * Loads a merged global property group from loaded packs making sure to respect order.
@@ -70,21 +39,21 @@ public final class PackParser { private PackParser() {}
      * @return globalProperties
      */
     public static GlobalProperties loadGlobalProperties(ResourceManager resourceManager, GlobalProperties globalProperties) {
-        forEachPack(resourceManager, pack -> {
-            for (String root : ROOTS) {
-                Identifier identifier = new Identifier("minecraft", root + "/cit.properties");
-                try {
-                    globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
-                } catch (FileNotFoundException ignored) {
-                } catch (IOException e) {
-                    // fixes log spam from Lambda Better Grass
-                    if (pack.getClass().getSimpleName().equals("LBGResourcePack")) continue;
+        for (ResourcePack pack : resourceManager.streamResourcePacks().collect(Collectors.toList()))
+            for (String namespace : pack.getNamespaces(ResourceType.CLIENT_RESOURCES))
+                for (String root : ROOTS) {
+                    Identifier identifier = new Identifier(namespace, root + "/cit.properties");
+                    try {
+                        globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
+                    } catch (FileNotFoundException ignored) {
+                    } catch (IOException e) {
+                        // fixes log spam from Lambda Better Grass todo move to a compat mixin
+                        if (pack.getClass().getSimpleName().equals("LBGResourcePack")) continue;
 
-                    CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
-                    e.printStackTrace();
+                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
+                        e.printStackTrace();
+                    }
                 }
-            }
-        });
         return globalProperties;
     }
 
