@@ -33,6 +33,7 @@ public class CITResewnDefaultsConfig {
         Gson gson = new Gson();
         JsonWriter writer = null;
         try {
+            FILE.getParentFile().mkdirs();
             writer = gson.newJsonWriter(new FileWriter(FILE));
             writer.setIndent("    ");
 
