@@ -40,9 +40,9 @@ public class CITResewnCommand {
     public static boolean openConfig = false;
 
     /**
-     * Registers
+     * Registers all of CIT Resewn's commands.
      */
-    static void register() {
+    public static void register() {
         ClientCommandManager.DISPATCHER.register(literal("citresewn")
                 .executes(context -> { //citresewn
                     context.getSource().sendFeedback(of("CIT Resewn v" + FabricLoader.getInstance().getModContainer("citresewn").orElseThrow().getMetadata().getVersion() + ":"));

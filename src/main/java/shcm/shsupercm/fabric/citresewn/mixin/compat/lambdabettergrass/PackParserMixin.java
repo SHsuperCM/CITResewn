@@ -8,7 +8,7 @@ import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 import java.io.IOException;
 
 @SuppressWarnings("UnresolvedMixinReference")
-@Mixin(PackParser.class)
+@Mixin(value = PackParser.class, remap = false)
 public class PackParserMixin {
     @ModifyVariable(method = "loadGlobalProperties(Lnet/minecraft/resource/ResourceManager;Lshcm/shsupercm/fabric/citresewn/pack/GlobalProperties;)Lshcm/shsupercm/fabric/citresewn/pack/GlobalProperties;", at =
     @At(value = "INVOKE", target = "shcm/shsupercm/fabric/citresewn/CITResewn.logErrorLoading(Ljava/lang/String;)V"))
