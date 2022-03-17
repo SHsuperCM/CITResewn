@@ -1,9 +1,12 @@
 package shcm.shsupercm.fabric.citresewn.config;
 
+import net.fabricmc.loader.api.FabricLoader;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +23,11 @@ public class CITResewnMixinConfiguration implements IMixinConfigPlugin {
      */
     private boolean broken_paths;
 
+    /**
+     * Set of mod ids that had compatibility mixins loaded for them.
+     */
+    private Set<String> compatMods = new HashSet<>();
+
     @Override
     public void onLoad(String mixinPackage) {
         CITResewnConfig launchConfig = CITResewnConfig.read();
@@ -35,6 +43,15 @@ public class CITResewnMixinConfiguration implements IMixinConfigPlugin {
 
         if (mixinClassName.startsWith("broken_paths"))
             return broken_paths;
+
+        if (mixinClassName.startsWith("compat.")) {
+            mixinClassName = mixinClassName.substring(7);
+            String modid = mixinClassName.substring(0, mixinClassName.indexOf('.'));
+            boolean loaded = FabricLoader.getInstance().isModLoaded(modid);
+            if (loaded && compatMods.add(modid))
+                CITResewn.info("Loading compatibility for " + modid);
+            return loaded;
+        }
 
         return true;
     }
