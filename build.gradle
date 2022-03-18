@@ -32,11 +32,6 @@ allprojects {
         modCompileOnly("me.shedaniel.cloth:cloth-config-fabric:${project.cloth}") {
             exclude(group: "net.fabricmc.fabric-api")
         }
-
-        //modCompileOnly("curse.maven:cosmeticarmor-436659:${project.cosmetic_armor}")
-
-
-        //fletchingTable.shutUpDrasil18()
     }
 
     fletchingTable {
