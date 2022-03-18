@@ -500,17 +500,11 @@ public class TypeItem extends CITType {
         }
 
         public CIT<TypeItem> getRealTimeCIT(CITContext context) {
-            ((CITCacheItem) (Object) context.stack).citresewn$setMojankCITTypeItem(false);
-
             Set<CIT<TypeItem>> loadedForItemType = loadedTyped.get(context.stack.getItem());
             if (loadedForItemType != null)
                 for (CIT<TypeItem> cit : loadedForItemType)
-                    if (cit.test(context)) {
-                        if (context.stack.isOf(Items.TRIDENT) || context.stack.isOf(Items.SPYGLASS))
-                            ((CITCacheItem) (Object) context.stack).citresewn$setMojankCITTypeItem(true);
-
+                    if (cit.test(context))
                         return cit;
-                    }
 
             return null;
         }
@@ -518,8 +512,9 @@ public class TypeItem extends CITType {
 
     public interface CITCacheItem {
         CITCache.Single<TypeItem> citresewn$getCacheTypeItem();
+    }
 
-        boolean citresewn$isMojankCITTypeItem();
-        void citresewn$setMojankCITTypeItem(boolean mojankCIT);
+    public interface BakedModelManagerMixinAccess {
+        void citresewn$forceMojankModel(BakedModel model);
     }
 }
