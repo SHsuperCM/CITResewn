@@ -1,1 +1,1 @@
-Complete rewrite of the mod!
+ - Fixed incompatibility with Secret Rooms and LambdaBetterGrass.
