@@ -1,0 +1,13 @@
+archivesBaseName = "citresewn-defaults"
+
+dependencies {
+	implementation project(path: ":", configuration: "namedElements")
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/citresewn-defaults.accesswidener")
+
+	runConfigs.configureEach {
+		ideConfigGenerated = true
+	}
+}

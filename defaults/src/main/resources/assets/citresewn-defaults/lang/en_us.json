@@ -1,0 +1,7 @@
+{
+  "config.citresewn-defaults.title": "CIT Resewn: Defaults",
+  "config.citresewn-defaults.tooltip": "Go to the defaults' config menu",
+
+  "config.citresewn-defaults.type_enchantment_scroll_multiplier.title": "Type Enchantment: Scroll multiplier",
+  "config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip": "A general multiplier for how fast cit enchantment glints scroll"
+}

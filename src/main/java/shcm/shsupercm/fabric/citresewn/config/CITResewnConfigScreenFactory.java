@@ -3,15 +3,33 @@ package shcm.shsupercm.fabric.citresewn.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
+import java.util.function.Function;
+
+/**
+ * Cloth Config integration to CIT Resewn's config
+ * @see CITResewnConfig
+ */
 public class CITResewnConfigScreenFactory {
+    /**
+     * Used to get CIT Resewn - Defaults's Cloth Config implementation.
+     */
+    public static final String DEFAULTS_CONFIG_ENTRYPOINT = "citresewn-defaults:config_screen";
+
+    /**
+     * Creates a Cloth Config screen for the current active config instance.
+     * @param parent parent to return to from the config screen
+     * @return the config screen
+     * @throws NoClassDefFoundError if Cloth Config is not present
+     */
     public static Screen create(Screen parent) {
-        CITResewnConfig currentConfig = CITResewnConfig.INSTANCE(), defaultConfig = new CITResewnConfig();
+        CITResewnConfig currentConfig = CITResewnConfig.INSTANCE, defaultConfig = new CITResewnConfig();
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
@@ -32,6 +50,24 @@ public class CITResewnConfigScreenFactory {
                 .setDefaultValue(defaultConfig.enabled)
                 .build());
 
+        if (FabricLoader.getInstance().isModLoaded("citresewn-defaults")) {
+            class CurrentScreen { boolean prevToggle = false; } final CurrentScreen currentScreen = new CurrentScreen();
+            category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn-defaults.title"), false)
+                    .setTooltip(new TranslatableText("config.citresewn-defaults.tooltip"))
+
+                    .setYesNoTextSupplier((b) -> {
+                        if (b != currentScreen.prevToggle) {
+                            //noinspection unchecked
+                            MinecraftClient.getInstance().setScreen((Screen) FabricLoader.getInstance().getEntrypoints(DEFAULTS_CONFIG_ENTRYPOINT, Function.class).stream().findAny().orElseThrow().apply(create(parent)));
+
+                            currentScreen.prevToggle = b;
+                        }
+
+                        return new TranslatableText("config.citresewn.configure");
+                    })
+                    .build());
+        }
+
         category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_errors.title"), currentConfig.mute_errors)
                 .setTooltip(new TranslatableText("config.citresewn.mute_errors.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.mute_errors = newConfig)
@@ -44,17 +80,10 @@ public class CITResewnConfigScreenFactory {
                 .setDefaultValue(defaultConfig.mute_warns)
                 .build());
 
-        category.addEntry(entryBuilder.startFloatField(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.title"), currentConfig.citenchantment_scroll_multiplier)
-                .setTooltip(new TranslatableText("config.citresewn.citenchantment_scroll_multiplier.tooltip"))
-                .setSaveConsumer(newConfig -> currentConfig.citenchantment_scroll_multiplier = newConfig)
-                .setDefaultValue(defaultConfig.citenchantment_scroll_multiplier)
-                .setMin(0f)
-                .build());
-
         category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)
                 .setTooltip(new TranslatableText("config.citresewn.cache_ms.tooltip"))
                 .setSaveConsumer(newConfig -> currentConfig.cache_ms = newConfig * 50)
-                .setDefaultValue(currentConfig.cache_ms / 50)
+                .setDefaultValue(defaultConfig.cache_ms / 50)
                 .setTextGetter(ticks -> {
                     if (ticks <= 1)
                         return new TranslatableText("config.citresewn.cache_ms.ticks." + ticks).formatted(Formatting.AQUA);

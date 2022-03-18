@@ -6,12 +6,25 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.config.BrokenPaths;
 
-/* if (CITResewnConfig.read().broken_paths) */ @Mixin(Identifier.class)
+import static shcm.shsupercm.fabric.citresewn.config.BrokenPaths.processingBrokenPaths;
+
+/**
+ * Applies broken paths logic when active.
+ * @see BrokenPaths
+ * @see ReloadableResourceManagerImplMixin
+ */
+@Mixin(Identifier.class)
 public class IdentifierMixin {
-    @Inject(method = "isPathValid", cancellable = true, at = @At("HEAD"))
-    private static void processBrokenPaths(String path, CallbackInfoReturnable<Boolean> cir) {
-        if (CITResewn.INSTANCE != null && CITResewn.INSTANCE.processingBrokenPaths)
+    @Inject(method = "isPathValid", cancellable = true, at = @At("RETURN"))
+    private static void citresewn$brokenpaths$processBrokenPaths(String path, CallbackInfoReturnable<Boolean> cir) {
+        if (!processingBrokenPaths)
+            return;
+
+        if (!cir.getReturnValue()) {
+            CITResewn.logWarnLoading("Warning: Encountered broken path: \"" + path + "\"");
             cir.setReturnValue(true);
+        }
     }
 }

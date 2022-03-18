@@ -2,23 +2,20 @@
   "schemaVersion": 1,
   "id": "citresewn",
   "version": "${version}",
-  "name": "CITResewn",
+  "name": "CIT Resewn",
   "description": "Re-implements MCPatcher's CIT",
   "authors": [
     "SHsuperCM"
   ],
   "license": "MIT",
   "icon": "assets/citresewn/logo.png",
+  "contact": {
+    "homepage": "https://citresewn.shcm.io/",
+    "sources": "https://github.com/SHsuperCM/CITResewn",
+    "issues": "https://github.com/SHsuperCM/CITResewn/issues"
+  },
 
   "environment": "client",
-  "entrypoints": {
-    "client": [
-      "shcm.shsupercm.fabric.citresewn.CITResewn"
-    ],
-    "modmenu": [
-      "shcm.shsupercm.fabric.citresewn.config.CITResewnModMenu"
-    ]
-  },
   "accessWidener" : "citresewn.accesswidener",
   "mixins": [
     "citresewn.mixins.json"
@@ -27,5 +24,12 @@
     "fabric": "*",
     "fabricloader": "*",
     "minecraft": "1.18.x"
+  },
+  "recommends": {
+    "modmenu": "*",
+    "cloth-config2": "*"
+  },
+  "breaks": {
+    "canvas": "*"
   }
 }
