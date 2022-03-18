@@ -17,7 +17,6 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,9 +43,10 @@ public final class PackParser { private PackParser() {}
                 for (String root : ROOTS) {
                     Identifier identifier = new Identifier(namespace, root + "/cit.properties");
                     try {
-                        globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
+                        if (pack.contains(ResourceType.CLIENT_RESOURCES, identifier))
+                            globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
                     } catch (FileNotFoundException ignored) {
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
                         e.printStackTrace();
                     }
