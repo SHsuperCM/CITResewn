@@ -1,6 +1,9 @@
+import java.nio.file.Files
+
 plugins {
     id 'fabric-loom' version '0.11-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.4' apply false
+    id "com.modrinth.minotaur" version "2.+" apply false
 }
 
 version = project.mod_version + "+" + project.minecraft_version
@@ -67,6 +70,8 @@ allprojects {
     }
 }
 
+apply plugin: "com.modrinth.minotaur"
+
 loom {
     accessWidenerPath = file("src/main/resources/citresewn.accesswidener")
 }
@@ -83,4 +88,14 @@ java {
 
 sourcesJar {
     from project("defaults:").sourceSets.main.java.srcDirs
+}
+modrinth {
+    token = TOKEN_MODRINTH
+    projectId = "otVJckYQ"
+    uploadFile = remapJar
+    changelog = Files.readString(projectDir.toPath().resolve("Changelog.md"))
+    versionNumber = version
+    versionName = "v" + version
+    additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
+    gameVersions = ["1.18", "1.18.1", "1.18.2"]
 }
