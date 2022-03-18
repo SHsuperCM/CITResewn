@@ -3,7 +3,8 @@ import java.nio.file.Files
 plugins {
     id 'fabric-loom' version '0.11-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.4' apply false
-    id "com.modrinth.minotaur" version "2.+" apply false
+    id 'com.modrinth.minotaur' version '2.+' apply false
+    id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 
 version = project.mod_version + "+" + project.minecraft_version
@@ -70,7 +71,8 @@ allprojects {
     }
 }
 
-apply plugin: "com.modrinth.minotaur"
+apply plugin: 'com.modrinth.minotaur'
+apply plugin: 'com.matthewprenger.cursegradle'
 
 loom {
     accessWidenerPath = file("src/main/resources/citresewn.accesswidener")
@@ -89,6 +91,7 @@ java {
 sourcesJar {
     from project("defaults:").sourceSets.main.java.srcDirs
 }
+
 modrinth {
     token = TOKEN_MODRINTH
     projectId = "otVJckYQ"
@@ -98,4 +101,24 @@ modrinth {
     versionName = "v" + version
     additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
     gameVersions = ["1.18", "1.18.1", "1.18.2"]
+}
+
+curseforge {
+    apiKey = TOKEN_CURSEFORGE
+    project {
+        id = '521427'
+        changelogType = 'markdown'
+        changelog = file('Changelog.md')
+        releaseType = 'release'
+        mainArtifact(remapJar) {
+            displayName = "v" + version
+        }
+        addGameVersion 'Fabric'
+        addGameVersion '1.18'
+        addGameVersion '1.18.1'
+        addGameVersion '1.18.2'
+    }
+    options {
+        forgeGradleIntegration = false
+    }
 }
