@@ -12,7 +12,7 @@ public interface CITDisposable {
     String ENTRYPOINT = "citresewn:dispose";
 
     /**
-     * Invoked just before reloading CITs. Use to clean up and changes CIT loading made.
+     * Invoked just before reloading CITs. Use to clean up effects and changes that CIT loading made.
      */
     void dispose();
 }
