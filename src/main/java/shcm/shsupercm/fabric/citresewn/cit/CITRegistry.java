@@ -92,7 +92,7 @@ public final class CITRegistry { private CITRegistry(){}
         CITConditionContainer<? extends CITCondition> conditionContainer = CONDITIONS.get(key);
         if (conditionContainer == null) {
             logWarnLoading(properties.messageWithDescriptorOf("Unknown condition type \"" + key.toString() + "\"", value.position()));
-            return new ConstantCondition(false);
+            return ConstantCondition.FALSE;
         }
 
         CITCondition condition = conditionContainer.createCondition.get();
