@@ -17,7 +17,7 @@ import java.util.List;
 public class WeightCondition extends IntegerCondition {
     @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<WeightCondition> CONTAINER = new CITConditionContainer<>(WeightCondition.class, WeightCondition::new,
-            "weight");
+            "weight", "cit_weight", "citWeight");
 
     public WeightCondition() {
         super(false, true, false);
