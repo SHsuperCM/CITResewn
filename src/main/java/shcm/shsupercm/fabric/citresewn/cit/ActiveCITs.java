@@ -5,6 +5,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.*;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
@@ -87,10 +88,15 @@ public class ActiveCITs { private ActiveCITs() {}
 
         profiler.swap("citresewn:load_cits");
         List<CIT<?>> cits = PackParser.parseCITs(resourceManager);
+
+        FallbackCondition.apply(cits);
+
         for (CIT<?> cit : cits)
             active.cits.computeIfAbsent(cit.type.getClass(), type -> new ArrayList<>()).add(cit);
+
         for (Map.Entry<Class<? extends CITType>, List<CIT<?>>> entry : active.cits.entrySet()) {
-            entry.getValue().sort(Comparator.<CIT<?>>comparingInt(cit -> cit.weight).reversed().thenComparing(cit -> cit.propertiesIdentifier.toString()));
+            WeightCondition.apply(entry.getValue());
+
             for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
                 if (typeContainer.type == entry.getKey()) {
                     typeContainer.loadUntyped(entry.getValue());

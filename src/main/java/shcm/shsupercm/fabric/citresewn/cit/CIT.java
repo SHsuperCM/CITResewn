@@ -32,12 +32,18 @@ public class CIT<T extends CITType> {
      */
     public final int weight;
 
-    public CIT(Identifier propertiesIdentifier, String packName, T type, CITCondition[] conditions, int weight) {
+    /**
+     * Identifier of the cit to fallback to if this one doesn't load.
+     */
+    public final Identifier fallback;
+
+    public CIT(Identifier propertiesIdentifier, String packName, T type, CITCondition[] conditions, int weight, Identifier fallback) {
         this.propertiesIdentifier = propertiesIdentifier;
         this.packName = packName;
         this.type = type;
         this.conditions = conditions;
         this.weight = weight;
+        this.fallback = fallback;
     }
 
     /**

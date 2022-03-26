@@ -6,6 +6,7 @@ import net.minecraft.resource.ResourcePack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.FallbackCondition;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.WeightCondition;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
@@ -111,10 +112,14 @@ public final class PackParser { private PackParser() {}
                                     siblingCondition);
 
         WeightCondition weight = new WeightCondition();
+        FallbackCondition fallback = new FallbackCondition();
 
         conditions.removeIf(condition -> {
             if (condition instanceof WeightCondition weightCondition) {
                 weight.setWeight(weightCondition.getWeight());
+                return true;
+            } else if (condition instanceof FallbackCondition fallbackCondition) {
+                fallback.setFallback(fallbackCondition.getFallback());
                 return true;
             }
 
@@ -123,6 +128,6 @@ public final class PackParser { private PackParser() {}
 
         citType.load(conditions, properties, resourceManager);
 
-        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.getWeight());
+        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.getWeight(), fallback.getFallback());
     }
 }
