@@ -1,6 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.util.Hand;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.EnumCondition;
@@ -16,18 +17,12 @@ public class ConditionHand extends EnumCondition<ConditionHand.Hand> {
 
     @Override
     protected Hand getValue(CITContext context) {
-        if (context.entity.getMainHandStack() == context.stack)
-            return Hand.MAINHAND;
-        if (context.entity.getOffHandStack() == context.stack)
-            return Hand.OFFHAND;
-
-        return null;
+        return context.entity != null && context.entity.getOffHandStack() == context.stack ? Hand.OFFHAND : Hand.MAINHAND;
     }
 
     @Override
     public boolean test(CITContext context) {
-        Hand hand = getValue(context);
-        return this.value == hand || (this.value == Hand.ANY && hand != null);
+        return this.value == Hand.ANY || this.value == getValue(context);
     }
 
     protected enum Hand implements EnumCondition.Aliased {
