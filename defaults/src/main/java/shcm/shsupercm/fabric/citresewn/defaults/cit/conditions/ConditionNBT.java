@@ -226,7 +226,7 @@ public class ConditionNBT extends CITCondition {
 
         public static class IRegexMatcher extends RegexMatcher {
             public IRegexMatcher(String pattern) {
-                super(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE));
+                super(Pattern.compile(pattern, Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE));
             }
         }
 
