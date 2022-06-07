@@ -27,7 +27,7 @@ allprojects {
 
         modImplementation fabricApi.module("fabric-api-base", "${project.fabric_api}")
         modImplementation fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}")
-        modImplementation fabricApi.module("fabric-command-api-v1", "${project.fabric_api}")
+        modImplementation fabricApi.module("fabric-command-api-v2", "${project.fabric_api}")
 
         modCompileOnly("com.terraformersmc:modmenu:${project.modmenu}") {
             exclude(group: "net.fabricmc.fabric-api")
@@ -93,7 +93,7 @@ sourcesJar {
 }
 
 modrinth {
-    token = TOKEN_MODRINTH
+//    token = TOKEN_MODRINTH
     projectId = "otVJckYQ"
     uploadFile = remapJar
     changelog = Files.readString(projectDir.toPath().resolve("Changelog.md"))
@@ -104,7 +104,7 @@ modrinth {
 }
 
 curseforge {
-    apiKey = TOKEN_CURSEFORGE
+//    apiKey = TOKEN_CURSEFORGE
     project {
         id = '521427'
         changelogType = 'markdown'

@@ -6,8 +6,9 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.TextContent;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 
 import java.util.function.Function;
@@ -33,14 +34,15 @@ public class CITResewnConfigScreenFactory {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(new TranslatableText("config.citresewn.title"))
+                .setTitle(MutableText.of(new TranslatableTextContent("config.citresewn.title")))
                 .setSavingRunnable(currentConfig::write);
 
-        ConfigCategory category = builder.getOrCreateCategory(new LiteralText(""));
+        ConfigCategory category = builder.getOrCreateCategory(MutableText.of(TextContent.EMPTY));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.enabled.title"), currentConfig.enabled)
-                .setTooltip(new TranslatableText("config.citresewn.enabled.tooltip"))
+        category.addEntry(entryBuilder.startBooleanToggle(MutableText.of(new TranslatableTextContent(
+                "config.citresewn.enabled.title")), currentConfig.enabled)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn.enabled.tooltip")))
                 .setSaveConsumer(newConfig -> {
                     if (currentConfig.enabled != newConfig) {
                         currentConfig.enabled = newConfig;
@@ -52,8 +54,8 @@ public class CITResewnConfigScreenFactory {
 
         if (FabricLoader.getInstance().isModLoaded("citresewn-defaults")) {
             class CurrentScreen { boolean prevToggle = false; } final CurrentScreen currentScreen = new CurrentScreen();
-            category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn-defaults.title"), false)
-                    .setTooltip(new TranslatableText("config.citresewn-defaults.tooltip"))
+            category.addEntry(entryBuilder.startBooleanToggle(MutableText.of(new TranslatableTextContent("config.citresewn-defaults.title")), false)
+                    .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn-defaults.tooltip")))
 
                     .setYesNoTextSupplier((b) -> {
                         if (b != currentScreen.prevToggle) {
@@ -63,30 +65,30 @@ public class CITResewnConfigScreenFactory {
                             currentScreen.prevToggle = b;
                         }
 
-                        return new TranslatableText("config.citresewn.configure");
+                        return MutableText.of(new TranslatableTextContent("config.citresewn.configure"));
                     })
                     .build());
         }
 
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_errors.title"), currentConfig.mute_errors)
-                .setTooltip(new TranslatableText("config.citresewn.mute_errors.tooltip"))
+        category.addEntry(entryBuilder.startBooleanToggle(MutableText.of(new TranslatableTextContent("config.citresewn.mute_errors.title")), currentConfig.mute_errors)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn.mute_errors.tooltip")))
                 .setSaveConsumer(newConfig -> currentConfig.mute_errors = newConfig)
                 .setDefaultValue(defaultConfig.mute_errors)
                 .build());
 
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.mute_warns.title"), currentConfig.mute_warns)
-                .setTooltip(new TranslatableText("config.citresewn.mute_warns.tooltip"))
+        category.addEntry(entryBuilder.startBooleanToggle(MutableText.of(new TranslatableTextContent("config.citresewn.mute_warns.title")), currentConfig.mute_warns)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn.mute_warns.tooltip")))
                 .setSaveConsumer(newConfig -> currentConfig.mute_warns = newConfig)
                 .setDefaultValue(defaultConfig.mute_warns)
                 .build());
 
-        category.addEntry(entryBuilder.startIntSlider(new TranslatableText("config.citresewn.cache_ms.title"), currentConfig.cache_ms / 50, 0, 5 * 20)
-                .setTooltip(new TranslatableText("config.citresewn.cache_ms.tooltip"))
+        category.addEntry(entryBuilder.startIntSlider(MutableText.of(new TranslatableTextContent("config.citresewn.cache_ms.title")), currentConfig.cache_ms / 50, 0, 5 * 20)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn.cache_ms.tooltip")))
                 .setSaveConsumer(newConfig -> currentConfig.cache_ms = newConfig * 50)
                 .setDefaultValue(defaultConfig.cache_ms / 50)
                 .setTextGetter(ticks -> {
                     if (ticks <= 1)
-                        return new TranslatableText("config.citresewn.cache_ms.ticks." + ticks).formatted(Formatting.AQUA);
+                        return MutableText.of(new TranslatableTextContent("config.citresewn.cache_ms.ticks." + ticks)).formatted(Formatting.AQUA);
 
                     Formatting color = Formatting.DARK_RED;
 
@@ -95,12 +97,12 @@ public class CITResewnConfigScreenFactory {
                     if (ticks <= 10) color = Formatting.DARK_GREEN;
                     if (ticks <= 5) color = Formatting.GREEN;
 
-                    return new TranslatableText("config.citresewn.cache_ms.ticks.any", ticks).formatted(color);
+                    return MutableText.of(new TranslatableTextContent("config.citresewn.cache_ms.ticks.any", ticks)).formatted(color);
                 })
                 .build());
 
-        category.addEntry(entryBuilder.startBooleanToggle(new TranslatableText("config.citresewn.broken_paths.title"), currentConfig.broken_paths)
-                .setTooltip(new TranslatableText("config.citresewn.broken_paths.tooltip"))
+        category.addEntry(entryBuilder.startBooleanToggle(MutableText.of(new TranslatableTextContent("config.citresewn.broken_paths.title")), currentConfig.broken_paths)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn.broken_paths.tooltip")))
                 .setSaveConsumer(newConfig -> currentConfig.broken_paths = newConfig)
                 .setDefaultValue(defaultConfig.broken_paths)
                 .requireRestart()

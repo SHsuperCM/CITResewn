@@ -21,9 +21,8 @@
     "citresewn.mixins.json"
   ],
   "depends": {
-    "fabric": "*",
     "fabricloader": "*",
-    "minecraft": "1.18.x"
+    "minecraft": "1.19.x"
   },
   "recommends": {
     "modmenu": "*",
