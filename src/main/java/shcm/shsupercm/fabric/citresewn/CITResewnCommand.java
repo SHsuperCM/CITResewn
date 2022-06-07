@@ -43,7 +43,7 @@ public class CITResewnCommand {
      * Registers all of CIT Resewn's commands.
      */
     public static void register() {
-        ClientCommandManager.getActiveDispatcher().register(literal("citresewn")
+        ClientCommandManager.literal("citresewn")
                 .executes(context -> { //citresewn
                     context.getSource().sendFeedback(of("CIT Resewn v" + FabricLoader.getInstance().getModContainer("citresewn").orElseThrow().getMetadata().getVersion() + ":"));
                     context.getSource().sendFeedback(of("  Registered: " + CITRegistry.TYPES.values().stream().distinct().count() + " types and " + CITRegistry.CONDITIONS.values().stream().distinct().count() + " conditions"));
@@ -113,8 +113,7 @@ public class CITResewnCommand {
                                         })
                                 )
                         )
-                )
-        );
+                );
     }
 
     /**

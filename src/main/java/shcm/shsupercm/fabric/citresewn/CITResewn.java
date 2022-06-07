@@ -20,7 +20,7 @@ public class CITResewn implements ClientModInitializer {
     public void onInitializeClient() {
         CITRegistry.registerAll();
 
-        if (FabricLoader.getInstance().isModLoaded("fabric-command-api-v1"))
+        if (FabricLoader.getInstance().isModLoaded("fabric-command-api-v2"))
             CITResewnCommand.register();
     }
 
