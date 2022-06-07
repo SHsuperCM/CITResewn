@@ -5,8 +5,9 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfigScreenFactory;
 
 public class CITResewnDefaultsConfigScreenFactory {
@@ -16,14 +17,14 @@ public class CITResewnDefaultsConfigScreenFactory {
 
         ConfigBuilder builder = ConfigBuilder.create()
                 .setParentScreen(parent)
-                .setTitle(new TranslatableText("config.citresewn-defaults.title"))
+                .setTitle(MutableText.of(new TranslatableTextContent("config.citresewn-defaults.title")))
                 .setSavingRunnable(currentConfig::write);
 
-        ConfigCategory category = builder.getOrCreateCategory(new LiteralText(""));
+        ConfigCategory category = builder.getOrCreateCategory(Text.empty());
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
-        category.addEntry(entryBuilder.startFloatField(new TranslatableText("config.citresewn-defaults.type_enchantment_scroll_multiplier.title"), currentConfig.type_enchantment_scroll_multiplier)
-                .setTooltip(new TranslatableText("config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip"))
+        category.addEntry(entryBuilder.startFloatField(MutableText.of(new TranslatableTextContent("config.citresewn-defaults.type_enchantment_scroll_multiplier.title")), currentConfig.type_enchantment_scroll_multiplier)
+                .setTooltip(MutableText.of(new TranslatableTextContent("config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip")))
                 .setSaveConsumer(newConfig -> currentConfig.type_enchantment_scroll_multiplier = newConfig)
                 .setDefaultValue(defaultConfig.type_enchantment_scroll_multiplier)
                 .build());

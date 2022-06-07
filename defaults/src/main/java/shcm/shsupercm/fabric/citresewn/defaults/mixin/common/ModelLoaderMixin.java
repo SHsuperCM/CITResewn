@@ -38,7 +38,7 @@ public class ModelLoaderMixin {
             InputStream is = null;
             Resource resource = null;
             try {
-                JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(id)).getInputStream(), StandardCharsets.UTF_8));
+                JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResourceOrThrow(id)).getInputStream(), StandardCharsets.UTF_8));
                 json.id = id.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
 
@@ -80,7 +80,7 @@ public class ModelLoaderMixin {
                 cir.setReturnValue(json);
             } catch (Exception ignored) {
             } finally {
-                IOUtils.closeQuietly(is, resource);
+                IOUtils.closeQuietly(is);
             }
         }
     }

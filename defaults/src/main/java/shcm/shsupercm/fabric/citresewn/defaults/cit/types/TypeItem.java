@@ -185,7 +185,8 @@ public class TypeItem extends CITType {
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
-                        try (Resource itemModelResource = resourceManager.getResource(itemModelIdentifier); Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
+                        Resource itemModelResource = resourceManager.getResourceOrThrow(itemModelIdentifier);
+                        try (Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
                             if (itemModelJson.getOverrides() != null && !itemModelJson.getOverrides().isEmpty())
@@ -263,7 +264,8 @@ public class TypeItem extends CITType {
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
-                        try (Resource itemModelResource = resourceManager.getResource(itemModelIdentifier); Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
+                        Resource itemModelResource = resourceManager.getResourceOrThrow(itemModelIdentifier);
+                        try (Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
                             if (itemModelJson.getOverrides() != null && !itemModelJson.getOverrides().isEmpty())
@@ -308,7 +310,7 @@ public class TypeItem extends CITType {
             InputStream is = null;
             Resource resource = null;
             try {
-                json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(identifier)).getInputStream(), StandardCharsets.UTF_8));
+                json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResourceOrThrow(identifier)).getInputStream(), StandardCharsets.UTF_8));
                 json.id = assetIdentifier.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
 
@@ -369,7 +371,7 @@ public class TypeItem extends CITType {
 
                 return json;
             } finally {
-                IOUtils.closeQuietly(is, resource);
+                IOUtils.closeQuietly(is);
             }
         } else if (identifier.getPath().endsWith(".png")) {
             json = getModelForFirstItemType(resourceManager);
@@ -421,7 +423,7 @@ public class TypeItem extends CITType {
         Identifier firstItemIdentifier = Registry.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
         Resource itemModelResource = null;
         try {
-            JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
+            JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResourceOrThrow(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
 
             if (!GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier)) // cit generated duplicate
                 firstItemModelIdentifier = new Identifier(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
@@ -432,8 +434,6 @@ public class TypeItem extends CITType {
             return json;
         } catch (Exception e) {
             return null;
-        } finally {
-            IOUtils.closeQuietly(itemModelResource);
         }
     }
 
