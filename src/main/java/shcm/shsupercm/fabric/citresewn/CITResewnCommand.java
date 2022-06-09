@@ -9,6 +9,7 @@ import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 import shcm.shsupercm.fabric.citresewn.cit.*;
@@ -43,8 +44,9 @@ public class CITResewnCommand {
      * Registers all of CIT Resewn's commands.
      */
     public static void register() {
-        ClientCommandManager.getActiveDispatcher().register(literal("citresewn")
-                .executes(context -> { //citresewn
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
+            dispatcher.register(
+                ClientCommandManager.literal("citresewn").executes(context -> {
                     context.getSource().sendFeedback(of("CIT Resewn v" + FabricLoader.getInstance().getModContainer("citresewn").orElseThrow().getMetadata().getVersion() + ":"));
                     context.getSource().sendFeedback(of("  Registered: " + CITRegistry.TYPES.values().stream().distinct().count() + " types and " + CITRegistry.CONDITIONS.values().stream().distinct().count() + " conditions"));
 
@@ -113,8 +115,9 @@ public class CITResewnCommand {
                                         })
                                 )
                         )
-                )
-        );
+                  )
+            );
+        });
     }
 
     /**
