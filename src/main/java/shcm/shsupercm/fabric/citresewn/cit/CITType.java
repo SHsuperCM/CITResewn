@@ -55,7 +55,7 @@ public abstract class CITType {
             if (!path.endsWith(extension))
                 path = path + extension;
             Identifier pathIdentifier = new Identifier(rootIdentifier.getNamespace(), path);
-            return resourceManager.containsResource(pathIdentifier) ? pathIdentifier : null;
+            return resourceManager.getResource(pathIdentifier).isPresent()? pathIdentifier: null;
         }
 
         Identifier pathIdentifier = new Identifier(path);
@@ -68,17 +68,17 @@ public abstract class CITType {
             path = path.substring(2);
         else if (!path.contains("..")) {
             pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
-            if (resourceManager.containsResource(pathIdentifier))
+            if (resourceManager.getResource(pathIdentifier).isPresent())
                 return pathIdentifier;
             else if (path.startsWith("assets/")) {
                 path = path.substring(7);
                 int sep = path.indexOf('/');
                 pathIdentifier = new Identifier(path.substring(0, sep), path.substring(sep + 1));
-                if (resourceManager.containsResource(pathIdentifier))
+                if (resourceManager.getResource(pathIdentifier).isPresent())
                     return pathIdentifier;
             }
             pathIdentifier = new Identifier(pathIdentifier.getNamespace(), defaultedTypeDirectory + "/" + path);
-            if (resourceManager.containsResource(pathIdentifier))
+            if (resourceManager.getResource(pathIdentifier).isPresent())
                 return pathIdentifier;
         }
 
@@ -100,7 +100,7 @@ public abstract class CITType {
 
         pathIdentifier = new Identifier(rootIdentifier.getNamespace(), path);
 
-        return resourceManager.containsResource(pathIdentifier) ? pathIdentifier : null;
+        return resourceManager.getResource(pathIdentifier).isPresent() ? pathIdentifier : null;
     }
 
     public static Identifier resolveAsset(Identifier rootIdentifier, PropertyValue path, String defaultedTypeDirectory, String extension, ResourceManager resourceManager) {

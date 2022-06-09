@@ -64,9 +64,9 @@ public final class PackParser { private PackParser() {}
         List<CIT<?>> cits = new ArrayList<>();
 
         for (String root : ROOTS)
-            for (Identifier identifier : resourceManager.findResources(root + "/cit", s -> s.endsWith(".properties"))) {
+            resourceManager.findResources(root + "/cit", s -> s.toString().endsWith(".properties")).forEach((identifier, resource) -> {
                 String packName = null;
-                try (Resource resource = resourceManager.getResource(identifier)) {
+                try {
                     cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = resource.getResourcePackName(), identifier, resource.getInputStream()), resourceManager));
                 } catch (CITParsingException e) {
                     CITResewn.logErrorLoading(e.getMessage());
@@ -74,7 +74,7 @@ public final class PackParser { private PackParser() {}
                     CITResewn.logErrorLoading("Errored while loading cit: " + identifier + (packName == null ? "" : " from " + packName));
                     e.printStackTrace();
                 }
-            }
+            });
 
         return cits;
     }

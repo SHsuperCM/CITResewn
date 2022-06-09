@@ -1,7 +1,7 @@
 import java.nio.file.Files
 
 plugins {
-    id 'fabric-loom' version '0.11-SNAPSHOT' apply false
+    id 'fabric-loom' version '0.12-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.4' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
@@ -25,9 +25,11 @@ allprojects {
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api}"
+
         modImplementation fabricApi.module("fabric-api-base", "${project.fabric_api}")
         modImplementation fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}")
-        modImplementation fabricApi.module("fabric-command-api-v1", "${project.fabric_api}")
+        modImplementation fabricApi.module("fabric-command-api-v2", "${project.fabric_api}")
 
         modCompileOnly("com.terraformersmc:modmenu:${project.modmenu}") {
             exclude(group: "net.fabricmc.fabric-api")
@@ -100,7 +102,7 @@ modrinth {
     versionNumber = version
     versionName = "v" + version
     additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
-    gameVersions = ["1.18", "1.18.1", "1.18.2"]
+    gameVersions = ["1.19"]
 }
 
 curseforge {
@@ -114,9 +116,7 @@ curseforge {
             displayName = "v" + version
         }
         addGameVersion 'Fabric'
-        addGameVersion '1.18'
-        addGameVersion '1.18.1'
-        addGameVersion '1.18.2'
+        addGameVersion '1.19'
     }
     options {
         forgeGradleIntegration = false
