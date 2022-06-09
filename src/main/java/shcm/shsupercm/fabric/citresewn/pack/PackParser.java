@@ -64,7 +64,7 @@ public final class PackParser { private PackParser() {}
         List<CIT<?>> cits = new ArrayList<>();
 
         for (String root : ROOTS)
-            resourceManager.findResources(root + "/cit", s -> s.toString().endsWith(".properties")).forEach((identifier, resource) -> {
+            resourceManager.findResources(root + "/cit", s -> s.getPath().endsWith(".properties")).forEach((identifier, resource) -> {
                 String packName = null;
                 try {
                     cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = resource.getResourcePackName(), identifier, resource.getInputStream()), resourceManager));

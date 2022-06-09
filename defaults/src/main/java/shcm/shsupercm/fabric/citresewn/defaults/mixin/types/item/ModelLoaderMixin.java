@@ -89,7 +89,7 @@ public class ModelLoaderMixin {
     }
 
     @ModifyArg(method = "loadModelFromJson", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;getResource(Lnet/minecraft/util/Identifier;)Lnet/minecraft/resource/Resource;"))
+    @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;openAsReader(Lnet/minecraft/util/Identifier;)Ljava/io/BufferedReader;"))
     public Identifier citresewn$fixDuplicatePrefixSuffix(Identifier original) {
         if (CONTAINER.active() && original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
             return new Identifier(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
