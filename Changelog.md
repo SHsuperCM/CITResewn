@@ -1,1 +1,4 @@
- - Fixed incompatibility with Secret Rooms and LambdaBetterGrass.
+ - Added option to set up fallback CITs for other implementations(more info in the wiki soon).
+ - CIT custom elytras now have priority over cape-provided elytra textures.
+ - The hand condition now has behavior parity to optifine's implementation.
+ - IRegex pattern recognition for the nbt condition now takes other unicode cases into account(specifically fixed cyrillic case insensitivity).
