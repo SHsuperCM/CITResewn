@@ -35,10 +35,8 @@ public class ModelLoaderMixin {
     @Inject(method = "loadModelFromJson", cancellable = true, at = @At("HEAD"))
     public void citresewn$forceLiteralResewnModelIdentifier(Identifier id, CallbackInfoReturnable<JsonUnbakedModel> cir) {
         if (id instanceof ResewnItemModelIdentifier) {
-            InputStream is = null;
-            Resource resource = null;
-            try {
-                JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(id)).getInputStream(), StandardCharsets.UTF_8));
+            try (InputStream is = resourceManager.getResource(id).orElseThrow().getInputStream()) {
+                JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
                 json.id = id.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
 
@@ -79,8 +77,6 @@ public class ModelLoaderMixin {
 
                 cir.setReturnValue(json);
             } catch (Exception ignored) {
-            } finally {
-                IOUtils.closeQuietly(is, resource);
             }
         }
     }

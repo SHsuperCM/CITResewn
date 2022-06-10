@@ -63,18 +63,19 @@ public final class PackParser { private PackParser() {}
     public static List<CIT<?>> parseCITs(ResourceManager resourceManager) {
         List<CIT<?>> cits = new ArrayList<>();
 
-        for (String root : ROOTS)
-            for (Identifier identifier : resourceManager.findResources(root + "/cit", s -> s.endsWith(".properties"))) {
+        for (String root : ROOTS) {
+            for (Map.Entry<Identifier, Resource> entry : resourceManager.findResources(root + "/cit", s -> s.getPath().endsWith(".properties")).entrySet()) {
                 String packName = null;
-                try (Resource resource = resourceManager.getResource(identifier)) {
-                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = resource.getResourcePackName(), identifier, resource.getInputStream()), resourceManager));
+                try {
+                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getResourcePackName(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
                 } catch (CITParsingException e) {
                     CITResewn.logErrorLoading(e.getMessage());
                 } catch (Exception e) {
-                    CITResewn.logErrorLoading("Errored while loading cit: " + identifier + (packName == null ? "" : " from " + packName));
+                    CITResewn.logErrorLoading("Errored while loading cit: " + entry.getKey() + (packName == null ? "" : " from " + packName));
                     e.printStackTrace();
                 }
             }
+        }
 
         return cits;
     }

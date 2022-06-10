@@ -14,8 +14,6 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -185,7 +183,7 @@ public class TypeItem extends CITType {
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
-                        try (Resource itemModelResource = resourceManager.getResource(itemModelIdentifier); Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
+                        try (Reader resourceReader = new InputStreamReader(resourceManager.getResource(itemModelIdentifier).orElseThrow().getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
                             if (itemModelJson.getOverrides() != null && !itemModelJson.getOverrides().isEmpty())
@@ -263,7 +261,7 @@ public class TypeItem extends CITType {
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
-                        try (Resource itemModelResource = resourceManager.getResource(itemModelIdentifier); Reader resourceReader = new InputStreamReader(itemModelResource.getInputStream())) {
+                        try (Reader resourceReader = new InputStreamReader( resourceManager.getResource(itemModelIdentifier).orElseThrow().getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
                             if (itemModelJson.getOverrides() != null && !itemModelJson.getOverrides().isEmpty())
@@ -305,10 +303,8 @@ public class TypeItem extends CITType {
         }
         JsonUnbakedModel json;
         if (identifier.getPath().endsWith(".json")) {
-            InputStream is = null;
-            Resource resource = null;
-            try {
-                json = JsonUnbakedModel.deserialize(IOUtils.toString(is = (resource = resourceManager.getResource(identifier)).getInputStream(), StandardCharsets.UTF_8));
+            try (InputStream is = resourceManager.getResource(identifier).orElseThrow().getInputStream()) {
+                json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
                 json.id = assetIdentifier.toString();
                 json.id = json.id.substring(0, json.id.length() - 5);
 
@@ -368,8 +364,6 @@ public class TypeItem extends CITType {
                 });
 
                 return json;
-            } finally {
-                IOUtils.closeQuietly(is, resource);
             }
         } else if (identifier.getPath().endsWith(".png")) {
             json = getModelForFirstItemType(resourceManager);
@@ -419,9 +413,8 @@ public class TypeItem extends CITType {
 
     private JsonUnbakedModel getModelForFirstItemType(ResourceManager resourceManager) {
         Identifier firstItemIdentifier = Registry.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
-        Resource itemModelResource = null;
-        try {
-            JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
+        try (InputStream is = resourceManager.getResource(firstItemModelIdentifier).orElseThrow().getInputStream()) {
+            JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
 
             if (!GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier)) // cit generated duplicate
                 firstItemModelIdentifier = new Identifier(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
@@ -432,8 +425,6 @@ public class TypeItem extends CITType {
             return json;
         } catch (Exception e) {
             return null;
-        } finally {
-            IOUtils.closeQuietly(itemModelResource);
         }
     }
 
