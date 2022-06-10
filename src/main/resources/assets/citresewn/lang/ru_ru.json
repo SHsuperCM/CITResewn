@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "Настройки CIT Resewn",
+  "config.citresewn.configure": "Настройки",
+
+  "config.citresewn.enabled.title": "Включить",
+  "config.citresewn.enabled.tooltip": "Загрузка и интеграция CIT из пакетов ресурсов",
+
+  "config.citresewn.mute_errors.title": "Скрыть ошибки загрузки",
+  "config.citresewn.mute_errors.tooltip": "Отключение вывода ошибок CIT в журнал",
+
+  "config.citresewn.mute_warns.title": "Скрыть предупреждения",
+  "config.citresewn.mute_warns.tooltip": "Отключение вывода предупреждений CIT в журнал",
+
+  "config.citresewn.broken_paths.title": "Разрешить недопустимые адреса к ресурсам",
+  "config.citresewn.broken_paths.tooltip": "Разрешение загрузки пакетов с адресами к ресурсам, содержащими запрещённые символы.\nМожет вызывать проблемы!",
+
+  "config.citresewn.cache_ms.title": "Кэширование",
+  "config.citresewn.cache_ms.tooltip": "Частота обновления кэша текстур.\nВысокие значения обеспечивают лучшую производительность.\nНизкие значения увеличивают частоту обновления.\nОбновление в реальном времени полностью отключает кэширование,\nприводя к покадровой проверке текстуры предмета.",
+  "config.citresewn.cache_ms.ticks.0": "В реальном времени",
+  "config.citresewn.cache_ms.ticks.1": "Каждый тик",
+  "config.citresewn.cache_ms.ticks.any": "Каждые %s тиков",
+
+
+  "pack.incompatible.broken_paths": "(Содержит недопустимые адреса)",
+  "pack.incompatible.confirm.broken_paths": "Этот пакет содержит адреса с ошибками и его поддержка может быть прекращена в будущем. Свяжитесь с автором пакета для исправления этого предупреждения. (~ CIT Resewn)"
+}
