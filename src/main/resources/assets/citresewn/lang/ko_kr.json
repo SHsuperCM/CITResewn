@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "CIT Resewn Configuration",
+  "config.citresewn.configure": "설정",
+
+  "config.citresewn.enabled.title": "사용",
+  "config.citresewn.enabled.tooltip": "CIT Resewn이 리소스 팩에서 CIT를 로드 및 인젝션 합니다.",
+
+  "config.citresewn.mute_errors.title": "로딩 오류 무시",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn가 CIT 오류를 기록하지 않습니다.",
+
+  "config.citresewn.mute_warns.title": "로딩 경고 무시",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn가 CIT 경고를 기록하지 않습니다.",
+
+  "config.citresewn.broken_paths.title": "리소스팩 손상된 경로 허용",
+  "config.citresewn.broken_paths.tooltip": "리소스 경로가 잘못된 팩을 사용할 수 있습니다.\n문제가 발생할 수 있습니다!",
+
+  "config.citresewn.cache_ms.title": "캐시",
+  "config.citresewn.cache_ms.tooltip": "캐시 새로 고침 빈도입니다.\n값이 높을 수록 성능이 향상됩니다.\n값이 작을 수록 CIT 업데이트 속도가 빨라집니다.\n실시간은 캐시를 완전히 삭제하고,\n모든 프레임에서 CIT 항목을 체크합니다.",
+  "config.citresewn.cache_ms.ticks.0": "실시간",
+  "config.citresewn.cache_ms.ticks.1": "틱 마다",
+  "config.citresewn.cache_ms.ticks.any": "%s 틱 마다",
+
+
+  "pack.incompatible.broken_paths": "(손상된 경로 포함)",
+  "pack.incompatible.confirm.broken_paths": "이 팩에는 손상된 경로가 포함되어 있으며 향후 지원이 중단될 수 있습니다. 이 경고를 제거하려면 팩 제작자에게 문의하세요. (~ CIT Resewn)"
+}
