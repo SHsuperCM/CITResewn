@@ -23,7 +23,6 @@ import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
-import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnTextureIdentifier;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item.JsonUnbakedModelAccessor;
 import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
@@ -130,7 +129,7 @@ public class TypeItem extends CITType {
             if (textureProp != null) {
                 assetIdentifier = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
                 if (assetIdentifier != null)
-                    textureOverrideMap.put(null, Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(assetIdentifier))));
+                    textureOverrideMap.put(null, Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, assetIdentifier)));
                 else
                     throw new CITParsingException("Cannot resolve path", properties, textureProp.position());
             }
@@ -141,7 +140,7 @@ public class TypeItem extends CITType {
                 if (subIdentifier == null)
                     throw new CITParsingException("Cannot resolve path", properties, property.position());
 
-                textureOverrideMap.put(property.keyMetadata(), Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(subIdentifier))));
+                textureOverrideMap.put(property.keyMetadata(), Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, subIdentifier)));
             }
         }
 
@@ -159,9 +158,9 @@ public class TypeItem extends CITType {
                     textureOverrideMap.replaceAll((layerName, originalTextureEither) -> {
                         Identifier textureIdentifier = assetIdentifiers.remove(originalTextureEither.map(SpriteIdentifier::getTextureId, Identifier::new));
                         if (textureIdentifier != null)
-                            return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(textureIdentifier)));
+                            return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, textureIdentifier));
                         if (defaultAsset != null)
-                            return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(defaultAsset)));
+                            return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, defaultAsset));
                         return null;
                     });
 
@@ -313,7 +312,7 @@ public class TypeItem extends CITType {
                     if (left.isPresent()) {
                         Identifier resolvedIdentifier = resolveAsset(identifier, left.get().getTextureId().getPath(), "textures", ".png", resourceManager);
                         if (resolvedIdentifier != null)
-                            return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
+                            return Either.left(new SpriteIdentifier(left.get().getAtlasId(), resolvedIdentifier));
                     }
                     return original;
                 });
@@ -368,7 +367,7 @@ public class TypeItem extends CITType {
         } else if (identifier.getPath().endsWith(".png")) {
             json = getModelForFirstItemType(resourceManager);
             if (json == null)
-                json = new JsonUnbakedModel(new Identifier("minecraft", "item/generated"), new ArrayList<>(), ImmutableMap.of("layer0", Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(identifier)))), true, JsonUnbakedModel.GuiLight.ITEM, ModelTransformation.NONE, new ArrayList<>());
+                json = new JsonUnbakedModel(new Identifier("minecraft", "item/generated"), new ArrayList<>(), ImmutableMap.of("layer0", Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, identifier))), true, JsonUnbakedModel.GuiLight.ITEM, ModelTransformation.NONE, new ArrayList<>());
             json.getOverrides().clear();
             json.id = identifier.toString();
             json.id = json.id.substring(0, json.id.length() - 4);
@@ -380,7 +379,7 @@ public class TypeItem extends CITType {
                         textureOverride = textureOverrideMap.get(null);
                     return textureOverride == null ? originalTextureEither : textureOverride;
                 } else
-                    return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new ResewnTextureIdentifier(identifier)));
+                    return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, identifier));
             });
             return json;
         }
