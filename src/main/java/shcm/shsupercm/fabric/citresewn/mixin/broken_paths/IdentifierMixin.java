@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.mixin.broken_paths;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,9 @@ public class IdentifierMixin {
             return;
 
         if (!cir.getReturnValue()) {
-            CITResewn.logWarnLoading("Warning: Encountered broken path: \"" + path + "\"");
+            if (FabricLoader.getInstance().isDevelopmentEnvironment())
+                CITResewn.logWarnLoading("Warning: Encountered broken path: \"" + path + "\"");
+
             cir.setReturnValue(true);
         }
     }
