@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.cit.CITType;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
-import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnTextureIdentifier;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item.JsonUnbakedModelAccessor;
 
 import java.io.InputStream;
@@ -50,7 +49,7 @@ public class ModelLoaderMixin {
                         if (originalPath.startsWith("./") || (split.length > 2 && split[1].equals("cit"))) {
                             Identifier resolvedIdentifier = CITType.resolveAsset(id, originalPath, "textures", ".png", resourceManager);
                             if (resolvedIdentifier != null)
-                                return Either.left(new SpriteIdentifier(left.get().getAtlasId(), new ResewnTextureIdentifier(resolvedIdentifier)));
+                                return Either.left(new SpriteIdentifier(left.get().getAtlasId(), resolvedIdentifier));
                         }
                     }
                     return original;
