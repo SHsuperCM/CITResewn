@@ -51,7 +51,6 @@ public class ModelLoaderMixin {
                 for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
                     ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
                     this.unbakedModels.put(id, unbakedModel);
-                    this.modelsToLoad.addAll(unbakedModel.getModelDependencies());
                     this.modelsToBake.put(id, unbakedModel);
                 }
             } catch (Exception e) {
