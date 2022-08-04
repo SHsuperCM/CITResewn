@@ -3,7 +3,7 @@
   "config.citresewn.configure": "Настройки",
 
   "config.citresewn.enabled.title": "Пользовательские текстуры предметов",
-  "config.citresewn.enabled.tooltip": "Загрузка и интеграция пользовательских\nтекстур предметов из наборов ресурсов",
+  "config.citresewn.enabled.tooltip": "Загружать и применять пользовательские\nтекстуры предметов из наборов ресурсов",
 
   "config.citresewn.mute_errors.title": "Скрыть ошибки загрузки",
   "config.citresewn.mute_errors.tooltip": "Отключить вывод ошибок\nзагрузки ресурсов в журнал",
