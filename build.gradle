@@ -2,7 +2,7 @@ import java.nio.file.Files
 
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT' apply false
-    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.4' apply false
+    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.5' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
@@ -24,6 +24,8 @@ allprojects {
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+        fletchingTable.fungible "1.2+mc1.19.2"
 
         modImplementation fabricApi.module("fabric-api-base", "${project.fabric_api}")
         modImplementation fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}")
@@ -100,7 +102,7 @@ modrinth {
     versionNumber = version
     versionName = "v" + version
     additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
-    gameVersions = ["1.19"]
+    gameVersions = ["1.19", "1.19", "1.19.2"]
 }
 
 curseforge {
@@ -115,6 +117,8 @@ curseforge {
         }
         addGameVersion 'Fabric'
         addGameVersion '1.19'
+        addGameVersion '1.19.1'
+        addGameVersion '1.19.2'
     }
     options {
         forgeGradleIntegration = false
