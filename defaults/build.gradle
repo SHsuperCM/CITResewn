@@ -1,7 +1,13 @@
+apply plugin: 'com.modrinth.minotaur'
+
 archivesBaseName = "citresewn-defaults"
 
 dependencies {
 	implementation project(path: ":", configuration: "namedElements")
+}
+
+java {
+	withSourcesJar()
 }
 
 loom {
@@ -11,3 +17,14 @@ loom {
 		ideConfigGenerated = true
 	}
 }
+
+modrinth {
+	token = TOKEN_MODRINTH
+	projectId = "meHXjJBu"
+	uploadFile = remapJar
+	versionNumber = version
+	versionName = "v" + version
+	additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
+	gameVersions = Arrays.asList(rootProject.publish_minecraft_versions.split(","))
+}
+tasks.getByName("modrinth").mustRunAfter(rootProject.tasks.getByName("modrinth"))
