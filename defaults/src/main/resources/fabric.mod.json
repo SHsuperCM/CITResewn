@@ -31,6 +31,6 @@
     "citresewn": "${version}"
   },
   "conflicts": {
-    "eatinganimationid": "*"
+    "eatinganimationid": "<1.9"
   }
 }
