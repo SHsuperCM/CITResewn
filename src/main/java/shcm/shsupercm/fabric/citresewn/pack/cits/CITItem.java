@@ -408,6 +408,13 @@ public class CITItem extends CIT {
         try {
             JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString((itemModelResource = resourceManager.getResource(firstItemModelIdentifier)).getInputStream(), StandardCharsets.UTF_8));
 
+            if (((JsonUnbakedModelAccessor) json).getParentId().equals(new Identifier("minecraft", "item/template_spawn_egg"))) { // HOTFIX: Fixes not being able to change spawn eggs using texture cits
+                try (InputStream parentInputStream = resourceManager.getResource(new Identifier("minecraft", "models/item/template_spawn_egg.json")).getInputStream()) {
+                    json = JsonUnbakedModel.deserialize(IOUtils.toString(parentInputStream, StandardCharsets.UTF_8));
+                    ((JsonUnbakedModelAccessor) json).getTextureMap().remove("layer1"); // PARITY
+                }
+            }
+
             if (!GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier)) // cit generated duplicate
                 firstItemModelIdentifier = new Identifier(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
             GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier);
