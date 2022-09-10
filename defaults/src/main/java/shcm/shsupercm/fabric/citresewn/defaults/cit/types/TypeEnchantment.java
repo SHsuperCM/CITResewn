@@ -77,8 +77,8 @@ public class TypeEnchantment extends CITType {
             throw new CITParsingException("Could not parse integer", properties, layerProp.position(), e);
         }
 
-        this.speed = parseFloatOrDefault(1f, "speed", properties);
-        this.rotation = parseFloatOrDefault(10f, "rotation", properties);
+        this.speed = parseFloatOrDefault(0f, "speed", properties);
+        this.rotation = parseFloatOrDefault(0f, "rotation", properties);
         this.duration = Math.max(0f, parseFloatOrDefault(0f, "duration", properties));
         this.r = Math.max(0f, parseFloatOrDefault(1f, "r", properties));
         this.g = Math.max(0f, parseFloatOrDefault(1f, "g", properties));
