@@ -18,9 +18,6 @@ Accessed through Mod Menu or by running `/citresewn config`.
 ### [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu)
 CIT Resewn is listed and a button is added to access the Cloth Config screen.
 
-### [Cosmetic Armor](https://www.curseforge.com/minecraft/mc-mods/cosmetic-armor-fabric)
-CITs are applied on armor in the cosmetic slots.
-
 <br>
 ## Incompatible
 
@@ -28,9 +25,6 @@ CITs are applied on armor in the cosmetic slots.
 The game crashes with both present.
 
 Support is planned eventually.
-
-### [Eating Animation](https://www.curseforge.com/minecraft/mc-mods/eating-animation-fabric)
-Breaks `item` CITs. Follow [Theoness1/EatingAnimation#2](https://github.com/Theoness1/EatingAnimation/issues/2) for updates.
 
 <br>
 ## Recommended
