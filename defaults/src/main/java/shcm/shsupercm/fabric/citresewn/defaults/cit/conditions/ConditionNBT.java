@@ -108,10 +108,14 @@ public class ConditionNBT extends CITCondition {
         } else {
             if (element instanceof NbtCompound compound)
                 return testPath(compound.get(path), pathIndex + 1);
-            else if (element instanceof NbtList list)
+            else if (element instanceof NbtList list) {
+                if (path.equals("count"))
+                    return testValue(NbtInt.of(list.size()));
+
                 try {
                     return testPath(list.get(Integer.parseInt(path)), pathIndex + 1);
                 } catch (NumberFormatException | IndexOutOfBoundsException ignored) { }
+            }
         }
 
         return false;
