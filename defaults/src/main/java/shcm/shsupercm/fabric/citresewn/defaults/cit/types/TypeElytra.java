@@ -1,8 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.types;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
@@ -12,9 +15,11 @@ import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 public class TypeElytra extends CITType {
     @Entrypoint(CITTypeContainer.ENTRYPOINT)
@@ -45,6 +50,8 @@ public class TypeElytra extends CITType {
             super(TypeElytra.class, TypeElytra::new, "elytra");
         }
 
+        public final List<Function<LivingEntity, ItemStack>> getItemInSlotCompatRedirects = new ArrayList<>();
+
         public Set<CIT<TypeElytra>> loaded = new HashSet<>();
 
         @Override
@@ -67,6 +74,16 @@ public class TypeElytra extends CITType {
                     return cit;
 
             return null;
+        }
+
+        public ItemStack getVisualElytraItem(LivingEntity entity) {
+            for (Function<LivingEntity, ItemStack> redirect : getItemInSlotCompatRedirects) {
+                ItemStack stack = redirect.apply(entity);
+                if (stack != null)
+                    return stack;
+            }
+
+            return entity.getEquippedStack(EquipmentSlot.CHEST);
         }
     }
 

@@ -1,8 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.types;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -15,6 +18,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 public class TypeArmor extends CITType {
     @Entrypoint(CITTypeContainer.ENTRYPOINT)
@@ -67,6 +71,8 @@ public class TypeArmor extends CITType {
             super(TypeArmor.class, TypeArmor::new, "armor");
         }
 
+        public final List<BiFunction<LivingEntity, EquipmentSlot, ItemStack>> getItemInSlotCompatRedirects = new ArrayList<>();
+
         public Set<CIT<TypeArmor>> loaded = new HashSet<>();
         public Map<ArmorItem, Set<CIT<TypeArmor>>> loadedTyped = new IdentityHashMap<>();
 
@@ -102,6 +108,16 @@ public class TypeArmor extends CITType {
                         return cit;
 
             return null;
+        }
+
+        public ItemStack getVisualItemInSlot(LivingEntity entity, EquipmentSlot slot) {
+            for (BiFunction<LivingEntity, EquipmentSlot, ItemStack> redirect : getItemInSlotCompatRedirects) {
+                ItemStack stack = redirect.apply(entity, slot);
+                if (stack != null)
+                    return stack;
+            }
+
+            return entity.getEquippedStack(slot);
         }
     }
 

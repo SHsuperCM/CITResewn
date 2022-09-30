@@ -3,7 +3,6 @@ package shcm.shsupercm.fabric.citresewn.defaults.mixin.types.elytra;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -30,7 +29,7 @@ public class ElytraFeatureRendererMixin {
         if (!CONTAINER.active())
             return;
 
-        ItemStack equippedStack = livingEntity.getEquippedStack(EquipmentSlot.CHEST);
+        ItemStack equippedStack = CONTAINER.getVisualElytraItem(livingEntity);
         if (!equippedStack.isOf(Items.ELYTRA))
             return;
 

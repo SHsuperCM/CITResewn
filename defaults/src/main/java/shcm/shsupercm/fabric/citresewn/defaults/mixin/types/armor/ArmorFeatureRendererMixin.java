@@ -32,7 +32,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         if (!CONTAINER.active())
             return;
 
-        ItemStack equippedStack = entity.getEquippedStack(armorSlot);
+        ItemStack equippedStack = CONTAINER.getVisualItemInSlot(entity, armorSlot);
 
         CIT<TypeArmor> cit = CONTAINER.getCIT(new CITContext(equippedStack, entity.getWorld(), entity));
         if (cit != null)
