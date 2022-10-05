@@ -5,20 +5,20 @@
   "config.citresewn.enabled.title": "Activé",
   "config.citresewn.enabled.tooltip": "Should CIT Resewn load and inject cits from resourcepacks",
 
-  "config.citresewn.mute_errors.title": "Mute loading errors",
-  "config.citresewn.mute_errors.tooltip": "Should CIT Resewn not log cit errors",
+  "config.citresewn.mute_errors.title": "Erreurs de chargement muettes",
+  "config.citresewn.mute_errors.tooltip": "Est-ce que CIT Resewn doit journaliser les erreurs",
 
-  "config.citresewn.mute_warns.title": "Mute loading warnings",
-  "config.citresewn.mute_warns.tooltip": "Should CIT Resewn not log cit warnings",
+  "config.citresewn.mute_warns.title": "Avertissements de chargement muets",
+  "config.citresewn.mute_warns.tooltip": "Est-ce que CIT Resewn doit journaliser les avertissements",
 
   "config.citresewn.broken_paths.title": "Autoriser les mauvais chemins",
   "config.citresewn.broken_paths.tooltip": "Autorise le chargement de packs de ressources avec des chemins de ressources illégaux\nPeut causer des problèmes.",
 
   "config.citresewn.cache_ms.title": "Cache",
-  "config.citresewn.cache_ms.tooltip": "How often should the cit cache be refreshed.\nHigher values will give more performance.\nLower values will make cits update faster.\nREALTIME will remove the cache entirely,\n making items check for cits every frame.",
-  "config.citresewn.cache_ms.ticks.0": "REALTIME",
-  "config.citresewn.cache_ms.ticks.1": "EVERY TICK",
-  "config.citresewn.cache_ms.ticks.any": "EVERY %s TICKS",
+  "config.citresewn.cache_ms.tooltip": "Fréquence de rechargement du cache de CIT.\nHigher values will give more performance.\nLower values will make cits update faster.\nREALTIME will remove the cache entirely,\n making items check for cits every frame.",
+  "config.citresewn.cache_ms.ticks.0": "TEMPS RÉEL",
+  "config.citresewn.cache_ms.ticks.1": "CHAQUE TICK",
+  "config.citresewn.cache_ms.ticks.any": "CHAQUE %s TICKS",
 
 
   "pack.incompatible.broken_paths": "(Contains broken paths)",
