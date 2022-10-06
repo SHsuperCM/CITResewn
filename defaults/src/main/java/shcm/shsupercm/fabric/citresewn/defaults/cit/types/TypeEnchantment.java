@@ -17,7 +17,7 @@ import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionEnchantm
 import shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.RenderPhaseAccessor;
-import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
+import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;

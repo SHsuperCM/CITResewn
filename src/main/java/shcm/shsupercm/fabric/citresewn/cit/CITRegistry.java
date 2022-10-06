@@ -5,8 +5,6 @@ import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ConstantCondition;
-import shcm.shsupercm.fabric.citresewn.ex.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.ex.UnknownCITTypeException;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
