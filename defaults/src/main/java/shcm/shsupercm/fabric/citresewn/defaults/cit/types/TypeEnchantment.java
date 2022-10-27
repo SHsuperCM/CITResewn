@@ -7,8 +7,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import shcm.shsupercm.fabric.citresewn.api.CITGlobalProperties;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
@@ -311,10 +310,10 @@ public class TypeEnchantment extends CITType {
                     float l = Util.getMeasuringTimeMs() * CITResewnDefaultsConfig.INSTANCE.type_enchantment_scroll_multiplier * speed;
                     float x = (l % 110000f) / 110000f;
                     float y = (l % 30000f) / 30000f;
-                    Matrix4f matrix4f = Matrix4f.translate(-x, y, 0.0f);
-                    matrix4f.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rotation));
-                    matrix4f.multiply(Matrix4f.scale(scale, scale, scale));
-                    setTextureMatrix(matrix4f);
+                    setTextureMatrix(new Matrix4f()
+                            .translation(-x, y, 0.0f)
+                            .rotateZ(rotation)
+                            .scale(scale));
 
                     setShaderColor(r, g, b, a * methodIntensity.intensity);
                 }

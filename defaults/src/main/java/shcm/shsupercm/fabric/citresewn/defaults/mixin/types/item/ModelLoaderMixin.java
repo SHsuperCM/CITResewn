@@ -3,12 +3,11 @@ package shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelLoader;
-import net.minecraft.client.render.model.SpriteAtlasManager;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverride;
-import net.minecraft.client.texture.TextureManager;
-import net.minecraft.resource.ResourceManager;
+import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import org.spongepowered.asm.mixin.Final;
@@ -18,13 +17,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
 
 import java.util.*;
+import java.util.function.BiFunction;
 
 import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
 import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem.CONTAINER;
@@ -38,7 +37,7 @@ public class ModelLoaderMixin {
 
     @Inject(method = "<init>", at =
     @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
-    public void citresewn$addTypeItemModels(ResourceManager resourceManager, BlockColors blockColors, Profiler profiler, int i, CallbackInfo ci) {
+    public void citresewn$addTypeItemModels(BlockColors blockColors, Profiler profiler, Map map, Map map2, CallbackInfo ci) {
         profiler.swap("citresewn:type_item_models");
         if (!CONTAINER.active())
             return;
@@ -46,7 +45,7 @@ public class ModelLoaderMixin {
         info("Loading item CIT models...");
         for (CIT<TypeItem> cit : CONTAINER.loaded)
             try {
-                cit.type.loadUnbakedAssets(resourceManager);
+                //cit.type.loadUnbakedAssets(resourceManager);
 
                 for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
                     ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
@@ -61,12 +60,11 @@ public class ModelLoaderMixin {
         TypeItem.GENERATED_SUB_CITS_SEEN.clear();
     }
 
-    @Inject(method = "upload", at = @At("RETURN"))
-    public void citresewn$linkTypeItemModels(TextureManager textureManager, Profiler profiler, CallbackInfoReturnable<SpriteAtlasManager> cir) {
+    @Inject(method = "bake", at = @At("RETURN"))
+    public void citresewn$linkTypeItemModels(BiFunction<Identifier, SpriteIdentifier, Sprite> spriteLoader, CallbackInfo ci) {
         if (!CONTAINER.active())
             return;
 
-        profiler.push("citresewn:type_item_linking");
         info("Linking baked models to item CITs...");
 
         for (CIT<TypeItem> cit : CONTAINER.loaded) {
@@ -83,13 +81,12 @@ public class ModelLoaderMixin {
             }
             cit.type.unbakedAssets = null;
         }
-
-        profiler.pop();
     }
 
     @ModifyArg(method = "loadModelFromJson", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/resource/ResourceManager;openAsReader(Lnet/minecraft/util/Identifier;)Ljava/io/BufferedReader;"))
-    public Identifier citresewn$fixDuplicatePrefixSuffix(Identifier original) {
+    @At(value = "INVOKE", ordinal = 1, target = "Ljava/util/Map;get(Ljava/lang/Object;)Ljava/lang/Object;"))
+    public Object citresewn$fixDuplicatePrefixSuffix(Object key) {
+        Identifier original = (Identifier) key;
         if (CONTAINER.active() && original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
             return new Identifier(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
 

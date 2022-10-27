@@ -1,6 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.defaults.mixin.common;
 
-import net.minecraft.client.texture.SpriteAtlasTexture;
+import net.minecraft.resource.ResourceFinder;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,13 +9,15 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(SpriteAtlasTexture.class)
-public class SpriteAtlasTextureMixin {
-    @Shadow @Final private static String PNG_EXTENSION;
+@Mixin(ResourceFinder.class)
+public class ResourceFinderMixin {
 
-    @Inject(method = "getTexturePath", cancellable = true, at = @At("HEAD"))
-    public void citresewn$forceAbsoluteTextureIdentifier(Identifier id, CallbackInfoReturnable<Identifier> cir) {
-        if (id.getPath().endsWith(PNG_EXTENSION))
+    @Shadow @Final private String fileExtension;
+
+    @Inject(method = "toResourcePath", cancellable = true, at =
+    @At("HEAD"))
+    private void citresewn$forceAbsoluteTextureIdentifier(Identifier id, CallbackInfoReturnable<Identifier> cir) {
+        if (id.getPath().endsWith(".png") && this.fileExtension.equals(".png"))
             cir.setReturnValue(id);
     }
 }

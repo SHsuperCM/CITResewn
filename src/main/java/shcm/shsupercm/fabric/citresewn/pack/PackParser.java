@@ -1,9 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.pack;
 
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourcePack;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.FallbackCondition;
@@ -18,6 +15,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,8 +42,9 @@ public final class PackParser { private PackParser() {}
                 for (String root : ROOTS) {
                     Identifier identifier = new Identifier(namespace, root + "/cit.properties");
                     try {
-                        if (pack.contains(ResourceType.CLIENT_RESOURCES, identifier))
-                            globalProperties.load(pack.getName(), identifier, pack.open(ResourceType.CLIENT_RESOURCES, identifier));
+                        InputSupplier<InputStream> citPropertiesSupplier = pack.open(ResourceType.CLIENT_RESOURCES, identifier);
+                        if (citPropertiesSupplier != null)
+                            globalProperties.load(pack.getName(), identifier, citPropertiesSupplier.get());
                     } catch (FileNotFoundException ignored) {
                     } catch (Exception e) {
                         CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());

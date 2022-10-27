@@ -27,9 +27,9 @@ allprojects {
 
         fletchingTable.fungible project.fungible
 
-        modImplementation fabricApi.module("fabric-api-base", "${project.fabric_api}")
-        modImplementation fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}")
-        modImplementation fabricApi.module("fabric-command-api-v2", "${project.fabric_api}")
+        modCompileOnly fabricApi.module("fabric-api-base", "${project.fabric_api}")
+        modCompileOnly fabricApi.module("fabric-resource-loader-v0", "${project.fabric_api}")
+        modCompileOnly fabricApi.module("fabric-command-api-v2", "${project.fabric_api}")
 
         modCompileOnly("com.terraformersmc:modmenu:${project.modmenu}") {
             exclude(group: "net.fabricmc.fabric-api")
