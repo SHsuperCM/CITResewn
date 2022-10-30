@@ -1,0 +1,26 @@
+{
+    "config.citresewn.title": "Configuração Refeita CIT",
+    "config.citresewn.configure": "Configurar",
+  
+    "config.citresewn.enabled.title": "Habilitado",
+    "config.citresewn.enabled.tooltip": "O CIT Resewn deve carregar e injetar citações de pacotes de recursos",
+  
+    "config.citresewn.mute_errors.title": "Silenciar erros de carregamento",
+    "config.citresewn.mute_errors.tooltip": "O CIT Resewn não deve registrar erros cit",
+  
+    "config.citresewn.mute_warns.title": "Silenciar avisos de carregamento",
+    "config.citresewn.mute_warns.tooltip": "O CIT Resewn não deve registrar os avisos do cit",
+  
+    "config.citresewn.broken_paths.title": "Permitir caminhos quebrados em resourcepacks",
+    "config.citresewn.broken_paths.tooltip": "Permite que pacotes com caminhos de recursos ilegais sejam carregados.\nPode causar problemas!",
+  
+    "config.citresewn.cache_ms.title": "Cache",
+    "config.citresewn.cache_ms.tooltip": "Com que frequência o cache cit deve ser atualizado.\nValores mais altos darão mais desempenho.\nValores mais baixos farão com que as citações sejam atualizadas mais rapidamente.\nREALTIME removerá o cache completamente,\n fazendo com que os itens verifiquem citações a cada quadro.",
+    "config.citresewn.cache_ms.ticks.0": "TEMPO REAL",
+    "config.citresewn.cache_ms.ticks.1": "CADA TICK",
+    "config.citresewn.cache_ms.ticks.any": "CADA %s TICKS",
+  
+  
+    "pack.incompatible.broken_paths": "(Contém caminhos quebrados)",
+    "pack.incompatible.confirm.broken_paths": "Este pacote contém caminhos quebrados e o suporte para ele pode ser descartado no futuro. Entre em contato com o autor do pacote para remover este aviso. (~ CIT Resewn)"
+  }
