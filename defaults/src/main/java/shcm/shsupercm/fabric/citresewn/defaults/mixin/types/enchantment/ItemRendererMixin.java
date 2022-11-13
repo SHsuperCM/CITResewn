@@ -54,7 +54,7 @@ public class ItemRendererMixin {
             return;
         VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
-            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix()), cir.getReturnValue()));
+            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1.f), cir.getReturnValue()));
     }
 
     @Inject(method = "getDirectCompassGlintConsumer", cancellable = true, at = @At("RETURN"))
@@ -63,7 +63,7 @@ public class ItemRendererMixin {
             return;
         VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
         if (vertexConsumer != null)
-            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix()), cir.getReturnValue()));
+            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1.f), cir.getReturnValue()));
     }
 
     @Inject(method = "getItemGlintConsumer", cancellable = true, at = @At("RETURN"))

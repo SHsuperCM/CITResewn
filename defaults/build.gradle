@@ -18,7 +18,7 @@ loom {
 	}
 }
 
-modrinth {
+/*modrinth {
 	token = TOKEN_MODRINTH
 	projectId = "meHXjJBu"
 	uploadFile = remapJar
@@ -26,5 +26,5 @@ modrinth {
 	versionName = "v" + version
 	additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
 	gameVersions = Arrays.asList(rootProject.publish_minecraft_versions.split(","))
-}
+}*/
 tasks.getByName("modrinth").mustRunAfter(rootProject.tasks.getByName("modrinth"))

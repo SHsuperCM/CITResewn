@@ -90,7 +90,7 @@ java {
     withSourcesJar()
 }
 
-modrinth {
+/*modrinth {
     token = TOKEN_MODRINTH
     projectId = "otVJckYQ"
     uploadFile = remapJar
@@ -99,9 +99,9 @@ modrinth {
     versionName = "v" + version
     additionalFiles = [ sourcesJar.outputs.getFiles().singleFile ]
     gameVersions = Arrays.asList(project.publish_minecraft_versions.split(","))
-}
+}*/
 
-curseforge {
+/*curseforge {
     apiKey = TOKEN_CURSEFORGE
     project {
         id = '521427'
@@ -118,7 +118,7 @@ curseforge {
     options {
         forgeGradleIntegration = false
     }
-}
+}*/
 
 task publishVersion {
     dependsOn 'remapJar', 'curseforge', 'modrinth', ':defaults:modrinth'

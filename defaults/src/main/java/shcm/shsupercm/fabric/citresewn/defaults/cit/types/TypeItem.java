@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registries;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.io.IOUtils;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
@@ -75,9 +76,9 @@ public class TypeItem extends CITType {
         if (this.items.size() == 0)
             try {
                 Identifier propertiesName = new Identifier(properties.stripName());
-                if (!Registry.ITEM.containsId(propertiesName))
+                if (!Registries.ITEM.containsId(propertiesName))
                     throw new Exception();
-                Item item = Registry.ITEM.get(propertiesName);
+                Item item = Registries.ITEM.get(propertiesName);
                 conditions.add(new ConditionItems(item));
                 this.items.add(item);
             } catch (Exception ignored) {
@@ -185,7 +186,7 @@ public class TypeItem extends CITType {
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
                     for (Item item : this.items) {
-                        Identifier itemIdentifier = Registry.ITEM.getId(item);
+                        Identifier itemIdentifier = Registries.ITEM.getId(item);
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
@@ -269,7 +270,7 @@ public class TypeItem extends CITType {
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
                     for (Item item : this.items) {
-                        Identifier itemIdentifier = Registry.ITEM.getId(item);
+                        Identifier itemIdentifier = Registries.ITEM.getId(item);
                         overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
                         Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
@@ -424,7 +425,7 @@ public class TypeItem extends CITType {
     }
 
     private JsonUnbakedModel getModelForFirstItemType(ResourceManager resourceManager) {
-        Identifier firstItemIdentifier = Registry.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
+        Identifier firstItemIdentifier = Registries.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
         try (InputStream is = resourceManager.getResource(firstItemModelIdentifier).orElseThrow().getInputStream()) {
             JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
 
