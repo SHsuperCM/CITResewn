@@ -23,7 +23,7 @@
   "depends": {
     "fabric": "*",
     "fabricloader": "*",
-    "minecraft": "1.19.3-alpha.22.45.a"
+    "minecraft": ">1.19.2"
   },
   "recommends": {
     "modmenu": "*",
