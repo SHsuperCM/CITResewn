@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "CIT Resewn 設定檔",
+  "config.citresewn.configure": "設定",
+
+  "config.citresewn.enabled.title": "啟用",
+  "config.citresewn.enabled.tooltip": "CIT Resewn 是否載入並注入來自資源包的自訂物品紋理",
+
+  "config.citresewn.mute_errors.title": "記錄「載入錯誤」訊息",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn 是否記錄「自訂物品紋理」的載入錯誤訊息",
+
+  "config.citresewn.mute_warns.title": "記錄「載入警告」訊息",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn 是否記錄「自訂物品紋理」的載入警告訊息",
+
+  "config.citresewn.broken_paths.title": "允許路徑損壞的資源包",
+  "config.citresewn.broken_paths.tooltip": "允許載入有違反規則路徑的資源包。\n可能會造成問題！",
+
+  "config.citresewn.cache_ms.title": "快取",
+  "config.citresewn.cache_ms.tooltip": "間隔多久刷新自訂物品紋理的快取，\n數值越高需要使用更多效能。\n即時載入將會移除整個快取，\n並在每幀下檢查自訂物品紋理。",
+  "config.citresewn.cache_ms.ticks.0": "即時",
+  "config.citresewn.cache_ms.ticks.1": "每 Tick",
+  "config.citresewn.cache_ms.ticks.any": "每 %s Ticks",
+
+
+  "pack.incompatible.broken_paths": "（包含損壞路徑）",
+  "pack.incompatible.confirm.broken_paths": "這個資源包包含了損壞路徑，未來可能移除對於它的支援。請聯繫資源包作者來移除這個警告。（～CIT Resewn）"
+}

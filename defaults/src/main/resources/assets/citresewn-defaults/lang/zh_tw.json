@@ -1,0 +1,7 @@
+{
+  "config.citresewn-defaults.title": "CIT Resewn：預設",
+  "config.citresewn-defaults.tooltip": "前往「預設」設定選單",
+
+  "config.citresewn-defaults.type_enchantment_scroll_multiplier.title": "附魔類別：捲動乘數",
+  "config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip": "用於調整「自訂物品紋理」的附魔閃光捲動速度"
+}
