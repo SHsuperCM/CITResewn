@@ -1,0 +1,19 @@
+{
+	"config.citresewn.title": "Configurazione CIT Resewn",
+	"config.citresewn.configure": "Configura",
+	"config.citresewn.enabled.title": "Attivato",
+	"config.citresewn.enabled.tooltip": "CIT Resewn può caricare e iniettare cits dalle resourcepack?",
+	"config.citresewn.mute_errors.title": "Muta gli errori di caricamento",
+	"config.citresewn.mute_errors.tooltip": "Dovrebbe CIT Resewn mutare gli errori cit?",
+	"config.citresewn.mute_warns.title": "Muta avvisi di caricamento",
+	"config.citresewn.mute_warns.tooltip": "Muta gli avvisi di caricamento cit",
+	"config.citresewn.broken_paths.title": "Consenti percorsi non funzionanti nelle resourcepacks",
+	"config.citresewn.broken_paths.tooltip": "Permette di caricare le resourcepack non funzionanti, Potrebbe causare problemi!",
+	"config.citresewn.cache_ms.title": "Cache",
+	"config.citresewn.cache_ms.tooltip": "Quanto spesso le cache cit dovrebbero essere ricaricate.\\nValori più alti daranno più performance.\\nValori più bassi faranno caricare prima i cit.\\n\"Tempo Reale\" rimuovve le cache del tutto caricando le cits ogni frame.",
+	"config.citresewn.cache_ms.ticks.0": "TEMPO REALE",
+	"config.citresewn.cache_ms.ticks.1": "OGNI TICK",
+	"config.citresewn.cache_ms.ticks.any": "OGNI %s TICK",
+	"pack.incompatible.broken_paths": "(Contiene percorsi non funzionanti)",
+	"pack.incompatible.confirm.broken_paths": "Questo pack contiene persorsi non funzionanti e il supporto per questi potrebbe mancare in futuro. Contatta l'autore del pack per rimuovere questo avviso (~ CIT Resewn)"
+}
