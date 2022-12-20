@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.color.block.BlockColors;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.ModelLoader;
@@ -45,7 +46,7 @@ public class ModelLoaderMixin {
         info("Loading item CIT models...");
         for (CIT<TypeItem> cit : CONTAINER.loaded)
             try {
-                //cit.type.loadUnbakedAssets(resourceManager);
+                cit.type.loadUnbakedAssets(MinecraftClient.getInstance().getResourceManager());
 
                 for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
                     ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);

@@ -2,8 +2,8 @@ package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierCondition;
@@ -59,8 +59,8 @@ public class ConditionItems extends ListCondition<ConditionItems.ItemCondition> 
         public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
             super.load(value, properties);
 
-            if (Registry.ITEM.containsId(this.value))
-                this.item = Registry.ITEM.get(this.value);
+            if (Registries.ITEM.containsId(this.value))
+                this.item = Registries.ITEM.get(this.value);
             else {
                 this.item = null;
                 warn(this.value + " is not in the item registry", value, properties);

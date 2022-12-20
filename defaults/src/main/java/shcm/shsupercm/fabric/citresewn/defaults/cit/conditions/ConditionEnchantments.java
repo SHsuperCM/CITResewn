@@ -1,8 +1,8 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
@@ -42,7 +42,7 @@ public class ConditionEnchantments extends ListCondition<ConditionEnchantments.E
         public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
             super.load(value, properties);
 
-            if (!Registry.ENCHANTMENT.containsId(this.value))
+            if (!Registries.ENCHANTMENT.containsId(this.value))
                 warn(this.value + " is not in the enchantment registry", value, properties);
         }
 

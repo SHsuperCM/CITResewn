@@ -241,41 +241,41 @@ public class TypeEnchantment extends CITType {
     
     public enum GlintRenderLayer {
         ARMOR_GLINT("armor_glint", 8f, layer -> layer
-                .shader(RenderPhaseAccessor.ARMOR_GLINT_SHADER())
+                .program(RenderPhaseAccessor.ARMOR_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
         ARMOR_ENTITY_GLINT("armor_entity_glint", 0.16f, layer -> layer
-                .shader(RenderPhaseAccessor.ARMOR_ENTITY_GLINT_SHADER())
+                .program(RenderPhaseAccessor.ARMOR_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .layering(RenderPhaseAccessor.VIEW_OFFSET_Z_LAYERING())),
         GLINT_TRANSLUCENT("glint_translucent", 8f, layer -> layer
-                .shader(RenderPhaseAccessor.TRANSLUCENT_GLINT_SHADER())
+                .program(RenderPhaseAccessor.TRANSLUCENT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .target(RenderPhaseAccessor.ITEM_TARGET())),
         GLINT("glint", 8f, layer -> layer
-                .shader(RenderPhaseAccessor.GLINT_SHADER())
+                .program(RenderPhaseAccessor.GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())),
         DIRECT_GLINT("glint_direct", 8f, layer -> layer
-                .shader(RenderPhaseAccessor.DIRECT_GLINT_SHADER())
+                .program(RenderPhaseAccessor.DIRECT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())),
         ENTITY_GLINT("entity_glint", 0.16f, layer -> layer
-                .shader(RenderPhaseAccessor.ENTITY_GLINT_SHADER())
+                .program(RenderPhaseAccessor.ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
                 .target(RenderPhaseAccessor.ITEM_TARGET())),
         DIRECT_ENTITY_GLINT("entity_glint_direct", 0.16f, layer -> layer
-                .shader(RenderPhaseAccessor.DIRECT_ENTITY_GLINT_SHADER())
+                .program(RenderPhaseAccessor.DIRECT_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST()));

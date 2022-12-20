@@ -6,9 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
@@ -45,9 +45,9 @@ public class TypeArmor extends CITType {
         if (!itemsConditionPresent)
             try {
                 Identifier propertiesName = new Identifier(properties.stripName());
-                if (!Registry.ITEM.containsId(propertiesName))
+                if (!Registries.ITEM.containsId(propertiesName))
                     throw new Exception();
-                Item item = Registry.ITEM.get(propertiesName);
+                Item item = Registries.ITEM.get(propertiesName);
                 if (!(item instanceof ArmorItem))
                     throw new Exception();
                 conditions.add(new ConditionItems(item));
