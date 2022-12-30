@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "CIT Resewn Konfiguration",
+  "config.citresewn.configure": "Konfiguriere",
+
+  "config.citresewn.enabled.title": "Aktivierts",
+  "config.citresewn.enabled.tooltip": "Soll CIT Resewn laden und cits injizieren von Ressourcepacketen",
+
+  "config.citresewn.mute_errors.title": "Schalte lade-Fehler stumm",
+  "config.citresewn.mute_errors.tooltip": "Soll CIT Resewn keine cit Fehler loggen.",
+
+  "config.citresewn.mute_warns.title": "Schalte lade-Warnungen stumm",
+  "config.citresewn.mute_warns.tooltip": "Soll CIT Resewn keine cit Warnungen loggen.",
+
+  "config.citresewn.broken_paths.title": "Erlaube kaputte Pfade in Ressourcenpacketen",
+  "config.citresewn.broken_paths.tooltip": "Erlaube Packete mit illegalen Resourenpfaden zu laden.\nKann Probleme auslösen!",
+
+  "config.citresewn.cache_ms.title": "Cache",
+  "config.citresewn.cache_ms.tooltip": "Wie oft soll der cit Cache erneuert werden.\nHöhere Werte geben bessere Leistung.\nNiedrigere Werte lassen cits schneller aktualisieren\nECHTZEIT entfernt den Cache komplett,\n dann überprüfen Items jeden Frame cits.",
+  "config.citresewn.cache_ms.ticks.0": "ECHTZEIT",
+  "config.citresewn.cache_ms.ticks.1": "JEDEN TICK",
+  "config.citresewn.cache_ms.ticks.any": "ALLE %s TICKS",
+
+
+  "pack.incompatible.broken_paths": "(Enthält kaputte Pfade)",
+  "pack.incompatible.confirm.broken_paths": "Dieses Packet enthält kaputte Pfade und Unterstüzung kann gestoppt werden in der Zukunft. Kontaktiere den Packeten-Autor, damit er diese Warnung zu entfernen kann. (~ CIT Resewn)"
+}
