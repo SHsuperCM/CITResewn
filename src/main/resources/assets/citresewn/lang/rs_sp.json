@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "CIT Resewn конфигурација",
+  "config.citresewn.configure": "конфигуриши",
+
+  "config.citresewn.enabled.title": "активирај",
+  "config.citresewn.enabled.tooltip": "Је треба да CIT Resewn учита и инјицира citове од пакета ресурса.",
+
+  "config.citresewn.mute_errors.title": "Смањи cit-грешке",
+  "config.citresewn.mute_errors.tooltip": "Јел CIT Resewn нетреба да логује cit-грешке.",
+
+  "config.citresewn.mute_warns.title": "Смањи cit-грешке",
+  "config.citresewn.mute_warns.tooltip": "Јел CIT Resewn нетреба да логује cit-упозорења.",
+
+  "config.citresewn.broken_paths.title": "Дозволи покварене путање у пакетима ресурса",
+  "config.citresewn.broken_paths.tooltip": "Дозволи пакете за не дозвољеним путањама да учитају.\nМоже да изазове проблеме!",
+
+  "config.citresewn.cache_ms.title": "кеш",
+  "config.citresewn.cache_ms.tooltip": "Колко често треба да се обнови кеш.\n Вишље вредности дају боју перформансу.\nНиже вредности ажурирају cit-ове брже\nРЕАЛНО ВРЕМЕ склања кеш комплетно,\n онда чу ајтеми гчедати сваки фрејм cit-ове.",
+  "config.citresewn.cache_ms.ticks.0": "РЕАЛНО ВРЕМЕ",
+  "config.citresewn.cache_ms.ticks.1": "СВАКИ ТИК",
+  "config.citresewn.cache_ms.ticks.any": "СВАКА %s ТИКОВА",
+
+
+  "pack.incompatible.broken_paths": "(садржи покварене путање)",
+  "pack.incompatible.confirm.broken_paths": "Тај пакет садржи покварене путање и подршла може да престане у бедучности. Контактирај аутора пакета, да може да склони ово упозорење. (~ CIT Resewn)"
+}
