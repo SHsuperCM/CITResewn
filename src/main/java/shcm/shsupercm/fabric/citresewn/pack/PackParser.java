@@ -26,7 +26,7 @@ public final class PackParser { private PackParser() {}
     /**
      * Possible CIT roots in resourcepacks ordered in increasing order of priority.
      */
-    private static final String[] ROOTS = new String[] { "mcpatcher", "optifine", "citresewn" };
+    public static final List<String> ROOTS = List.of("mcpatcher", "optifine", "citresewn");
 
     /**
      * Loads a merged global property group from loaded packs making sure to respect order.

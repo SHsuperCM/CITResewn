@@ -16,7 +16,13 @@ public abstract class AtlasPreparationMixin {
 
     @Inject(method = "getSprite", cancellable = true, at = @At("HEAD"))
     private void citresewn$unwrapTexturePaths(Identifier id, CallbackInfoReturnable<Sprite> cir) {
-        if (id.getPath().startsWith("textures/") && id.getPath().endsWith(".png"))
-            cir.setReturnValue(getSprite(new Identifier(id.getNamespace(), id.getPath().substring(9, id.getPath().length() - 4))));
+        if (id.getPath().endsWith(".png")) {
+            id = id.withPath(path -> path.substring(0, path.length() - 4));
+
+            if (id.getPath().startsWith("textures/"))
+                id = id.withPath(path -> path.substring(9));
+
+            cir.setReturnValue(getSprite(id));
+        }
     }
 }
