@@ -22,7 +22,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 import shcm.shsupercm.util.logic.Loops;
 
-import javax.annotation.Nullable;
+import blue.endless.jankson.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;

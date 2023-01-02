@@ -2,7 +2,7 @@ package shcm.shsupercm.fabric.citresewn.api;
 
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
-import javax.annotation.Nullable;
+import blue.endless.jankson.annotation.Nullable;
 
 /**
  * @see #globalProperty(String, PropertyValue)
