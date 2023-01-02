@@ -7,12 +7,12 @@ import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
 
 import java.util.List;
@@ -20,10 +20,12 @@ import java.util.Map;
 
 @Mixin(AtlasLoader.class)
 public class AtlasLoaderMixin {
-    @Inject(method = "of", at = @At("RETURN"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void citresewn$atlasSource(ResourceManager resourceManager, Identifier id, CallbackInfoReturnable<AtlasLoader> cir, Identifier identifier, List<AtlasSource> list) {
+    @Shadow @Final private List<AtlasSource> sources;
+
+    @Inject(method = "of", at = @At("RETURN"), cancellable = true)
+    private static void citresewn$atlasSource(ResourceManager resourceManager, Identifier id, CallbackInfoReturnable<AtlasLoader> cir) {
         if (id.getPath().equals("blocks") && id.getNamespace().equals("minecraft")) {
-            list.add(new AtlasSource() {
+            ((AtlasLoaderMixin) (Object) cir.getReturnValue()).sources.add(new AtlasSource() {
                 @Override
                 public void load(ResourceManager resourceManager, SpriteRegions regions) {
                     for (String root : PackParser.ROOTS) {
