@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.defaults.mixin.common;
+package shcm.shsupercm.fabric.citresewn.mixin;
 
 import net.minecraft.client.render.model.SpriteAtlasManager;
 import net.minecraft.client.texture.Sprite;
