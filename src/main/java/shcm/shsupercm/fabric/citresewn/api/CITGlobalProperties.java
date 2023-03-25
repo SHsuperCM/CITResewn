@@ -2,8 +2,6 @@ package shcm.shsupercm.fabric.citresewn.api;
 
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
-import blue.endless.jankson.annotation.Nullable;
-
 /**
  * @see #globalProperty(String, PropertyValue)
  */
@@ -22,5 +20,5 @@ public interface CITGlobalProperties {
 	 * @param key name of the property key stripped of its modid
 	 * @param value the value it's been set to or null if resetting
      */
-    void globalProperty(String key, @Nullable PropertyValue value) throws Exception;
+    void globalProperty(String key, PropertyValue value) throws Exception;
 }

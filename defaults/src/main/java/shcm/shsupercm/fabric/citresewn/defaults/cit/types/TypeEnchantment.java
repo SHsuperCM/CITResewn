@@ -21,7 +21,6 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 import shcm.shsupercm.util.logic.Loops;
 
-import blue.endless.jankson.annotation.Nullable;
 import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.function.Consumer;
@@ -151,7 +150,7 @@ public class TypeEnchantment extends CITType {
         }
 
         @Override
-        public void globalProperty(String key, @Nullable PropertyValue value) throws Exception {
+        public void globalProperty(String key, PropertyValue value) throws Exception {
             switch (key) {
                 case "useGlint" -> {
                     globalUseGlint = value == null ? true : Boolean.parseBoolean(value.value());

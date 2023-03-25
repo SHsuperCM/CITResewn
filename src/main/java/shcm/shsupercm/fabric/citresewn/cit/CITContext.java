@@ -11,7 +11,6 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-import blue.endless.jankson.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,7 +32,6 @@ public class CITContext {
     /**
      * The item's associated living entity if present. (null if not relevant)
      */
-    @Nullable
     public final LivingEntity entity;
 
     /**
@@ -42,7 +40,7 @@ public class CITContext {
      */
     private Map<Identifier, Integer> enchantments = null;
 
-    public CITContext(ItemStack stack, @Nullable World world, @Nullable LivingEntity entity) {
+    public CITContext(ItemStack stack, World world, LivingEntity entity) {
         this.stack = stack;
         this.world = world == null ? MinecraftClient.getInstance().world : world;
         this.entity = entity;
