@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "Параметри CIT Resewn",
+  "config.citresewn.configure": "Параметри",
+
+  "config.citresewn.enabled.title": "Власні текстури предметів",
+  "config.citresewn.enabled.tooltip": "Увімкнути завантаження власних текстур предметів з пакетів ресурсів",
+
+  "config.citresewn.mute_errors.title": "Приховати помилки завантаження",
+  "config.citresewn.mute_errors.tooltip": "Не записувати помилки власних текстур предметів у журнал налагодження",
+
+  "config.citresewn.mute_warns.title": "Приховати попередження про завантаження",
+  "config.citresewn.mute_warns.tooltip": "Не записувати попередження про завантаження власних текстур у журнал налагодження",
+
+  "config.citresewn.broken_paths.title": "Некоректні директорії в пакетах ресурсів",
+  "config.citresewn.broken_paths.tooltip": "Дозволити завантаження пакетів ресурсів з некоректними директоріями.\nМожуть виникнути проблеми!",
+
+  "config.citresewn.cache_ms.title": "Частота кешу",
+  "config.citresewn.cache_ms.tooltip": "Частота відновлення кешу власних текстур предметів.\nБільші значення покращать швидкодію.\nМенші значення покращать частоту оновлень власних текстур предметів.\nПараметр \"У реальному часі\" повністю видалить кеш, предмети перевірятимуться на власні текстури кожен кадр.",
+  "config.citresewn.cache_ms.ticks.0": "У реальному часі",
+  "config.citresewn.cache_ms.ticks.1": "Кожен такт",
+  "config.citresewn.cache_ms.ticks.any": "Кожні %s тактів",
+
+
+  "pack.incompatible.broken_paths": "(Містить некоректні директорії)",
+  "pack.incompatible.confirm.broken_paths": "Цей пакет ресурсів містить некоректні директорії, і їх підтримка може бути припинена у майбутньому. Будь ласка, зв'яжіться з автором пакета, щоб прибрати це попередження. (~ CIT Resewn)"
+}
