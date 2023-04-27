@@ -209,16 +209,16 @@ public class TypeEnchantment extends CITType {
                 for (WeakReference<CIT<TypeEnchantment>> citRef : cits)
                     if (citRef != null) {
                         CIT<TypeEnchantment> cit = citRef.get();
-                        if (cit != null) {
+                        if (appliedContext != null && cit != null) {
                             appliedContext.add(cit);
                             if (cit.type.useGlint)
                                 defaultGlint = true;
                         }
                     }
-
-            if (appliedContext.isEmpty())
+            
+            if (appliedContext != null && appliedContext.isEmpty())
                 appliedContext = null;
-            else
+            else if(appliedContext != null) 
                 globalMergeMethod.applyMethod(appliedContext, context);
 
             return this;
