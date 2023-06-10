@@ -17,5 +17,5 @@ public interface RenderPhaseAccessor {
     @Accessor("EQUAL_DEPTH_TEST") static RenderPhase.DepthTest EQUAL_DEPTH_TEST() { throw new RuntimeException(); }
     @Accessor("COLOR_MASK") static RenderPhase.WriteMaskState COLOR_MASK() { throw new RuntimeException(); }
     @Accessor("VIEW_OFFSET_Z_LAYERING") static RenderPhase.Layering VIEW_OFFSET_Z_LAYERING() { throw new RuntimeException(); }
-    @Accessor("ITEM_TARGET") static RenderPhase.Target ITEM_TARGET() { throw new RuntimeException(); }
+    @Accessor("ITEM_ENTITY_TARGET") static RenderPhase.Target ITEM_ENTITY_TARGET() { throw new RuntimeException(); }
 }

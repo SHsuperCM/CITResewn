@@ -19,7 +19,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
     @Inject(method = "renderArmor", at = @At("HEAD"))
     private void citresewn$enchantment$setAppliedContextAndStartApplyingArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, T livingEntity, EquipmentSlot armorSlot, int light, A model, CallbackInfo ci) {
         if (CONTAINER.active())
-            CONTAINER.setContext(new CITContext(livingEntity.getEquippedStack(armorSlot), livingEntity.world, livingEntity)).apply();
+            CONTAINER.setContext(new CITContext(livingEntity.getEquippedStack(armorSlot), livingEntity.getWorld(), livingEntity)).apply();
     }
 
     @Inject(method = "renderArmor", at = @At("RETURN"))

@@ -2,7 +2,7 @@ import java.nio.file.Files
 
 plugins {
     id 'fabric-loom' version '1.1-SNAPSHOT' apply false
-    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.5' apply false
+    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }

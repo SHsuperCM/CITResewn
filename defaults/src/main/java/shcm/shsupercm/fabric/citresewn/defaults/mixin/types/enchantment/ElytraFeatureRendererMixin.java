@@ -18,7 +18,7 @@ public class ElytraFeatureRendererMixin {
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At("HEAD"))
     private void citresewn$enchantment$setAppliedContextAndStartApplyingElytra(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, LivingEntity livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci) {
         if (CONTAINER.active())
-            CONTAINER.setContext(new CITContext(livingEntity.getEquippedStack(EquipmentSlot.CHEST), livingEntity.world, livingEntity)).apply();
+            CONTAINER.setContext(new CITContext(livingEntity.getEquippedStack(EquipmentSlot.CHEST), livingEntity.getWorld(), livingEntity)).apply();
     }
 
     @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/entity/LivingEntity;FFFFFF)V", at = @At("RETURN"))

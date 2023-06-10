@@ -255,7 +255,7 @@ public class TypeEnchantment extends CITType {
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .target(RenderPhaseAccessor.ITEM_TARGET())),
+                .target(RenderPhaseAccessor.ITEM_ENTITY_TARGET())),
         GLINT("glint", 8f, layer -> layer
                 .program(RenderPhaseAccessor.GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
@@ -271,7 +271,7 @@ public class TypeEnchantment extends CITType {
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())
-                .target(RenderPhaseAccessor.ITEM_TARGET())),
+                .target(RenderPhaseAccessor.ITEM_ENTITY_TARGET())),
         DIRECT_ENTITY_GLINT("entity_glint_direct", 0.16f, layer -> layer
                 .program(RenderPhaseAccessor.DIRECT_ENTITY_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())

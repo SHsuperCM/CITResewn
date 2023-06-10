@@ -49,7 +49,7 @@ public class ItemRendererMixin {
             cir.setReturnValue(vertexConsumer);
     }
 
-    @Inject(method = "getCompassGlintConsumer", cancellable = true, at = @At("RETURN"))
+    @Inject(method = "getDynamicDisplayGlintConsumer", cancellable = true, at = @At("RETURN"))
     private static void citresewn$enchantment$getCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
@@ -58,7 +58,7 @@ public class ItemRendererMixin {
             cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1f), cir.getReturnValue()));
     }
 
-    @Inject(method = "getDirectCompassGlintConsumer", cancellable = true, at = @At("RETURN"))
+    @Inject(method = "getDirectDynamicDisplayGlintConsumer", cancellable = true, at = @At("RETURN"))
     private static void citresewn$enchantment$getDirectCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
