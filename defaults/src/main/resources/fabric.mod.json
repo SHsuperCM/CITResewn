@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "citresewn-defaults",
-  "version": "${version}",
+  "version": "${mod_version}",
   "name": "CIT Resewn: Defaults",
   "description": "Default types and conditions for CIT Resewn",
   "authors": [
@@ -28,7 +28,7 @@
     }
   },
   "depends": {
-    "citresewn": "${version}"
+    "citresewn": "${mod_version}"
   },
   "conflicts": {
     "eatinganimationid": "<1.9"
