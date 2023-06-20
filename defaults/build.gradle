@@ -1,7 +1,5 @@
-plugins {
-    id 'fabric-loom' version '1.2-SNAPSHOT'
-    id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6'
-}
+plugins.apply 'fabric-loom'
+plugins.apply 'io.shcm.shsupercm.fabric.fletchingtable'
 
 version = "${property('mod.version')}+${stonecutter.current().version()}"
 group = 'shcm.shsupercm.fabric.citresewn.defaults'
@@ -37,7 +35,7 @@ loom {
 }
 
 java {
-    //withSourcesJar()
+    withSourcesJar()
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 
@@ -65,7 +63,7 @@ if (stonecutter.current().isActiveVersion()) {
         uploadFile = remapJar
         versionNumber = version
         versionName = "v" + version
-        //additionalFiles = [sourcesJar.outputs.getFiles().singleFile]
+        additionalFiles = [sourcesJar.outputs.getFiles().singleFile]
         gameVersions = Arrays.asList(property('mod.target-mc-publish').split(","))
     }
 
