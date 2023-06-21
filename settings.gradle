@@ -9,7 +9,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'io.shcm.shsupercm.fabric.stonecutter' version '1.1'
+    id 'io.shcm.shsupercm.fabric.stonecutter' version '1.2'
 
     id 'fabric-loom' version '1.2-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6' apply false
@@ -19,7 +19,7 @@ plugins {
 
 include 'defaults'
 
-String[] targetMCVersions = [ '1.20.1' ]
+String[] targetMCVersions = [ '1.20.1', '1.19.4' ]
 
 stonecutter.create(rootProject) {
     versions targetMCVersions

@@ -49,8 +49,8 @@ public class ItemRendererMixin {
             cir.setReturnValue(vertexConsumer);
     }
 
-    @Inject(method = "getDynamicDisplayGlintConsumer", cancellable = true, at = @At("RETURN"))
-    private static void citresewn$enchantment$getCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
+    @Inject(method = /*? <1.20 {?*//*"getCompassGlintConsumer"/*?} else {?*/"getDynamicDisplayGlintConsumer"/*?}?*/, cancellable = true, at = @At("RETURN"))
+    private static void citresewn$enchantment$getDynamicDisplayGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
         VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.GLINT.tryApply(null, layer, provider);
@@ -58,8 +58,8 @@ public class ItemRendererMixin {
             cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1f), cir.getReturnValue()));
     }
 
-    @Inject(method = "getDirectDynamicDisplayGlintConsumer", cancellable = true, at = @At("RETURN"))
-    private static void citresewn$enchantment$getDirectCompassGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
+    @Inject(method = /*? <1.20 {?*//*"getDirectCompassGlintConsumer"/*?} else {?*/"getDirectDynamicDisplayGlintConsumer"/*?}?*/, cancellable = true, at = @At("RETURN"))
+    private static void citresewn$enchantment$getDirectDynamicDisplayGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
         VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
