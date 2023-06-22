@@ -19,7 +19,13 @@ dependencies {
     modCompileOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
 
-    compileOnly project(path: ":${stonecutter.current().version()}", configuration: "namedElements")
+    implementation project(path: ":${stonecutter.current().version()}", configuration: "namedElements")
+
+    // testing mods
+    modRuntimeOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
+    modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric-api')}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
+    modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
 }
 
 fletchingTable {
@@ -54,6 +60,8 @@ jar {
 }
 
 if (stonecutter.current().isActiveVersion()) {
+    loom.runConfigs.client.ideConfigGenerated = true
+
     plugins.apply 'com.modrinth.minotaur'
 
     modrinth {

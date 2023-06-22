@@ -54,15 +54,6 @@ jar {
 }
 
 if (stonecutter.current().isActiveVersion()) {
-    dependencies {
-        modRuntimeOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
-        modRuntimeOnly "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric-api')}"
-        modRuntimeOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
-        modRuntimeOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
-        runtimeOnly project(path: ":defaults:${stonecutter.current().version()}", configuration: "namedElements")
-    }
-    loom.runConfigs.client.ideConfigGenerated = true
-
     rootProject.tasks.register('buildActive') {
         setGroup 'project'
 
