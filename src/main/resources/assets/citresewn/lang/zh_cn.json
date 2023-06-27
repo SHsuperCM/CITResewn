@@ -17,7 +17,7 @@
   "config.citresewn.cache_ms.title": "缓存",
   "config.citresewn.cache_ms.tooltip": "cit缓存应该多久刷新一次.\n更高的值将提供更多的性能.\n较低的值将使cits更新更快.\n实时将完全删除缓存,\n让物品每一帧都检查cits.",
   "config.citresewn.cache_ms.ticks.0": "实时",
-  "config.citresewn.cache_ms.ticks.1": "每一个TICK",
+  "config.citresewn.cache_ms.ticks.1": "每一TICK",
   "config.citresewn.cache_ms.ticks.any": "每%sTICKS",
 
 
