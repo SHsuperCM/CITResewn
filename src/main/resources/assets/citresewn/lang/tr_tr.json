@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "CIT Resewn Ayarları",
+  "config.citresewn.configure": "Ayarla",
+
+  "config.citresewn.enabled.title": "Etkinleştirildi",
+  "config.citresewn.enabled.tooltip": "CIT Resewn kaynak paketlerini yüklemeli ve citleri içeri aktarmalı",
+
+  "config.citresewn.mute_errors.title": "Yüklenme hatalarını sustur",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn hataları loglamaz",
+
+  "config.citresewn.mute_warns.title": "Uyarıları sustur",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn uyarıları loglamaz",
+
+  "config.citresewn.broken_paths.title": "Kaynak Paketlerinde bozuk yollara izin ver",
+  "config.citresewn.broken_paths.tooltip": "Bozuk yollardan kaynak paketi yüklensin.\nSorunlara sebep olabilir!",
+
+  "config.citresewn.cache_ms.title": "Önbellek",
+  "config.citresewn.cache_ms.tooltip": "CIT Önbelleği ne kadar sürede bir yenilemeli\nYüksek değerler daha fazla performans sağlar.\nDüşük değerler citin daha hızlı yüklenmesini sağlar.\nGerçek Zamanlı seçeneği önbelleği devre dışı bırakır,\nböylece her karede işlem yapar.",
+  "config.citresewn.cache_ms.ticks.0": "GERÇEK ZAMANLI",
+  "config.citresewn.cache_ms.ticks.1": "HER 1 TICK",
+  "config.citresewn.cache_ms.ticks.any": "HER %s TICKTE ",
+
+
+  "pack.incompatible.broken_paths": "(Bozuk Yol İçeriyor)",
+  "pack.incompatible.confirm.broken_paths": "Bu paket bozuk yollar içeriyor ve gelecekte desteği kesilebilir. Bu uyarıyı kaldırmak için paketin yapımcısıyla iletişime geçin. (~ CIT Resewn)"
+}
