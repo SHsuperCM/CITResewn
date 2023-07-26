@@ -1,1 +1,1 @@
- - Updated to 1.20
+- Added the option to specify the mumber of enchantments an item has via `numberOfEnchantments` or `enchantmentCount`
