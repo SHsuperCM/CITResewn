@@ -22,6 +22,8 @@ public class ConditionNBT extends CITCondition {
     protected String[] path;
 
     protected StringMatcher matchString = null;
+    protected NbtString previousNbtString = null;
+    protected boolean previousMatch = false;
     protected NbtInt matchInteger = null;
     protected NbtByte matchByte = null;
     protected NbtFloat matchFloat = null;
@@ -123,9 +125,12 @@ public class ConditionNBT extends CITCondition {
 
     private boolean testValue(NbtElement element) {
         try {
-            if (element instanceof NbtString nbtString) //noinspection ConstantConditions
-                return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
-            else if (element instanceof NbtInt nbtInt && matchInteger != null)
+            if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
+                if (nbtString.equals(previousNbtString)) return previousMatch;
+                previousNbtString = nbtString.copy();
+                previousMatch = matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
+                return previousMatch;
+            } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
                 return nbtByte.equals(matchByte);
