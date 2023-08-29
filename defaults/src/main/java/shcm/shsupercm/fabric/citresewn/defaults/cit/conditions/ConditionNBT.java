@@ -1,8 +1,10 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
+import com.ibm.icu.impl.locale.XCldrStub;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.nbt.*;
-import net.minecraft.text.Text;
+import org.apache.logging.log4j.Level;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
@@ -11,6 +13,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -22,8 +25,6 @@ public class ConditionNBT extends CITCondition {
     protected String[] path;
 
     protected StringMatcher matchString = null;
-    protected NbtString previousNbtString = null;
-    protected boolean previousMatch = false;
     protected NbtInt matchInteger = null;
     protected NbtByte matchByte = null;
     protected NbtFloat matchFloat = null;
@@ -31,6 +32,8 @@ public class ConditionNBT extends CITCondition {
     protected NbtLong matchLong = null;
     protected NbtShort matchShort = null;
     protected NbtCompound matchCompound = null;
+
+    private static final Pattern TEXT_PATTERN = Pattern.compile("\"text\":\"([^\"]+)\"");
 
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
@@ -125,11 +128,20 @@ public class ConditionNBT extends CITCondition {
 
     private boolean testValue(NbtElement element) {
         try {
-            if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
-                if (nbtString.equals(previousNbtString)) return previousMatch;
-                previousNbtString = nbtString.copy();
-                previousMatch = matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
-                return previousMatch;
+            if (element instanceof NbtString nbtString) {//noinspection ConstantConditions
+                String nbtAsString = nbtString.asString();
+                if (nbtAsString.startsWith("{")) {
+                    StringBuilder text = new StringBuilder();
+                    Matcher textMatcher = TEXT_PATTERN.matcher(nbtAsString);
+                    while (textMatcher.find()) {
+                        String match = textMatcher.group();
+                        text.append(match, 8, match.length() - 1);
+                    }
+
+                    return matchString.matches(text.toString());
+                } else {
+                    return matchString.matches(nbtAsString);
+                }
             } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
