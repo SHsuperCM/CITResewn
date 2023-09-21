@@ -124,7 +124,7 @@ public class ConditionNBT extends CITCondition {
     private boolean testValue(NbtElement element) {
         try {
             if (element instanceof NbtString nbtString) //noinspection ConstantConditions
-                return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
+                return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromLenientJson(nbtString.asString()).getString());
             else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
