@@ -122,27 +122,25 @@ public class ConditionNBT extends CITCondition {
     }
 
     private boolean testValue(NbtElement element) {
-        try {
-            if (element instanceof NbtString nbtString) //noinspection ConstantConditions
-                return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromLenientJson(nbtString.asString()).getString());
-            else if (element instanceof NbtInt nbtInt && matchInteger != null)
-                return nbtInt.equals(matchInteger);
-            else if (element instanceof NbtByte nbtByte && matchByte != null)
-                return nbtByte.equals(matchByte);
-            else if (element instanceof NbtFloat nbtFloat && matchFloat != null)
-                return nbtFloat.equals(matchFloat);
-            else if (element instanceof NbtDouble nbtDouble && matchDouble != null)
-                return nbtDouble.equals(matchDouble);
-            else if (element instanceof NbtLong nbtLong && matchLong != null)
-                return nbtLong.equals(matchLong);
-            else if (element instanceof NbtShort nbtShort && matchShort != null)
-                return nbtShort.equals(matchShort);
-            else if (element instanceof NbtCompound nbtCompound && matchCompound != null)
-                return NbtHelper.matches(matchCompound, nbtCompound, true);
+        if (element instanceof NbtString nbtString) //noinspection ConstantConditions
+            return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromLenientJson(nbtString.asString()).getString());
+        else if (element instanceof NbtInt nbtInt && matchInteger != null)
+            return nbtInt.equals(matchInteger);
+        else if (element instanceof NbtByte nbtByte && matchByte != null)
+            return nbtByte.equals(matchByte);
+        else if (element instanceof NbtFloat nbtFloat && matchFloat != null)
+            return nbtFloat.equals(matchFloat);
+        else if (element instanceof NbtDouble nbtDouble && matchDouble != null)
+            return nbtDouble.equals(matchDouble);
+        else if (element instanceof NbtLong nbtLong && matchLong != null)
+            return nbtLong.equals(matchLong);
+        else if (element instanceof NbtShort nbtShort && matchShort != null)
+            return nbtShort.equals(matchShort);
+        else if (element instanceof NbtCompound nbtCompound && matchCompound != null)
+            return NbtHelper.matches(matchCompound, nbtCompound, true);
 
-            if (element instanceof AbstractNbtNumber nbtNumber && !(matchString instanceof StringMatcher.DirectMatcher))
-                return matchString.matches(String.valueOf(nbtNumber.numberValue()));
-        } catch (Exception ignored) { }
+        if (element instanceof AbstractNbtNumber nbtNumber && !(matchString instanceof StringMatcher.DirectMatcher))
+            return matchString.matches(String.valueOf(nbtNumber.numberValue()));
         return false;
     }
 
