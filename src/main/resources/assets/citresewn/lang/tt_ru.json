@@ -6,13 +6,13 @@
   "config.citresewn.configure": "Көйләү",
 
   "config.citresewn.enabled.title": "Мод",
-  "config.citresewn.enabled.tooltip": "CIT Resewn йөкләргә һәм CIT-лар ресурс җыелмалардан кертергә тиеш",
+  "config.citresewn.enabled.tooltip": "CIT Resewn йөкләргә һәм CIT-лар ресурс җыелмалардан кертергә тиешме",
 
-  "config.citresewn.mute_errors.title": "Loading хаталар mute",
-  "config.citresewn.mute_errors.tooltip": "CIT Resewn CIT хаталарын not log тиеш",
+  "config.citresewn.mute_errors.title": "Йөкләү хаталарын сүндерү",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn CIT хаталарын яздырмаска тиешме",
 
-  "config.citresewn.mute_warns.title": "Loading кисәтүләр mute",
-  "config.citresewn.mute_warns.tooltip": "CIT Resewn CIT кисәтүләрен not log тиеш",
+  "config.citresewn.mute_warns.title": "Йөкләү кисәтүләрын сүндерү",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn CIT кисәтүләрен яздырмаска тиешме",
 
   "config.citresewn.broken_paths.title": "Ресурс җыелмаларындагы ватылган юлларны рөхсәт итү",
   "config.citresewn.broken_paths.tooltip": "Йөкләү өчен тыелган ресурс юлларлы җыелмалар рөхсәт итә.\nПроблемаларны чакырырга мөмкин!",
