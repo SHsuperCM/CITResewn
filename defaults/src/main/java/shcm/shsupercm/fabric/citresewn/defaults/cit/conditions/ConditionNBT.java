@@ -19,6 +19,8 @@ public class ConditionNBT extends CITCondition {
     public static final CITConditionContainer<ConditionNBT> CONTAINER = new CITConditionContainer<>(ConditionNBT.class, ConditionNBT::new,
             "nbt");
 
+    private static final Pattern jsonBeginPattern = Pattern.compile("^\s*[\\{\\[].*");
+
     protected String[] path;
 
     protected StringMatcher matchString = null;
@@ -123,8 +125,12 @@ public class ConditionNBT extends CITCondition {
 
     private boolean testValue(NbtElement element) {
         try {
-            if (element instanceof NbtString nbtString) //noinspection ConstantConditions
-                return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
+            if (element instanceof NbtString nbtString) { // noinspection ConstantConditions
+                String str = nbtString.asString();
+                return matchString.matches(str) || (
+                    jsonBeginPattern.matcher(str).matches() && matchString.matches(Text.Serializer.fromJson(str).getString())
+                );
+            }
             else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
