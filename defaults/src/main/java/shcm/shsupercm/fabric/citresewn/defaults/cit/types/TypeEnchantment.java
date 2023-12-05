@@ -14,7 +14,6 @@ import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionEnchantments;
 import shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfig;
-import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.BufferBuilderStorageAccessor;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.RenderPhaseAccessor;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
@@ -145,7 +144,7 @@ public class TypeEnchantment extends CITType {
                     RenderLayer renderLayer = glintLayer.build(cit.type, cit.propertiesIdentifier);
 
                     cit.type.renderLayers.put(glintLayer, renderLayer);
-                    ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).getEntityBuilders().put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
+                    ((CITBufferBuilderStorage) MinecraftClient.getInstance().getBufferBuilders()).citresewn$getEntityBuilders().put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
                 }
         }
 
@@ -176,7 +175,7 @@ public class TypeEnchantment extends CITType {
 
             for (CIT<TypeEnchantment> cit : loaded)
                 for (RenderLayer renderLayer : cit.type.renderLayers.values())
-                    ((BufferBuilderStorageAccessor) MinecraftClient.getInstance().getBufferBuilders()).getEntityBuilders().remove(renderLayer);
+                    ((CITBufferBuilderStorage) MinecraftClient.getInstance().getBufferBuilders()).citresewn$getEntityBuilders().remove(renderLayer);
 
             loaded.clear();
             loadedLayered.clear();
@@ -521,5 +520,9 @@ public class TypeEnchantment extends CITType {
 
     public interface CITCacheEnchantment {
         CITCache.MultiList<TypeEnchantment> citresewn$getCacheTypeEnchantment();
+    }
+
+    public interface CITBufferBuilderStorage {
+        Map<RenderLayer, BufferBuilder> citresewn$getEntityBuilders();
     }
 }
