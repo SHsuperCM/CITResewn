@@ -19,7 +19,7 @@ plugins {
 
 include 'defaults'
 
-String[] targetMCVersions = [ '1.20.1', '1.19.4' ]
+String[] targetMCVersions = ['1.20.4', '1.20.1', '1.19.4' ]
 
 stonecutter.create(rootProject) {
     versions targetMCVersions

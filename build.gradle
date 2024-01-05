@@ -60,10 +60,10 @@ if (stonecutter.current().isActiveVersion()) {
         dependsOn tasks.getByName('build')
     }
 
-    plugins.apply 'com.modrinth.minotaur'
-    plugins.apply 'com.matthewprenger.cursegradle'
+    //plugins.apply 'com.modrinth.minotaur'
+    //plugins.apply 'com.matthewprenger.cursegradle'
 
-    modrinth {
+    /*modrinth {
         token = TOKEN_MODRINTH
         projectId = property('publish.modrinth.id')
         uploadFile = remapJar
@@ -111,5 +111,5 @@ if (stonecutter.current().isActiveVersion()) {
         dependsOn remapJarTask, curseforgeTask, modrinthTask
         curseforgeTask.mustRunAfter remapJarTask
         modrinthTask.mustRunAfter remapJarTask
-    }
+    }*/
 }
