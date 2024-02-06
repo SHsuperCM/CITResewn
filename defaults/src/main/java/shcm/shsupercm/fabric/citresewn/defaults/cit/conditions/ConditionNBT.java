@@ -20,7 +20,7 @@ public class ConditionNBT extends CITCondition {
             "nbt");
 
     protected String[] path;
-
+    protected Boolean exists = null;
     protected StringMatcher matchString = null;
     protected NbtInt matchInteger = null;
     protected NbtByte matchByte = null;
@@ -39,6 +39,8 @@ public class ConditionNBT extends CITCondition {
         for (String s : path)
             if (s.isEmpty())
                 throw new CITParsingException("Path segment cannot be empty", properties, value.position());
+        if (value.value().startsWith("exists:"))
+        {exists = Boolean.parseBoolean(value.value().substring(7)); return;}
 
         try {
             if (value.value().startsWith("regex:"))
@@ -89,7 +91,7 @@ public class ConditionNBT extends CITCondition {
 
     protected boolean testPath(NbtElement element, int pathIndex) {
         if (element == null)
-            return false;
+            return exists != null && !exists;
 
         if (pathIndex >= path.length)
             return testValue(element);
@@ -123,6 +125,7 @@ public class ConditionNBT extends CITCondition {
 
     private boolean testValue(NbtElement element) {
         try {
+            if (exists != null) return exists;
             if (element instanceof NbtString nbtString) //noinspection ConstantConditions
                 return matchString.matches(nbtString.asString()) || matchString.matches(Text.Serializer.fromJson(nbtString.asString()).getString());
             else if (element instanceof NbtInt nbtInt && matchInteger != null)
