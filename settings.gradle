@@ -21,8 +21,8 @@ include 'defaults'
 
 stonecutter {
     shared {
-        versions '1.20.1', '1.19.4'
-        vcsVersion '1.20.1'
+        versions '1.20.4', '1.20.1', '1.19.4'
+        vcsVersion '1.20.4'
     }
 
     create rootProject, project(':defaults')
