@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "Налады CIT Resewn",
+  "config.citresewn.configure": "Наладзіць",
+
+  "config.citresewn.enabled.title": "Уключыць",
+  "config.citresewn.enabled.tooltip": "Дазваліць CIT Resewn загружаць і ўстаўляць карыстальніцкія тэкстуры прадметаў (КТП) з пакетаў рэсурсаў",
+
+  "config.citresewn.mute_errors.title": "Выключыць памылкі загрузкі",
+  "config.citresewn.mute_errors.tooltip": "Дазволіць CIT Resewn не запісваць памылкі КТП",
+
+  "config.citresewn.mute_warns.title": "Выключыць папярэджанні загрузкі",
+  "config.citresewn.mute_warns.tooltip": "Дазволіць CIT Resewn не запісваць папярэджанні КТП",
+
+  "config.citresewn.broken_paths.title": "Дазволіць хібныя шляхі ў пакетах рэсурсаў",
+  "config.citresewn.broken_paths.tooltip": "Дазволіць загрузку пакетаў рэсурсаў з хібным шляхам.\nМожа выклікаць праблемы!",
+
+  "config.citresewn.cache_ms.title": "Кэш",
+  "config.citresewn.cache_ms.tooltip": "Як часта павінен аднаўляцца кэш КТП.\nВышэйшыя лічбы дадуць больш прадукцыйнайсці.\nНіжэйшыя лічбы будуць загружаць КТП хутчэй.\nАДРАЗУ выдаляе кэш зусім,\n і правярае прадметы КТП кожны кадр.",
+  "config.citresewn.cache_ms.ticks.0": "АДРАЗУ",
+  "config.citresewn.cache_ms.ticks.1": "КОЖНЫ ЦІК",
+  "config.citresewn.cache_ms.ticks.any": "КОЖНЫЯ %s ЦІКАЎ",
+
+
+  "pack.incompatible.broken_paths": "(Мае хібныя шляхі)",
+  "pack.incompatible.confirm.broken_paths": "Гэты пакет рэсурсаў мае хібныя шляхі і ягоная падтрымка можа скончыцца ў будучыні. Звяжыцеся з аўтарам пакета каб убраць гэта папярэджанне. (~ CIT Resewn)"
+}
