@@ -26,7 +26,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
             while ((line = reader.readLine()) != null) {
                 linePos++;
                 line = line.stripLeading();
-                if (line.isEmpty() || line.startsWith("#") || line.startsWith("!"))
+                if (line.isEmpty() || line.startsWith("#") || line.startsWith("!") || line.startsWith("%"))
                     continue;
 
                 while (line.endsWith("\\")) {
@@ -37,7 +37,7 @@ public class PropertiesGroupAdapter extends PropertyGroup {
                         nextLine = "";
                     nextLine = nextLine.stripLeading();
 
-                    if (nextLine.startsWith("#") || nextLine.startsWith("!"))
+                    if (nextLine.startsWith("#") || nextLine.startsWith("!") || nextLine.startsWith("%"))
                         continue;
 
                     line = line.substring(0, line.length() - 1) + "\\n" + nextLine;
