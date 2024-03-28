@@ -45,10 +45,11 @@ public abstract class CITCache<T extends CITType> {
          * @return reference to the CIT or reference to null if no CIT applied
          */
         public WeakReference<CIT<T>> get(CITContext context) {
-            if (this.cit == null || System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
+            long timeMillis = System.currentTimeMillis();
+            if (this.cit == null || timeMillis - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
                 this.cit = new WeakReference<>(this.realtime.apply(context));
-                this.lastCachedStamp = System.currentTimeMillis();
             }
+            this.lastCachedStamp = timeMillis;
 
             return this.cit;
         }
@@ -80,12 +81,13 @@ public abstract class CITCache<T extends CITType> {
          * @return list of references to CITs or empty list no CIT applied
          */
         public List<WeakReference<CIT<T>>> get(CITContext context) {
-            if (this.cit == null || System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
+            long timeMillis = System.currentTimeMillis();
+            if (this.cit == null || timeMillis - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
                 this.cit = new ArrayList<>();
                 for (CIT<T> realtimeCIT : this.realtime.apply(context))
                     this.cit.add(new WeakReference<>(realtimeCIT));
-                this.lastCachedStamp = System.currentTimeMillis();
             }
+            this.lastCachedStamp = timeMillis;
 
             return cit;
         }
