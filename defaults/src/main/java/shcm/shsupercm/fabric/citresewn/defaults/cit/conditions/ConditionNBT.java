@@ -123,9 +123,18 @@ public class ConditionNBT extends CITCondition {
 
     private boolean testValue(NbtElement element) {
         try {
-            if (element instanceof NbtString nbtString) //noinspection ConstantConditions
-                return matchString.matches(nbtString.asString()) || matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(nbtString.asString()).getString());
-            else if (element instanceof NbtInt nbtInt && matchInteger != null)
+            if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
+                String elementString = nbtString.asString();
+                if (matchString.matches(elementString))
+                    return true;
+                for (int i = 0; i < elementString.length(); i++) {
+                    char ch = elementString.charAt(i);
+                    if (Character.isWhitespace(ch))
+                        continue;
+
+                    return (ch == '[' || ch == '{') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
+                }
+            } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
                 return nbtByte.equals(matchByte);
