@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "Tùy chỉnh CIT Resewn"
+  "config.citresewn.configure": "Tùy chỉnh",
+
+  "config.citresewn.enabled.title": "Bật",
+  "config.citresewn.enabled.tooltip": "CIT Resewn có nên tải và đưa cit từ gói tài nguyên không",
+
+  "config.citresewn.mute_errors.title": "Ẩn lỗi tải",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn có nên ghi lại lỗi cit không",
+
+  "config.citresewn.mute_warns.title": "Tắt tiếng cảnh báo tải",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn có nên ghi cảnh báo cit không",
+
+  "config.citresewn.broken_paths.title": "Cho phép các đường dẫn bị hỏng trong gói tài nguyên",
+  "config.citresewn.broken_paths.tooltip": "Cho phép tải các gói có đường dẫn tài nguyên bất hợp pháp.\nCó thể gây ra sự cố!",
+
+  "config.citresewn.cache_ms.title": "Bộ nhớ đệm",
+  "config.citresewn.cache_ms.tooltip": "Tần suất làm mới bộ đệm cit.\nGiá trị cao hơn sẽ mang lại hiệu suất cao hơn.\nGiá trị thấp hơn sẽ giúp cập nhật cit nhanh hơn.\nTHỜI GIAN THỰC sẽ xóa hoàn toàn bộ nhớ đệm,\n giúp các vật phẩm kiểm tra cit mỗi khung hình.",
+  "config.citresewn.cache_ms.ticks.0": "THỜI GIAN THỰC",
+  "config.citresewn.cache_ms.ticks.1": "MỖI TICK",
+  "config.citresewn.cache_ms.ticks.any": "MỖI %s TICK",
+
+
+  "pack.incompatible.broken_paths": "(Chứa các đường dẫn bị hỏng)",
+  "pack.incompatible.confirm.broken_paths": "Gói này chứa các đường dẫn bị hỏng và hỗ trợ cho nó có thể bị loại bỏ trong tương lai. Liên hệ với tác giả gói để loại bỏ cảnh báo này. (~ CIT Resewn)"
+}
