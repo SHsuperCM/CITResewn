@@ -1,0 +1,29 @@
+{
+  "modmenu.summaryTranslation.citresewn": "MCPatcher-ның CIT-ын уенга ашыра",
+  "modmenu.descriptionTranslation.citresewn": "MCPatcher-ның CIT-ын (көйләнелгән предмет текстурларын) уенга ашыра",
+
+  "config.citresewn.title": "CIT Resewn көйләүләре",
+  "config.citresewn.configure": "Көйләү",
+
+  "config.citresewn.enabled.title": "Мод",
+  "config.citresewn.enabled.tooltip": "CIT Resewn йөкләргә һәм CIT-лар ресурс җыелмалардан кертергә тиешме",
+
+  "config.citresewn.mute_errors.title": "Йөкләү хаталарын сүндерү",
+  "config.citresewn.mute_errors.tooltip": "CIT Resewn CIT хаталарын яздырмаска тиешме",
+
+  "config.citresewn.mute_warns.title": "Йөкләү кисәтүләрын сүндерү",
+  "config.citresewn.mute_warns.tooltip": "CIT Resewn CIT кисәтүләрен яздырмаска тиешме",
+
+  "config.citresewn.broken_paths.title": "Ресурс җыелмаларындагы ватылган юлларны рөхсәт итү",
+  "config.citresewn.broken_paths.tooltip": "Йөкләү өчен тыелган ресурс юлларлы җыелмалар рөхсәт итә.\nПроблемаларны чакырырга мөмкин!",
+
+  "config.citresewn.cache_ms.title": "Кәшләү",
+  "config.citresewn.cache_ms.tooltip": "Еш ничек CIT кәше яңартылырга тиеш.\nЮгарырак кыйммәтләр күбрәк эшчәнлекне бирәчәк.\nТүбән кыйммәтләр CIT яңартуын тизрәк итәчәк.\nCIT-ның һәр кадр өчен предмет тикшерүне ясап,\n«РЕАЛЬ ВАКЫТ» кәшне тулысынча бетерәчәк.",
+  "config.citresewn.cache_ms.ticks.0": "РЕАЛЬ ВАКЫТ",
+  "config.citresewn.cache_ms.ticks.1": "ҺӘР ТАКТ",
+  "config.citresewn.cache_ms.ticks.any": "ҺӘР %s ТАКТ",
+
+
+  "pack.incompatible.broken_paths": "(Анда ватылган юллар бар)",
+  "pack.incompatible.confirm.broken_paths": "Бу җыелмада ватылган юллар бар һәм аны өчен хуплау киләчәктә ташлый алачак. Бу кисәтүне бетерү өчен җыелма авторы белән бәйләнешегез. (~ CIT Resewn)"
+}
