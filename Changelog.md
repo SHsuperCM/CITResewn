@@ -1,1 +1,3 @@
- - Updated to 1.20
+ - Significantly improved performance with large resourcepacks.
+ - Significantly improved effectiveness of high config cache time with larger packs.
+ - Fixed crash with some custom enchantment CITs(dbrighthd PR#258)
