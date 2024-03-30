@@ -15,6 +15,11 @@ import java.util.function.Function;
  */
 public abstract class CITCache<T extends CITType> {
     /**
+     * Cache refresh staggering offset
+     */
+    private static byte offset = 0;
+
+    /**
      * The last time in epoch milliseconds that this cache invalidated its stored CIT.
      */
     public long lastCachedStamp = 0;
@@ -45,7 +50,12 @@ public abstract class CITCache<T extends CITType> {
          * @return reference to the CIT or reference to null if no CIT applied
          */
         public WeakReference<CIT<T>> get(CITContext context) {
-            if (this.cit == null || System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
+            if (this.cit == null) {
+                this.cit = new WeakReference<>(null);
+                this.lastCachedStamp = System.currentTimeMillis() + CITResewnConfig.INSTANCE.cache_ms + (offset += 4);
+            }
+
+            if (System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
                 this.cit = new WeakReference<>(this.realtime.apply(context));
                 this.lastCachedStamp = System.currentTimeMillis();
             }
@@ -80,7 +90,12 @@ public abstract class CITCache<T extends CITType> {
          * @return list of references to CITs or empty list no CIT applied
          */
         public List<WeakReference<CIT<T>>> get(CITContext context) {
-            if (this.cit == null || System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
+            if (this.cit == null) {
+                this.cit = new ArrayList<>();
+                this.lastCachedStamp = System.currentTimeMillis() + CITResewnConfig.INSTANCE.cache_ms + (offset += 4);
+            }
+
+            if (System.currentTimeMillis() - this.lastCachedStamp >= CITResewnConfig.INSTANCE.cache_ms) {
                 this.cit = new ArrayList<>();
                 for (CIT<T> realtimeCIT : this.realtime.apply(context))
                     this.cit.add(new WeakReference<>(realtimeCIT));
