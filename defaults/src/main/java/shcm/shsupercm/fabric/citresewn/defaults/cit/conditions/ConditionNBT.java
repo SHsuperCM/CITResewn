@@ -132,7 +132,7 @@ public class ConditionNBT extends CITCondition {
                     if (Character.isWhitespace(ch))
                         continue;
 
-                    return (ch == '[' || ch == '{') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
+                    return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
                 }
             } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
