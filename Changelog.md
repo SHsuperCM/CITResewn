@@ -1,3 +1,2 @@
- - Significantly improved performance with large resourcepacks.
- - Significantly improved effectiveness of high config cache time with larger packs.
- - Fixed crash with some custom enchantment CITs(dbrighthd PR#258)
+ - Fixed CITs not being checked on the first cache interval
+ - Fixed CITs not matching correctly in cases where the root element of a json is a string
