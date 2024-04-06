@@ -122,7 +122,7 @@ public class TypeEnchantment extends CITType {
         public float globalFade = 0.5f;
 
         public List<CIT<TypeEnchantment>> loaded = new ArrayList<>();
-        public List<List<CIT<TypeEnchantment>>> loadedLayered = new ArrayList<>();
+        public final List<List<CIT<TypeEnchantment>>> loadedLayered = new ArrayList<>();
 
         private List<CIT<TypeEnchantment>> appliedContext = null;
         private boolean apply = false, defaultGlint = false;
@@ -134,10 +134,12 @@ public class TypeEnchantment extends CITType {
             Map<Integer, List<CIT<TypeEnchantment>>> layers = new HashMap<>();
             for (CIT<TypeEnchantment> cit : loaded)
                 layers.computeIfAbsent(cit.type.layer, i -> new ArrayList<>()).add(cit);
-            loadedLayered.clear();
-            layers.entrySet().stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .forEachOrdered(layer -> loadedLayered.add(layer.getValue()));
+            synchronized (loadedLayered) {
+                loadedLayered.clear();
+                layers.entrySet().stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEachOrdered(layer -> loadedLayered.add(layer.getValue()));
+            }
 
             for (CIT<TypeEnchantment> cit : loaded)
                 for (GlintRenderLayer glintLayer : GlintRenderLayer.values()) {
@@ -178,7 +180,9 @@ public class TypeEnchantment extends CITType {
                     MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.remove(renderLayer);
 
             loaded.clear();
-            loadedLayered.clear();
+            synchronized (loadedLayered) {
+                loadedLayered.clear();
+            }
         }
 
         public void apply() {
@@ -224,15 +228,17 @@ public class TypeEnchantment extends CITType {
         }
 
         public List<CIT<TypeEnchantment>> getRealTimeCIT(CITContext context) {
-            List<CIT<TypeEnchantment>> cits = new ArrayList<>();
-            for (List<CIT<TypeEnchantment>> layer : loadedLayered)
-                for (CIT<TypeEnchantment> cit : layer)
-                    if (cit.test(context)) {
-                        cits.add(cit);
-                        break;
-                    }
+            synchronized (loadedLayered) {
+                List<CIT<TypeEnchantment>> cits = new ArrayList<>();
+                for (List<CIT<TypeEnchantment>> layer : loadedLayered)
+                    for (CIT<TypeEnchantment> cit : layer)
+                        if (cit.test(context)) {
+                            cits.add(cit);
+                            break;
+                        }
 
-            return cits;
+                return cits;
+            }
         }
     }
     
