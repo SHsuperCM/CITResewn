@@ -1,0 +1,26 @@
+{
+  "config.citresewn.title": "Configuración de CIT Resewn",
+  "config.citresewn.configure": "Configurar",
+
+  "config.citresewn.enabled.title": "Habilitado",
+  "config.citresewn.enabled.tooltip": "¿Debería CIT Resewn cargar e inyectar cits desde los resourcepacks?",
+
+  "config.citresewn.mute_errors.title": "Silenciar errores de carga",
+  "config.citresewn.mute_errors.tooltip": "¿Debería CIT Resewn no registrar errores de cit?",
+
+  "config.citresewn.mute_warns.title": "Silenciar advertencias de carga",
+  "config.citresewn.mute_warns.tooltip": "¿Debería CIT Resewn no registrar advertencias de cit?",
+
+  "config.citresewn.broken_paths.title": "Permitir rutas incorrectas en los resourcepacks",
+  "config.citresewn.broken_paths.tooltip": "Permite cargar paquetes con rutas de recursos ilegales.\nPuede causar problemas.",
+
+  "config.citresewn.cache_ms.title": "Caché",
+  "config.citresewn.cache_ms.tooltip": "Con qué frecuencia se debe actualizar la caché de cit.\nValores más altos brindarán mejor rendimiento.\nValores más bajos harán que las cits se actualicen más rápido.\nREALTIME eliminará por completo la caché,\nhaciendo que los elementos verifiquen las cits en cada fotograma.",
+  "config.citresewn.cache_ms.ticks.0": "TIEMPO REAL",
+  "config.citresewn.cache_ms.ticks.1": "CADA TICK",
+  "config.citresewn.cache_ms.ticks.any": "CADA %s TICKS",
+
+
+  "pack.incompatible.broken_paths": "(Contiene rutas incorrectas)",
+  "pack.incompatible.confirm.broken_paths": "Este paquete contiene rutas incorrectas y el soporte para él podría eliminarse en el futuro. Contacta al autor del paquete para eliminar esta advertencia. (~ CIT Resewn)"
+}
