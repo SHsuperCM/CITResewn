@@ -1,0 +1,25 @@
+{
+  "config.citresewn.title": "Konfigurasi CIT Resewn",
+  "config.citresewn.configure": "Konfigurasikan",
+
+  "config.citresewn.enabled.title": "Didayakan",
+  "config.citresewn.enabled.tooltip": "Patutkah CIT Resewn memuat dan menyuntik cit daripada pek sumber",
+
+  "config.citresewn.mute_errors.title": "Redamkan ralat pemuatan",
+  "config.citresewn.mute_errors.tooltip": "Patutkah CIT Resewn tidak mengelog ralat cit",
+
+  "config.citresewn.mute_warns.title": "Redamkan amaran pemuatan",
+  "config.citresewn.mute_warns.tooltip": "Patutkah CIT Resewn tidak mengelog amaran cit",
+
+  "config.citresewn.broken_paths.title": "Benarkan laluan yang rosak dalam pek sumber",
+  "config.citresewn.broken_paths.tooltip": "Benarkan pek dengan laluan sumber tidak sah untuk dimuatkan. Boleh menyebabkan masalah!",
+
+  "config.citresewn.cache_ms.title": "Cache",
+  "config.citresewn.cache_ms.tooltip": "Berapa kerap cache cit perlu dimuat semula.\nNilai yang lebih tinggi akan memberikan prestasi yang lebih baik.\nNilai yang lebih rendah akan menjadikan cit dikemas kini lebih cepat.\nREALTIME akan mengalih keluar cache sepenuhnya,\n membuat item menyemak cit pada setiap bingkai.",
+  "config.citresewn.cache_ms.ticks.0": "REALTIME",
+  "config.citresewn.cache_ms.ticks.1": "SETIAP DETIK",
+  "config.citresewn.cache_ms.ticks.any": "SETIAP %s DETIK",
+
+  "pack.incompatible.broken_paths": "(mengandungi laluan yang rosak)",
+  "pack.incompatible.confirm.broken_paths": "Pek ini mengandungi laluan yang rosak dan sokongan untuknya mungkin akan digugurkan pada masa hadapan. Hubungi pengarang pek untuk mengalih keluar amaran ini. (~ CIT Resewn)"
+}
