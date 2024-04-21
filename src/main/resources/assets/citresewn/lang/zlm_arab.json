@@ -1,0 +1,25 @@
+{
+  "config.citresewn.title": "کونفيݢوراسي CIT Resewn",
+  "config.citresewn.configure": "کونفيݢوراسيکن",
+
+  "config.citresewn.enabled.title": "دداياکن",
+  "config.citresewn.enabled.tooltip": "ڤاتوتکه CIT Resewn مموات دان مپونتيق cit درڤد ڤيک سومبر",
+
+  "config.citresewn.mute_errors.title": "ردمکن رالت ڤمواتن",
+  "config.citresewn.mute_errors.tooltip": "ڤاتوتکه CIT Resewn تيدق مڠلوݢ رالت cit",
+
+  "config.citresewn.mute_warns.title": "ردمکن امرن ڤمواتن",
+  "config.citresewn.mute_warns.tooltip": "ڤاتوتکه CIT Resewn تيدق مڠلوݢ امرن cit",
+
+  "config.citresewn.broken_paths.title": "بنرکن لالوان يڠ روسق دالم ڤيک سومبر",
+  "config.citresewn.broken_paths.tooltip": "بنرکن ڤيک دڠن لالوان سومبر تيدق صح اونتوق دمواتکن. بوليه مپببکن مسئله!",
+
+  "config.citresewn.cache_ms.title": "کش",
+  "config.citresewn.cache_ms.tooltip": "براڤ کرڤ کش cit ڤرلو دموات سمولا.\nنيلاي يڠ لبيه تيڠݢي اکن ممبريکن ڤريستاسي يڠ لبيه باءيق.\nنيلاي يڠ لبيه رنده اکن منجاديکن چيت دکمس کيني لبيه چڤت.\nREALTIME اکن مڠاليه کلوار کش سڤنوهڽ⹁\n ممبوات اءيتم مپيمق cit ڤد ستياڤ بيڠکاي.",
+  "config.citresewn.cache_ms.ticks.0": "REALTIME",
+  "config.citresewn.cache_ms.ticks.1": "ستياڤ دتيق",
+  "config.citresewn.cache_ms.ticks.any": "ستياڤ %s دتيق",
+
+  "pack.incompatible.broken_paths": "(مڠاندوڠي لالوان يڠ روسق)",
+  "pack.incompatible.confirm.broken_paths": "ڤيک اين مڠاندوڠي لالوان يڠ روسق دان سوکوڠن اونتوقڽ موڠکين اکن دݢوݢورکن ڤد ماس هادڤن. هوبوڠي ڤڠارڠ ڤيک اونتوق مڠاليه کلوار امرن اين. (~ CIT Resewn)"
+}
