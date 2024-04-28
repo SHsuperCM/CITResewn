@@ -14,7 +14,7 @@
   "config.citresewn.mute_warns.title": "Йөкләү кисәтүләрын сүндерү",
   "config.citresewn.mute_warns.tooltip": "CIT Resewn CIT кисәтүләрен яздырмаска тиешме",
 
-  "config.citresewn.broken_paths.title": "Ресурс җыелмаларындагы ватылган юлларны рөхсәт итү",
+  "config.citresewn.broken_paths.title": "Ресурс җыелмаларындагы ватылган юллар",
   "config.citresewn.broken_paths.tooltip": "Йөкләү өчен тыелган ресурс юлларлы җыелмалар рөхсәт итә.\nПроблемаларны чакырырга мөмкин!",
 
   "config.citresewn.cache_ms.title": "Кәшләү",
