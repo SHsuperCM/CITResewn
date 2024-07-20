@@ -53,11 +53,11 @@ public abstract class CITType {
             path = rootIdentifier.getPath().substring(0, rootIdentifier.getPath().length() - 11);
             if (!path.endsWith(extension))
                 path = path + extension;
-            Identifier pathIdentifier = new Identifier(rootIdentifier.getNamespace(), path);
+            Identifier pathIdentifier = Identifier.of(rootIdentifier.getNamespace(), path);
             return resourceManager.getResource(pathIdentifier).isPresent() ? pathIdentifier: null;
         }
 
-        Identifier pathIdentifier = new Identifier(path);
+        Identifier pathIdentifier = Identifier.tryParse(path);
 
         path = pathIdentifier.getPath().replace('\\', '/');
         if (!path.endsWith(extension))
@@ -66,17 +66,17 @@ public abstract class CITType {
         if (path.startsWith("./"))
             path = path.substring(2);
         else if (!path.contains("..")) {
-            pathIdentifier = new Identifier(pathIdentifier.getNamespace(), path);
+            pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), path);
             if (resourceManager.getResource(pathIdentifier).isPresent())
                 return pathIdentifier;
             else if (path.startsWith("assets/")) {
                 path = path.substring(7);
                 int sep = path.indexOf('/');
-                pathIdentifier = new Identifier(path.substring(0, sep), path.substring(sep + 1));
+                pathIdentifier = Identifier.of(path.substring(0, sep), path.substring(sep + 1));
                 if (resourceManager.getResource(pathIdentifier).isPresent())
                     return pathIdentifier;
             }
-            pathIdentifier = new Identifier(pathIdentifier.getNamespace(), defaultedTypeDirectory + "/" + path);
+            pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), defaultedTypeDirectory + "/" + path);
             if (resourceManager.getResource(pathIdentifier).isPresent())
                 return pathIdentifier;
         }
@@ -97,7 +97,7 @@ public abstract class CITType {
             pathParts.addLast(path);
         path = String.join("/", pathParts);
 
-        pathIdentifier = new Identifier(rootIdentifier.getNamespace(), path);
+        pathIdentifier = Identifier.of(rootIdentifier.getNamespace(), path);
 
         return resourceManager.getResource(pathIdentifier).isPresent() ? pathIdentifier : null;
     }

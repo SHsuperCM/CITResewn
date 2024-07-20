@@ -29,7 +29,7 @@ public abstract class IdentifierCondition extends CITCondition {
     @Override
     public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
         try {
-            this.value = new Identifier(value.value());
+            this.value = Identifier.tryParse(value.value());
         } catch (InvalidIdentifierException e) {
             throw new CITParsingException(e.getMessage(), properties, value.position());
         }

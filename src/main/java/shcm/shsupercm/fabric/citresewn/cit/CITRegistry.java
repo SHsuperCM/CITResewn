@@ -70,7 +70,7 @@ public final class CITRegistry { private CITRegistry(){}
             if (namespace.equals("citresewn-defaults"))
                 namespace = "citresewn";
 
-            final Identifier id = new Identifier(namespace, entrypointContainer.getEntrypoint().id);
+            final Identifier id = Identifier.of(namespace, entrypointContainer.getEntrypoint().id);
             CITTypeContainer<?> container = entrypointContainer.getEntrypoint();
 
             TYPES.put(id, container);
@@ -107,14 +107,14 @@ public final class CITRegistry { private CITRegistry(){}
      * @throws UnknownCITTypeException if the given type is unrecognized in the registry
      */
     public static CITType parseType(PropertyGroup properties) throws UnknownCITTypeException {
-        Identifier type = new Identifier("citresewn", "item");
+        Identifier type = Identifier.of("citresewn", "item");
 
         PropertyValue propertiesType = properties.getLastWithoutMetadata("citresewn", "type");
         if (propertiesType != null) {
             String value = propertiesType.value();
             if (!value.contains(":"))
                 value = "citresewn:" + value;
-            type = new Identifier(value);
+            type = Identifier.tryParse(value);
         }
 
         CITTypeContainer<? extends CITType> typeContainer = TYPES.get(type);

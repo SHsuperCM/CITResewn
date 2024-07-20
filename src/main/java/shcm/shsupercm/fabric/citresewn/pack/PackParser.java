@@ -40,7 +40,7 @@ public final class PackParser { private PackParser() {}
         for (ResourcePack pack : resourceManager.streamResourcePacks().collect(Collectors.toList()))
             for (String namespace : pack.getNamespaces(ResourceType.CLIENT_RESOURCES))
                 for (String root : ROOTS) {
-                    Identifier identifier = new Identifier(namespace, root + "/cit.properties");
+                    Identifier identifier = Identifier.of(namespace, root + "/cit.properties");
                     try {
                         InputSupplier<InputStream> citPropertiesSupplier = pack.open(ResourceType.CLIENT_RESOURCES, identifier);
                         if (citPropertiesSupplier != null)

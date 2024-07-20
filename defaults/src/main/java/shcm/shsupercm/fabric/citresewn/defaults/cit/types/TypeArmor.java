@@ -43,7 +43,7 @@ public class TypeArmor extends CITType {
 
         if (!itemsConditionPresent)
             try {
-                Identifier propertiesName = new Identifier(properties.stripName());
+                Identifier propertiesName = Identifier.tryParse(properties.stripName());
                 if (!Registries.ITEM.containsId(propertiesName))
                     throw new Exception();
                 Item item = Registries.ITEM.get(propertiesName);

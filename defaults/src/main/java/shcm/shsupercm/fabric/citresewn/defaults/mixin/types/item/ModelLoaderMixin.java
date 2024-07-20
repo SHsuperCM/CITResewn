@@ -89,7 +89,7 @@ public class ModelLoaderMixin {
     public Object citresewn$fixDuplicatePrefixSuffix(Object key) {
         Identifier original = (Identifier) key;
         if (CONTAINER.active() && original.getPath().startsWith("models/models/") && original.getPath().endsWith(".json.json") && original.getPath().contains("cit"))
-            return new Identifier(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
+            return Identifier.of(original.getNamespace(), original.getPath().substring(7, original.getPath().length() - 5));
 
         return original;
     }
