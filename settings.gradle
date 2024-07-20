@@ -11,7 +11,7 @@ pluginManagement {
 plugins {
     id 'io.shcm.shsupercm.fabric.stonecutter' version '1.5'
 
-    id 'fabric-loom' version '1.6-SNAPSHOT' apply false
+    id 'fabric-loom' version '1.7-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6' apply false
     id 'com.modrinth.minotaur' version '2.+' apply false
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
@@ -21,8 +21,8 @@ include 'defaults'
 
 stonecutter {
     shared {
-        versions '1.20.4', '1.20.1', '1.19.4'
-        vcsVersion '1.20.4'
+        versions '1.21', '1.20.4', '1.20.1', '1.19.4'
+        vcsVersion '1.21'
     }
 
     create rootProject, project(':defaults')
