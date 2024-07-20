@@ -29,7 +29,7 @@ public class ConditionDamage extends IntegerCondition {
 
     @Override
     protected int getPercentageTotalValue(CITContext context) {
-        return context.stack.isDamageable() ? context.stack.getItem().getMaxDamage() : 0;
+        return context.stack.isDamageable() ? context.stack.getMaxDamage() : 0;
     }
 
     @Override

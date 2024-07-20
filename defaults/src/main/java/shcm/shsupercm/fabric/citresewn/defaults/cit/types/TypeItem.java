@@ -158,7 +158,7 @@ public class TypeItem extends CITType {
                     textureOverrideMap = ((JsonUnbakedModelAccessor) itemJson).getTextureMap();
                     Identifier defaultAsset = assetIdentifiers.get(null);
                     textureOverrideMap.replaceAll((layerName, originalTextureEither) -> {
-                        Identifier textureIdentifier = assetIdentifiers.remove(originalTextureEither.map(SpriteIdentifier::getTextureId, Identifier::new));
+                        Identifier textureIdentifier = assetIdentifiers.remove(originalTextureEither.map(SpriteIdentifier::getTextureId, Identifier::tryParse));
                         if (textureIdentifier != null)
                             return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, textureIdentifier));
                         if (defaultAsset != null)
