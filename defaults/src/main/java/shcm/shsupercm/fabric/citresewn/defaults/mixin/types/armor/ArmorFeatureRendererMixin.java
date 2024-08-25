@@ -1,5 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.mixin.types.armor;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -7,6 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,8 +42,9 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
             citresewn$cachedTextures = cit.type.textures;
     }
 
+    /*?<1.21 {?*//*
     @Inject(method = "getArmorTexture", cancellable = true, at = @At("HEAD"))
-    private void citresewn$getArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
+    private void citresewn$replaceArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
         if (citresewn$cachedTextures == null)
             return;
 
@@ -48,4 +52,16 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         if (identifier != null)
             cir.setReturnValue(identifier);
     }
+    /*?} else {?*/
+    @WrapOperation(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorMaterial$Layer;getTexture(Z)Lnet/minecraft/util/Identifier;"))
+    public Identifier citresewn$replaceArmorTexture(ArmorMaterial.Layer layer, boolean secondLayer, Operation<Identifier> original) {
+        if (citresewn$cachedTextures != null) {
+            String layerPath = layer.getTexture(secondLayer).getPath();
+            Identifier identifier = citresewn$cachedTextures.get(layerPath.substring("textures/models/armor/".length(), layerPath.length() - ".png".length()));
+            if (identifier != null)
+                return identifier;
+        }
+        return original.call(layer, secondLayer);
+    }
+    /*?}?*/
 }
