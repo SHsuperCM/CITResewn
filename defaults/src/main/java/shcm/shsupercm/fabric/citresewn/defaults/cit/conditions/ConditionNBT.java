@@ -84,7 +84,8 @@ public class ConditionNBT extends CITCondition {
 
     @Override
     public boolean test(CITContext context) {
-        return testPath(context.stack.getNbt(), 0);
+        return false;
+        //todo 1205 return testPath(context.stack.getNbt(), 0);
     }
 
     protected boolean testPath(NbtElement element, int pathIndex) {
@@ -132,7 +133,8 @@ public class ConditionNBT extends CITCondition {
                     if (Character.isWhitespace(ch))
                         continue;
 
-                    return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
+                    //todo 1205  return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
+                    return false;
                 }
             } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
