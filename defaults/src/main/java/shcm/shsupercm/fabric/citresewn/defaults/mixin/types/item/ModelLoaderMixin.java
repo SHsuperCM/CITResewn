@@ -62,7 +62,7 @@ public class ModelLoaderMixin {
     }
 
     @Inject(method = "bake", at = @At("RETURN"))
-    public void citresewn$linkTypeItemModels(BiFunction<Identifier, SpriteIdentifier, Sprite> spriteLoader, CallbackInfo ci) {
+    public void citresewn$linkTypeItemModels(/*?<1.21 {?*//*BiFunction<Identifier, SpriteIdentifier, Sprite> spriteLoader/*?} else {?*/ModelLoader.SpriteGetter spriteGetter/*?}?*/, CallbackInfo ci) {
         if (!CONTAINER.active())
             return;
 
