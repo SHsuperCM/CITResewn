@@ -73,7 +73,7 @@ public class TypeItem extends CITType {
 
         if (this.items.size() == 0)
             try {
-                Identifier propertiesName = new Identifier(properties.stripName());
+                Identifier propertiesName = Identifier.tryParse(properties.stripName());
                 if (!Registries.ITEM.containsId(propertiesName))
                     throw new Exception();
                 Item item = Registries.ITEM.get(propertiesName);
@@ -105,7 +105,7 @@ public class TypeItem extends CITType {
 
             String subItem = property.keyMetadata();
             Identifier subItemIdentifier = fixDeprecatedSubItem(subItem, properties, property.position());
-            assetIdentifiers.put(subItemIdentifier == null ? new Identifier("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
+            assetIdentifiers.put(subItemIdentifier == null ? Identifier.of("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
         }
 
         if (assetIdentifiers.size() == 0) { // attempt to load texture
@@ -124,7 +124,7 @@ public class TypeItem extends CITType {
 
                 String subItem = property.keyMetadata();
                 Identifier subItemIdentifier = fixDeprecatedSubItem(subItem, properties, property.position());
-                assetIdentifiers.put(subItemIdentifier == null ? new Identifier("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
+                assetIdentifiers.put(subItemIdentifier == null ? Identifier.of("minecraft", "item/" + subItem) : subItemIdentifier, subIdentifier);
             }
         } else { // attempt to load textureOverrideMap from textures
             PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture", "tile");
@@ -158,7 +158,7 @@ public class TypeItem extends CITType {
                     textureOverrideMap = ((JsonUnbakedModelAccessor) itemJson).getTextureMap();
                     Identifier defaultAsset = assetIdentifiers.get(null);
                     textureOverrideMap.replaceAll((layerName, originalTextureEither) -> {
-                        Identifier textureIdentifier = assetIdentifiers.remove(originalTextureEither.map(SpriteIdentifier::getTextureId, Identifier::new));
+                        Identifier textureIdentifier = assetIdentifiers.remove(originalTextureEither.map(SpriteIdentifier::getTextureId, Identifier::tryParse));
                         if (textureIdentifier != null)
                             return Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, textureIdentifier));
                         if (defaultAsset != null)
@@ -177,17 +177,17 @@ public class TypeItem extends CITType {
                 if (baseIdentifier != null) {
                     unbakedAssets.put(null, loadUnbakedAsset(resourceManager, baseIdentifier, null));
 
-                    if (this.items.contains(Items.GOAT_HORN) && !assetIdentifiers.containsKey(new Identifier("minecraft", "item/tooting_goat_horn"))) // HOTFIX: TOOTING GOAT HORN WITH TEXTURE ASSET
-                        assetIdentifiers.put(new Identifier("minecraft", "item/tooting_goat_horn"), baseIdentifier);
+                    if (this.items.contains(Items.GOAT_HORN) && !assetIdentifiers.containsKey(Identifier.of("minecraft", "item/tooting_goat_horn"))) // HOTFIX: TOOTING GOAT HORN WITH TEXTURE ASSET
+                        assetIdentifiers.put(Identifier.of("minecraft", "item/tooting_goat_horn"), baseIdentifier);
                 }
 
                 if (!assetIdentifiers.isEmpty()) { // contains sub models
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
                     for (Item item : this.items) {
                         Identifier itemIdentifier = Registries.ITEM.getId(item);
-                        overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
+                        overrideConditions.put(Identifier.of(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
-                        Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
+                        Identifier itemModelIdentifier = Identifier.of(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
                         try (Reader resourceReader = new InputStreamReader(resourceManager.getResource(itemModelIdentifier).orElseThrow().getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
@@ -209,7 +209,7 @@ public class TypeItem extends CITType {
 
                         if (overrideModel != null) {
                             GENERATED_SUB_CITS_SEEN.add(replacement);
-                            replacement = new Identifier(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
+                            replacement = Identifier.of(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
                         }
 
                         unbakedAssets.put(conditions, loadUnbakedAsset(resourceManager, replacement, overrideModel));
@@ -220,7 +220,7 @@ public class TypeItem extends CITType {
 
                 if (baseIdentifier != null) {
                     if (!GENERATED_SUB_CITS_SEEN.add(baseIdentifier)) // cit generated duplicate
-                        baseIdentifier = new Identifier(baseIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + baseIdentifier.getPath());
+                        baseIdentifier = Identifier.of(baseIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + baseIdentifier.getPath());
                     GENERATED_SUB_CITS_SEEN.add(baseIdentifier);
 
                     JsonUnbakedModel model = loadUnbakedAsset(resourceManager, baseIdentifier, null);
@@ -243,7 +243,7 @@ public class TypeItem extends CITType {
 
                                 replacement = baseIdentifier;
                                 if (!GENERATED_SUB_CITS_SEEN.add(replacement)) // cit generated duplicate
-                                    replacement = new Identifier(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
+                                    replacement = Identifier.of(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
                                 GENERATED_SUB_CITS_SEEN.add(replacement);
 
                                 JsonUnbakedModel jsonModel = loadUnbakedAsset(resourceManager, replacement, null);
@@ -269,9 +269,9 @@ public class TypeItem extends CITType {
                     LinkedHashMap<Identifier, List<ModelOverride.Condition>> overrideConditions = new LinkedHashMap<>();
                     for (Item item : this.items) {
                         Identifier itemIdentifier = Registries.ITEM.getId(item);
-                        overrideConditions.put(new Identifier(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
+                        overrideConditions.put(Identifier.of(itemIdentifier.getNamespace(), "item/" + itemIdentifier.getPath()), Collections.emptyList());
 
-                        Identifier itemModelIdentifier = new Identifier(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
+                        Identifier itemModelIdentifier = Identifier.of(itemIdentifier.getNamespace(), "models/item/" + itemIdentifier.getPath() + ".json");
                         try (Reader resourceReader = new InputStreamReader( resourceManager.getResource(itemModelIdentifier).orElseThrow().getInputStream())) {
                             JsonUnbakedModel itemModelJson = JsonUnbakedModel.deserialize(resourceReader);
 
@@ -290,7 +290,7 @@ public class TypeItem extends CITType {
                             continue;
 
                         if (!GENERATED_SUB_CITS_SEEN.add(replacement)) // cit generated duplicate
-                            replacement = new Identifier(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
+                            replacement = Identifier.of(replacement.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + replacement.getPath());
                         GENERATED_SUB_CITS_SEEN.add(replacement);
 
                         List<ModelOverride.Condition> conditions = overrideConditions.get(overrideModel);
@@ -309,7 +309,7 @@ public class TypeItem extends CITType {
         {
             Identifier possibleIdentifier = assetIdentifier;
             while (possibleIdentifier.getPath().startsWith(GENERATED_SUB_CITS_PREFIX))
-                possibleIdentifier = new Identifier(possibleIdentifier.getNamespace(), possibleIdentifier.getPath().substring(possibleIdentifier.getPath().substring(GENERATED_SUB_CITS_PREFIX.length()).indexOf('_') + GENERATED_SUB_CITS_PREFIX.length() + 1));
+                possibleIdentifier = Identifier.of(possibleIdentifier.getNamespace(), possibleIdentifier.getPath().substring(possibleIdentifier.getPath().substring(GENERATED_SUB_CITS_PREFIX.length()).indexOf('_') + GENERATED_SUB_CITS_PREFIX.length() + 1));
             identifier = possibleIdentifier;
         }
         JsonUnbakedModel json;
@@ -359,7 +359,7 @@ public class TypeItem extends CITType {
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
                         parentId = resolveAsset(identifier, parentId.getPath(), "models", ".json", resourceManager);
                         if (parentId != null)
-                            ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                            ((JsonUnbakedModelAccessor) json).setParentId(ResewnItemModelIdentifier.pack(parentId));
                     }
                 }
 
@@ -368,7 +368,7 @@ public class TypeItem extends CITType {
                     if (override.getModelId().getPath().startsWith("./") || (modelIdPathSplit.length > 2 && modelIdPathSplit[1].equals("cit"))) {
                         Identifier resolvedOverridePath = resolveAsset(identifier, override.getModelId().getPath(), "models", ".json", resourceManager);
                         if (resolvedOverridePath != null)
-                            return new ModelOverride(new ResewnItemModelIdentifier(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
+                            return new ModelOverride(ResewnItemModelIdentifier.pack(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
                     }
 
                     return override;
@@ -379,7 +379,7 @@ public class TypeItem extends CITType {
         } else if (identifier.getPath().endsWith(".png")) {
             json = overrideModel == null ? getModelForFirstItemType(resourceManager) : getModelFromOverrideModel(resourceManager, overrideModel);
             if (json == null)
-                json = new JsonUnbakedModel(new Identifier("minecraft", "item/generated"), new ArrayList<>(), ImmutableMap.of("layer0", Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, identifier))), true, JsonUnbakedModel.GuiLight.ITEM, ModelTransformation.NONE, new ArrayList<>());
+                json = new JsonUnbakedModel(Identifier.of("minecraft", "item/generated"), new ArrayList<>(), ImmutableMap.of("layer0", Either.left(new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, identifier))), true, JsonUnbakedModel.GuiLight.ITEM, ModelTransformation.NONE, new ArrayList<>());
             json.getOverrides().clear();
             json.id = assetIdentifier.toString();
             json.id = json.id.substring(0, json.id.length() - 4);
@@ -416,26 +416,26 @@ public class TypeItem extends CITType {
         if (replacement != null) {
             CITResewn.logWarnLoading(properties.messageWithDescriptorOf("Warning: Using deprecated sub item id \"" + subItem + "\" instead of \"" + replacement + "\"", position));
 
-            return new Identifier("minecraft", "item/" + replacement);
+            return Identifier.of("minecraft", "item/" + replacement);
         }
 
         return null;
     }
 
     private JsonUnbakedModel getModelForFirstItemType(ResourceManager resourceManager) {
-        Identifier firstItemIdentifier = Registries.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = new Identifier(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
+        Identifier firstItemIdentifier = Registries.ITEM.getId(this.items.iterator().next()), firstItemModelIdentifier = Identifier.of(firstItemIdentifier.getNamespace(), "models/item/" + firstItemIdentifier.getPath() + ".json");
         try (InputStream is = resourceManager.getResource(firstItemModelIdentifier).orElseThrow().getInputStream()) {
             JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
 
-            if (((JsonUnbakedModelAccessor) json).getParentId().equals(new Identifier("minecraft", "item/template_spawn_egg"))) { // HOTFIX: Fixes not being able to change spawn eggs using texture cits
-                try (InputStream parentInputStream = resourceManager.getResource(new Identifier("minecraft", "models/item/template_spawn_egg.json")).orElseThrow().getInputStream()) {
+            if (((JsonUnbakedModelAccessor) json).getParentId().equals(Identifier.of("minecraft", "item/template_spawn_egg"))) { // HOTFIX: Fixes not being able to change spawn eggs using texture cits
+                try (InputStream parentInputStream = resourceManager.getResource(Identifier.of("minecraft", "models/item/template_spawn_egg.json")).orElseThrow().getInputStream()) {
                     json = JsonUnbakedModel.deserialize(IOUtils.toString(parentInputStream, StandardCharsets.UTF_8));
                     ((JsonUnbakedModelAccessor) json).getTextureMap().remove("layer1"); // PARITY
                 }
             }
 
             if (!GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier)) // cit generated duplicate
-                firstItemModelIdentifier = new Identifier(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
+                firstItemModelIdentifier = Identifier.of(firstItemModelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + firstItemModelIdentifier.getPath());
             GENERATED_SUB_CITS_SEEN.add(firstItemModelIdentifier);
 
             json.id = firstItemModelIdentifier.toString();
@@ -447,12 +447,12 @@ public class TypeItem extends CITType {
     }
 
     private JsonUnbakedModel getModelFromOverrideModel(ResourceManager resourceManager, Identifier overrideModel) {
-        Identifier modelIdentifier = new Identifier(overrideModel.getNamespace(), "models/" + overrideModel.getPath() + ".json");
+        Identifier modelIdentifier = Identifier.of(overrideModel.getNamespace(), "models/" + overrideModel.getPath() + ".json");
         try (InputStream is = resourceManager.getResource(modelIdentifier).orElseThrow().getInputStream()) {
             JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
 
             if (!GENERATED_SUB_CITS_SEEN.add(modelIdentifier)) // cit generated duplicate
-                modelIdentifier = new Identifier(modelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + modelIdentifier.getPath());
+                modelIdentifier = Identifier.of(modelIdentifier.getNamespace(), GENERATED_SUB_CITS_PREFIX + GENERATED_SUB_CITS_SEEN.size() + "_" + modelIdentifier.getPath());
             GENERATED_SUB_CITS_SEEN.add(modelIdentifier);
 
             json.id = modelIdentifier.toString();

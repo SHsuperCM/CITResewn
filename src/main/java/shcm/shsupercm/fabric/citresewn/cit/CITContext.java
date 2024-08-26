@@ -8,6 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -53,8 +56,14 @@ public class CITContext {
     public Map<Identifier, Integer> enchantments() {
         if (this.enchantments == null) {
             this.enchantments = new LinkedHashMap<>();
+            /*?<1.21 {?*//*
             for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
                 this.enchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
+            /*?} else {?*/
+            for (Map.Entry<RegistryEntry<Enchantment>, Integer> entry : EnchantmentHelper.getEnchantments(stack).getEnchantmentEntries())
+                this.enchantments.put(entry.getKey().getKey().map(RegistryKey::getValue).orElseGet(() -> Identifier.of("unregistered")), entry.getValue());
+            /*?}?*/
+
         }
         return this.enchantments;
     }

@@ -24,7 +24,7 @@ import java.util.Set;
  */
 public class GlobalProperties extends PropertyGroup {
     public GlobalProperties() {
-        super("global_properties", new Identifier("citresewn", "global_properties"));
+        super("global_properties", Identifier.of("citresewn", "global_properties"));
     }
 
     @Override

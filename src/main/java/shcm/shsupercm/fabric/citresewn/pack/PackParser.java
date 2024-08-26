@@ -40,14 +40,14 @@ public final class PackParser { private PackParser() {}
         for (ResourcePack pack : resourceManager.streamResourcePacks().collect(Collectors.toList()))
             for (String namespace : pack.getNamespaces(ResourceType.CLIENT_RESOURCES))
                 for (String root : ROOTS) {
-                    Identifier identifier = new Identifier(namespace, root + "/cit.properties");
+                    Identifier identifier = Identifier.of(namespace, root + "/cit.properties");
                     try {
                         InputSupplier<InputStream> citPropertiesSupplier = pack.open(ResourceType.CLIENT_RESOURCES, identifier);
                         if (citPropertiesSupplier != null)
-                            globalProperties.load(pack.getName(), identifier, citPropertiesSupplier.get());
+                            globalProperties.load(pack./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/(), identifier, citPropertiesSupplier.get());
                     } catch (FileNotFoundException ignored) {
                     } catch (Exception e) {
-                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack.getName());
+                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/());
                         e.printStackTrace();
                     }
                 }
@@ -66,7 +66,7 @@ public final class PackParser { private PackParser() {}
             for (Map.Entry<Identifier, Resource> entry : resourceManager.findResources(root + "/cit", s -> s.getPath().endsWith(".properties")).entrySet()) {
                 String packName = null;
                 try {
-                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getResourcePackName(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
+                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getPack()./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
                 } catch (CITParsingException e) {
                     CITResewn.logErrorLoading(e.getMessage());
                 } catch (Exception e) {

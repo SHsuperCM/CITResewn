@@ -63,8 +63,8 @@ public class FallbackCondition extends IdentifierCondition {
             if (cit.fallback == null) {
                 if (fallbackCITResewnRoot && cit.propertiesIdentifier.getPath().startsWith("citresewn/")) {
                     String subPath = cit.propertiesIdentifier.getPath().substring(10);
-                    remove.add(new Identifier(cit.propertiesIdentifier.getNamespace(), "optifine/" + subPath));
-                    remove.add(new Identifier(cit.propertiesIdentifier.getNamespace(), "mcpatcher/" + subPath));
+                    remove.add(Identifier.of(cit.propertiesIdentifier.getNamespace(), "optifine/" + subPath));
+                    remove.add(Identifier.of(cit.propertiesIdentifier.getNamespace(), "mcpatcher/" + subPath));
                 }
             } else {
                 remove.add(cit.fallback);
