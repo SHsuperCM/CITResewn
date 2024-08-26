@@ -49,7 +49,7 @@ public class ModelLoaderMixin {
                 cit.type.loadUnbakedAssets(MinecraftClient.getInstance().getResourceManager());
 
                 for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
-                    ResewnItemModelIdentifier id = new ResewnItemModelIdentifier(unbakedModel.id);
+                    Identifier id = ResewnItemModelIdentifier.pack(Identifier.of(unbakedModel.id));
                     this.unbakedModels.put(id, unbakedModel);
                     this.modelsToBake.put(id, unbakedModel);
                 }
@@ -71,9 +71,9 @@ public class ModelLoaderMixin {
         for (CIT<TypeItem> cit : CONTAINER.loaded) {
             for (Map.Entry<List<ModelOverride.Condition>, JsonUnbakedModel> citModelEntry : cit.type.unbakedAssets.entrySet()) {
                 if (citModelEntry.getKey() == null) {
-                    cit.type.bakedModel = this.bakedModels.get(new ResewnItemModelIdentifier(citModelEntry.getValue().id));
+                    cit.type.bakedModel = this.bakedModels.get(ResewnItemModelIdentifier.pack(Identifier.of(citModelEntry.getValue().id)));
                 } else {
-                    BakedModel bakedModel = bakedModels.get(new ResewnItemModelIdentifier(citModelEntry.getValue().id));
+                    BakedModel bakedModel = bakedModels.get(ResewnItemModelIdentifier.pack(Identifier.of(citModelEntry.getValue().id)));
                     if (bakedModel == null)
                         CITResewn.logWarnLoading("Skipping sub cit: Failed loading model for \"" + citModelEntry.getValue().id + "\" in " + cit.propertiesIdentifier + " from " + cit.packName);
                     else

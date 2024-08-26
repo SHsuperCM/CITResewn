@@ -27,8 +27,9 @@ import java.util.stream.Collectors;
 @Mixin(ModelLoader.class)
 public class ModelLoaderMixin {
     @Inject(method = "loadModelFromJson", cancellable = true, at = @At("HEAD"))
-    public void citresewn$forceLiteralResewnModelIdentifier(Identifier id, CallbackInfoReturnable<JsonUnbakedModel> cir) {
-        if (id instanceof ResewnItemModelIdentifier) {
+    public void citresewn$forceLiteralResewnModelIdentifier(Identifier originalId, CallbackInfoReturnable<JsonUnbakedModel> cir) {
+        if (ResewnItemModelIdentifier.marked(originalId)) {
+            final Identifier id = ResewnItemModelIdentifier.unpack(originalId);
             try (InputStream is = MinecraftClient.getInstance().getResourceManager().getResource(id).orElseThrow().getInputStream()) {
                 JsonUnbakedModel json = JsonUnbakedModel.deserialize(IOUtils.toString(is, StandardCharsets.UTF_8));
                 json.id = id.toString();
@@ -54,7 +55,7 @@ public class ModelLoaderMixin {
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
                         parentId = CITType.resolveAsset(id, parentId.getPath(), "models", ".json", MinecraftClient.getInstance().getResourceManager());
                         if (parentId != null)
-                            ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                            ((JsonUnbakedModelAccessor) json).setParentId(ResewnItemModelIdentifier.pack(parentId));
                     }
                 }
 
@@ -63,7 +64,7 @@ public class ModelLoaderMixin {
                     if (override.getModelId().getPath().startsWith("./") || (modelIdPathSplit.length > 2 && modelIdPathSplit[1].equals("cit"))) {
                         Identifier resolvedOverridePath = CITType.resolveAsset(id, override.getModelId().getPath(), "models", ".json", MinecraftClient.getInstance().getResourceManager());
                         if (resolvedOverridePath != null)
-                            return new ModelOverride(new ResewnItemModelIdentifier(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
+                            return new ModelOverride(ResewnItemModelIdentifier.pack(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
                     }
 
                     return override;

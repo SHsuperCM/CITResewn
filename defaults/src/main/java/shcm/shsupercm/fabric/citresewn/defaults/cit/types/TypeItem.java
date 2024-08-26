@@ -359,7 +359,7 @@ public class TypeItem extends CITType {
                     if (parentId.getPath().startsWith("./") || (parentIdPathSplit.length > 2 && parentIdPathSplit[1].equals("cit"))) {
                         parentId = resolveAsset(identifier, parentId.getPath(), "models", ".json", resourceManager);
                         if (parentId != null)
-                            ((JsonUnbakedModelAccessor) json).setParentId(new ResewnItemModelIdentifier(parentId));
+                            ((JsonUnbakedModelAccessor) json).setParentId(ResewnItemModelIdentifier.pack(parentId));
                     }
                 }
 
@@ -368,7 +368,7 @@ public class TypeItem extends CITType {
                     if (override.getModelId().getPath().startsWith("./") || (modelIdPathSplit.length > 2 && modelIdPathSplit[1].equals("cit"))) {
                         Identifier resolvedOverridePath = resolveAsset(identifier, override.getModelId().getPath(), "models", ".json", resourceManager);
                         if (resolvedOverridePath != null)
-                            return new ModelOverride(new ResewnItemModelIdentifier(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
+                            return new ModelOverride(ResewnItemModelIdentifier.pack(resolvedOverridePath), override.streamConditions().collect(Collectors.toList()));
                     }
 
                     return override;
