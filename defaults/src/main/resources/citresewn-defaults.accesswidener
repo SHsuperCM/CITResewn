@@ -13,6 +13,8 @@ accessible   field   net/minecraft/client/render/model/json/ModelOverrideList ov
 mutable      field   net/minecraft/client/render/model/json/ModelOverrideList overrides [Lnet/minecraft/client/render/model/json/ModelOverrideList$BakedOverride;
 accessible   field   net/minecraft/client/render/model/json/ModelOverrideList conditionTypes [Lnet/minecraft/util/Identifier;
 mutable      field   net/minecraft/client/render/model/json/ModelOverrideList conditionTypes [Lnet/minecraft/util/Identifier;
+extendable   class   net/minecraft/util/Identifier
+accessible   method  net/minecraft/util/Identifier <init> (Ljava/lang/String;Ljava/lang/String;)V
 
 # TypeEnchantment
 accessible   field   net/minecraft/client/render/VertexConsumerProvider$Immediate layerBuffers Ljava/util/Map;

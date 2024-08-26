@@ -7,7 +7,11 @@ import net.minecraft.util.Identifier;
  */
 public class ResewnItemModelIdentifier extends Identifier {
     public ResewnItemModelIdentifier(String id) {
+        /*?<1.21 {?*//*
         super(id);
+        /*?} else {?*/
+        this(Identifier.of(id));
+        /*?}?*/
     }
 
     public ResewnItemModelIdentifier(Identifier identifier) {
