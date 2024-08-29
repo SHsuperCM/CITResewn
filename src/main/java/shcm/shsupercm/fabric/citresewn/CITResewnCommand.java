@@ -8,6 +8,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -43,7 +44,7 @@ public class CITResewnCommand {
     /**
      * Registers all of CIT Resewn's commands.
      */
-    public static void register() {
+    @Entrypoint(Entrypoint.CLIENT) public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(
                 ClientCommandManager.literal("citresewn").executes(context -> {

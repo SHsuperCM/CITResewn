@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
+import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
@@ -48,7 +49,7 @@ public final class CITRegistry { private CITRegistry(){}
      * @see CITTypeContainer
      * @see CITConditionContainer
      */
-    public static void registerAll() {
+    @Entrypoint(Entrypoint.CLIENT) public static void registerAll() {
         info("Registering CIT Conditions");
         for (var entrypointContainer : FabricLoader.getInstance().getEntrypointContainers(CITConditionContainer.ENTRYPOINT, CITConditionContainer.class)) {
             String namespace = entrypointContainer.getProvider().getMetadata().getId();
