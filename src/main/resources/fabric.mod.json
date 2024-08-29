@@ -21,7 +21,7 @@
     "citresewn.mixins.json"
   ],
   "depends": {
-    "fabric": "*",
+    "fabric-api": "*",
     "fabricloader": "*",
     "minecraft": "${mod_target_mc}"
   },
