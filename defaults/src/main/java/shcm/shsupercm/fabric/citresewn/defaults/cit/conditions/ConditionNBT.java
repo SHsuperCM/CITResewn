@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class ConditionNBT extends CITCondition {
-    @Entrypoint(CITConditionContainer.ENTRYPOINT)
+    /*?<1.21 {?*//*@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}?*/
     public static final CITConditionContainer<ConditionNBT> CONTAINER = new CITConditionContainer<>(ConditionNBT.class, ConditionNBT::new,
             "nbt");
 
@@ -84,37 +84,40 @@ public class ConditionNBT extends CITCondition {
 
     @Override
     public boolean test(CITContext context) {
-        return false;
-        //todo 1205 return testPath(context.stack.getNbt(), 0);
+        /*?>=1.21 {?*/
+        throw new AssertionError("NBT condition replaced with component condition in 1.21");
+        /*?} else {?*//*
+        return testPath(context.stack.getNbt(), 0, context);
+        /*?}?*/
     }
 
-    protected boolean testPath(NbtElement element, int pathIndex) {
+    protected boolean testPath(NbtElement element, int pathIndex, CITContext context) {
         if (element == null)
             return false;
 
         if (pathIndex >= path.length)
-            return testValue(element);
+            return testValue(element, context);
 
         final String path = this.path[pathIndex];
         if (path.equals("*")) {
             if (element instanceof NbtCompound compound) {
                 for (NbtElement subElement : compound.entries.values())
-                    if (testPath(subElement, pathIndex + 1))
+                    if (testPath(subElement, pathIndex + 1, context))
                         return true;
             } else if (element instanceof NbtList list) {
                 for (NbtElement subElement : list)
-                    if (testPath(subElement, pathIndex + 1))
+                    if (testPath(subElement, pathIndex + 1, context))
                         return true;
             }
         } else {
             if (element instanceof NbtCompound compound)
-                return testPath(compound.get(path), pathIndex + 1);
+                return testPath(compound.get(path), pathIndex + 1, context);
             else if (element instanceof NbtList list) {
                 if (path.equals("count"))
-                    return testValue(NbtInt.of(list.size()));
+                    return testValue(NbtInt.of(list.size()), context);
 
                 try {
-                    return testPath(list.get(Integer.parseInt(path)), pathIndex + 1);
+                    return testPath(list.get(Integer.parseInt(path)), pathIndex + 1, context);
                 } catch (NumberFormatException | IndexOutOfBoundsException ignored) { }
             }
         }
@@ -122,7 +125,7 @@ public class ConditionNBT extends CITCondition {
         return false;
     }
 
-    private boolean testValue(NbtElement element) {
+    private boolean testValue(NbtElement element, CITContext context) {
         try {
             if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
                 String elementString = nbtString.asString();
@@ -133,8 +136,7 @@ public class ConditionNBT extends CITCondition {
                     if (Character.isWhitespace(ch))
                         continue;
 
-                    //todo 1205  return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
-                    return false;
+                    return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString/*?>=1.21 {?*/, context.world.getRegistryManager()/*?}?*/).getString());
                 }
             } else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
