@@ -4,6 +4,7 @@ import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.function.Supplier;
@@ -47,7 +48,7 @@ public abstract class EnumCondition<T extends Enum<? extends EnumCondition.Alias
     }
 
     @Override
-    public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
+    public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
         for (T enumConstant : values.get())
             for (String alias : ((Aliased) enumConstant).getAliases())
                 if (ignoreCase ? alias.equalsIgnoreCase(value.value()) : alias.equals(value.value())) {

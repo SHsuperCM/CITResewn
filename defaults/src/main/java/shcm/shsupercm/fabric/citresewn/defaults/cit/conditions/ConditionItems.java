@@ -10,6 +10,7 @@ import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierConditio
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ListCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.LinkedHashSet;
@@ -32,8 +33,8 @@ public class ConditionItems extends ListCondition<ConditionItems.ItemCondition> 
     }
 
     @Override
-    public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
-        super.load(value, properties);
+    public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
+        super.load(key, value, properties);
 
         Set<Item> items = new LinkedHashSet<>();
 
@@ -56,8 +57,8 @@ public class ConditionItems extends ListCondition<ConditionItems.ItemCondition> 
         public Item item = null;
 
         @Override
-        public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
-            super.load(value, properties);
+        public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
+            super.load(key, value, properties);
 
             if (Registries.ITEM.containsId(this.value))
                 this.item = Registries.ITEM.get(this.value);
