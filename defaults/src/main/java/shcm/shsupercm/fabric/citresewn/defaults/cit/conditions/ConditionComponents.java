@@ -1,6 +1,9 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import net.minecraft.component.ComponentType;
+import net.minecraft.registry.Registries;
+import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
@@ -15,23 +18,38 @@ public class ConditionComponents extends CITCondition {
     public static final CITConditionContainer<ConditionComponents> CONTAINER = new CITConditionContainer<>(ConditionComponents.class, ConditionComponents::new,
             "components", "component", "nbt");
 
+    private ComponentType<?> componentType;
+    private String componentMetadata;
+
     @Override
     public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
+        String metadata = value.keyMetadata();
         if (key.path().equals("nbt")) {
-            if (value.keyMetadata().startsWith("display.Name")) {
-                value = new PropertyValue("minecraft:custom_name" + value.keyMetadata().substring("display.Name".length()), value.value(), value.separator(), value.position(), value.propertiesIdentifier(), value.packName());
+            if (metadata.startsWith("display.Name")) {
+                metadata = "minecraft:custom_name" + value.keyMetadata().substring("display.Name".length());
                 CITResewn.logWarnLoading(properties.messageWithDescriptorOf("Using legacy nbt.display.Name", value.position()));
-            } else if (value.keyMetadata().startsWith("display.Lore")) {
-                value = new PropertyValue("minecraft:lore" + value.keyMetadata().substring("display.Lore".length()), value.value(), value.separator(), value.position(), value.propertiesIdentifier(), value.packName());
+            } else if (metadata.startsWith("display.Lore")) {
+                metadata = "minecraft:lore" + value.keyMetadata().substring("display.Lore".length());
                 CITResewn.logWarnLoading(properties.messageWithDescriptorOf("Using legacy nbt.display.Lore", value.position()));
             } else
                 throw new CITParsingException("NBT condition is not supported since 1.21", properties, value.position());
         }
 
+        metadata = metadata.replace("~", "minecraft:");
+
+        String componentId = metadata.split("\\.")[0];
+
+        if ((this.componentType = Registries.DATA_COMPONENT_TYPE.get(Identifier.tryParse(componentId))) == null)
+            throw new CITParsingException("Unknown condition type \"" + componentId + "\"", properties, value.position());
+
+        this.componentMetadata = metadata = metadata.substring(componentId.length());
+
+        
     }
 
     @Override
     public boolean test(CITContext context) {
+
         return false;
     }
 }
