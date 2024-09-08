@@ -20,6 +20,9 @@ public class ConditionComponents extends CITCondition {
 
     private ComponentType<?> componentType;
     private String componentMetadata;
+    private String requiredValue;
+
+    private ConditionNBT fallbackNBTCheck;
 
     @Override
     public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
@@ -40,11 +43,14 @@ public class ConditionComponents extends CITCondition {
         String componentId = metadata.split("\\.")[0];
 
         if ((this.componentType = Registries.DATA_COMPONENT_TYPE.get(Identifier.tryParse(componentId))) == null)
-            throw new CITParsingException("Unknown condition type \"" + componentId + "\"", properties, value.position());
+            throw new CITParsingException("Unknown component type \"" + componentId + "\"", properties, value.position());
 
         this.componentMetadata = metadata = metadata.substring(componentId.length());
 
-        
+        this.requiredValue = value.value();
+
+        this.fallbackNBTCheck = new ConditionNBT();
+        this.fallbackNBTCheck.loadNbtCondition(value, properties, metadata.split("\\."), this.requiredValue);
     }
 
     @Override
