@@ -1,7 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+/*?>=1.21 {?*/
 import net.minecraft.component.ComponentType;
+/*?}?*/
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
@@ -20,7 +24,7 @@ public class ConditionComponents extends CITCondition {
 
     private ComponentType<?> componentType;
     private String componentMetadata;
-    private String requiredValue;
+    private String matchValue;
 
     private ConditionNBT fallbackNBTCheck;
 
@@ -45,17 +49,31 @@ public class ConditionComponents extends CITCondition {
         if ((this.componentType = Registries.DATA_COMPONENT_TYPE.get(Identifier.tryParse(componentId))) == null)
             throw new CITParsingException("Unknown component type \"" + componentId + "\"", properties, value.position());
 
-        this.componentMetadata = metadata = metadata.substring(componentId.length());
+        metadata = metadata.substring(componentId.length());
+        if (metadata.startsWith("."))
+            metadata = metadata.substring(1);
+        this.componentMetadata = metadata;
 
-        this.requiredValue = value.value();
+        this.matchValue = value.value();
 
         this.fallbackNBTCheck = new ConditionNBT();
-        this.fallbackNBTCheck.loadNbtCondition(value, properties, metadata.split("\\."), this.requiredValue);
+        String[] metadataNbtPath = metadata.split("\\.");
+        if (metadataNbtPath.length == 1 && metadataNbtPath[0].isEmpty())
+            metadataNbtPath = new String[0];
+        this.fallbackNBTCheck.loadNbtCondition(value, properties, metadataNbtPath, this.matchValue);
     }
 
     @Override
     public boolean test(CITContext context) {
+        /*?>=1.21 {?*/
+        Object stackComponent = context.stack.getComponents().get(this.componentType);
+        if (stackComponent != null) {
 
+
+            NbtElement fallbackComponentNBT = ((ComponentType<Object>) this.componentType).getCodec().encodeStart(NbtOps.INSTANCE, stackComponent).getOrThrow();
+            return this.fallbackNBTCheck.testPath(fallbackComponentNBT, 0, context);
+        }
+        /*?}?*/
         return false;
     }
 }
