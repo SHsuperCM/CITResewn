@@ -134,18 +134,9 @@ public class ConditionNBT extends CITCondition {
 
     public boolean testValue(NbtElement element, CITContext context) {
         try {
-            if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
-                String elementString = nbtString.asString();
-                if (matchString.matches(elementString))
-                    return true;
-                for (int i = 0; i < elementString.length(); i++) {
-                    char ch = elementString.charAt(i);
-                    if (Character.isWhitespace(ch))
-                        continue;
-
-                    return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString/*?>=1.21 {?*/, context.world.getRegistryManager()/*?}?*/).getString());
-                }
-            } else if (element instanceof NbtInt nbtInt && matchInteger != null)
+            if (element instanceof NbtString nbtString)
+                return testString(nbtString.asString(), null, context);
+            else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
                 return nbtByte.equals(matchByte);
@@ -164,6 +155,22 @@ public class ConditionNBT extends CITCondition {
                 return matchString.matches(String.valueOf(nbtNumber.numberValue()));
         } catch (Exception ignored) { }
         return false;
+    }
+
+    public boolean testString(String element, Text elementText, CITContext context) {
+        if (element != null) {
+            if (matchString.matches(element))
+                return true;
+
+            if (elementText == null)
+                elementText = Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/
+                        .fromJson(element/*?>=1.21 {?*/, context.world.getRegistryManager()/*?}?*/);
+        }
+
+        if (elementText == null)
+            return false;
+
+        return matchString.matches(elementText.getString());
     }
 
     protected static abstract class StringMatcher {

@@ -7,6 +7,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.Registries;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
@@ -68,7 +69,12 @@ public class ConditionComponents extends CITCondition {
         /*?>=1.21 {?*/
         Object stackComponent = context.stack.getComponents().get(this.componentType);
         if (stackComponent != null) {
-
+            if (stackComponent instanceof Text text) {
+                if (this.fallbackNBTCheck.testString(null, text, context))
+                    return true;
+            } /*else if (stackComponent instanceof LoreComponent lore) {
+                //todo avoid nbt based check if possible
+            }*/
 
             NbtElement fallbackComponentNBT = ((ComponentType<Object>) this.componentType).getCodec().encodeStart(NbtOps.INSTANCE, stackComponent).getOrThrow();
             return this.fallbackNBTCheck.testPath(fallbackComponentNBT, 0, context);
