@@ -8,6 +8,7 @@ import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.Locale;
@@ -15,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class ConditionNBT extends CITCondition {
-    @Entrypoint(CITConditionContainer.ENTRYPOINT)
+    /*?<1.21 {?*//*@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}?*/
     public static final CITConditionContainer<ConditionNBT> CONTAINER = new CITConditionContainer<>(ConditionNBT.class, ConditionNBT::new,
             "nbt");
 
@@ -31,90 +32,99 @@ public class ConditionNBT extends CITCondition {
     protected NbtCompound matchCompound = null;
 
     @Override
-    public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
+    public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
         if (value.keyMetadata() == null || value.keyMetadata().isEmpty())
             throw new CITParsingException("Missing nbt path", properties, value.position());
 
-        path = value.keyMetadata().split("\\.");
-        for (String s : path)
+        String[] nbtPath = value.keyMetadata().split("\\.");
+        for (String s : nbtPath)
             if (s.isEmpty())
                 throw new CITParsingException("Path segment cannot be empty", properties, value.position());
 
+        loadNbtCondition(value, properties, nbtPath, value.value());
+    }
+
+    public void loadNbtCondition(PropertyValue value, PropertyGroup properties, String[] path, String nbtValue) throws CITParsingException {
+        this.path = path;
+
         try {
-            if (value.value().startsWith("regex:"))
-                matchString = new StringMatcher.RegexMatcher(value.value().substring(6));
-            else if (value.value().startsWith("iregex:"))
-                matchString = new StringMatcher.IRegexMatcher(value.value().substring(7));
-            else if (value.value().startsWith("pattern:"))
-                matchString = new StringMatcher.PatternMatcher(value.value().substring(8));
-            else if (value.value().startsWith("ipattern:"))
-                matchString = new StringMatcher.IPatternMatcher(value.value().substring(9));
+            if (nbtValue.startsWith("regex:"))
+                matchString = new StringMatcher.RegexMatcher(nbtValue.substring(6));
+            else if (nbtValue.startsWith("iregex:"))
+                matchString = new StringMatcher.IRegexMatcher(nbtValue.substring(7));
+            else if (nbtValue.startsWith("pattern:"))
+                matchString = new StringMatcher.PatternMatcher(nbtValue.substring(8));
+            else if (nbtValue.startsWith("ipattern:"))
+                matchString = new StringMatcher.IPatternMatcher(nbtValue.substring(9));
             else
-                matchString = new StringMatcher.DirectMatcher(value.value());
+                matchString = new StringMatcher.DirectMatcher(nbtValue);
         } catch (PatternSyntaxException e) {
             throw new CITParsingException("Malformatted regex expression", properties, value.position(), e);
         } catch (Exception ignored) { }
         try {
-            if (value.value().startsWith("#"))
-                matchInteger = NbtInt.of(Integer.parseInt(value.value().substring(1).toLowerCase(Locale.ENGLISH), 16));
-            else if (value.value().startsWith("0x"))
-                matchInteger = NbtInt.of(Integer.parseInt(value.value().substring(2).toLowerCase(Locale.ENGLISH), 16));
+            if (nbtValue.startsWith("#"))
+                matchInteger = NbtInt.of(Integer.parseInt(nbtValue.substring(1).toLowerCase(Locale.ENGLISH), 16));
+            else if (nbtValue.startsWith("0x"))
+                matchInteger = NbtInt.of(Integer.parseInt(nbtValue.substring(2).toLowerCase(Locale.ENGLISH), 16));
             else
-                matchInteger = NbtInt.of(Integer.parseInt(value.value()));
+                matchInteger = NbtInt.of(Integer.parseInt(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchByte = NbtByte.of(Byte.parseByte(value.value()));
+            matchByte = NbtByte.of(Byte.parseByte(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchFloat = NbtFloat.of(Float.parseFloat(value.value()));
+            matchFloat = NbtFloat.of(Float.parseFloat(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchDouble = NbtDouble.of(Double.parseDouble(value.value()));
+            matchDouble = NbtDouble.of(Double.parseDouble(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchLong = NbtLong.of(Long.parseLong(value.value()));
+            matchLong = NbtLong.of(Long.parseLong(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchShort = NbtShort.of(Short.parseShort(value.value()));
+            matchShort = NbtShort.of(Short.parseShort(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchCompound = StringNbtReader.parse(value.value());
+            matchCompound = StringNbtReader.parse(nbtValue);
         } catch (Exception ignored) { }
     }
 
     @Override
     public boolean test(CITContext context) {
-        return false;
-        //todo 1205 return testPath(context.stack.getNbt(), 0);
+        /*?>=1.21 {?*/
+        throw new AssertionError("NBT condition replaced with component condition in 1.21");
+        /*?} else {?*//*
+        return testPath(context.stack.getNbt(), 0, context);
+        /*?}?*/
     }
 
-    protected boolean testPath(NbtElement element, int pathIndex) {
+    public boolean testPath(NbtElement element, int pathIndex, CITContext context) {
         if (element == null)
             return false;
 
         if (pathIndex >= path.length)
-            return testValue(element);
+            return testValue(element, context);
 
         final String path = this.path[pathIndex];
         if (path.equals("*")) {
             if (element instanceof NbtCompound compound) {
                 for (NbtElement subElement : compound.entries.values())
-                    if (testPath(subElement, pathIndex + 1))
+                    if (testPath(subElement, pathIndex + 1, context))
                         return true;
             } else if (element instanceof NbtList list) {
                 for (NbtElement subElement : list)
-                    if (testPath(subElement, pathIndex + 1))
+                    if (testPath(subElement, pathIndex + 1, context))
                         return true;
             }
         } else {
             if (element instanceof NbtCompound compound)
-                return testPath(compound.get(path), pathIndex + 1);
+                return testPath(compound.get(path), pathIndex + 1, context);
             else if (element instanceof NbtList list) {
                 if (path.equals("count"))
-                    return testValue(NbtInt.of(list.size()));
+                    return testValue(NbtInt.of(list.size()), context);
 
                 try {
-                    return testPath(list.get(Integer.parseInt(path)), pathIndex + 1);
+                    return testPath(list.get(Integer.parseInt(path)), pathIndex + 1, context);
                 } catch (NumberFormatException | IndexOutOfBoundsException ignored) { }
             }
         }
@@ -122,21 +132,11 @@ public class ConditionNBT extends CITCondition {
         return false;
     }
 
-    private boolean testValue(NbtElement element) {
+    public boolean testValue(NbtElement element, CITContext context) {
         try {
-            if (element instanceof NbtString nbtString) { //noinspection ConstantConditions
-                String elementString = nbtString.asString();
-                if (matchString.matches(elementString))
-                    return true;
-                for (int i = 0; i < elementString.length(); i++) {
-                    char ch = elementString.charAt(i);
-                    if (Character.isWhitespace(ch))
-                        continue;
-
-                    //todo 1205  return (ch == '[' || ch == '{' || ch == '"') && matchString.matches(Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/.fromJson(elementString).getString());
-                    return false;
-                }
-            } else if (element instanceof NbtInt nbtInt && matchInteger != null)
+            if (element instanceof NbtString nbtString)
+                return testString(nbtString.asString(), null, context);
+            else if (element instanceof NbtInt nbtInt && matchInteger != null)
                 return nbtInt.equals(matchInteger);
             else if (element instanceof NbtByte nbtByte && matchByte != null)
                 return nbtByte.equals(matchByte);
@@ -155,6 +155,22 @@ public class ConditionNBT extends CITCondition {
                 return matchString.matches(String.valueOf(nbtNumber.numberValue()));
         } catch (Exception ignored) { }
         return false;
+    }
+
+    public boolean testString(String element, Text elementText, CITContext context) {
+        if (element != null) {
+            if (matchString.matches(element))
+                return true;
+
+            if (elementText == null)
+                elementText = Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/
+                        .fromJson(element/*?>=1.21 {?*/, context.world.getRegistryManager()/*?}?*/);
+        }
+
+        if (elementText == null)
+            return false;
+
+        return matchString.matches(elementText.getString());
     }
 
     protected static abstract class StringMatcher {

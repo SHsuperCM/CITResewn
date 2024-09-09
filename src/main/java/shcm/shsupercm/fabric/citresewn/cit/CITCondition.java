@@ -4,6 +4,7 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.Collections;
@@ -18,11 +19,13 @@ import java.util.Set;
 public abstract class CITCondition {
     /**
      * Parses the given property value into the condition.
-     * @param value value to read
+     *
+     * @param key        key for this condition
+     * @param value      value to read
      * @param properties the group containing value
      * @throws CITParsingException if errored while parsing the condition
      */
-    public abstract void load(PropertyValue value, PropertyGroup properties) throws CITParsingException;
+    public abstract void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException;
 
     /**
      * @return a set of classes of conditions that have integration with this condition

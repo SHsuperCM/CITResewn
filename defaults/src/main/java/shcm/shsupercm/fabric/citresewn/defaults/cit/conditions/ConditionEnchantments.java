@@ -1,7 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
@@ -10,6 +9,7 @@ import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierConditio
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ListCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 import java.util.Set;
@@ -39,8 +39,8 @@ public class ConditionEnchantments extends ListCondition<ConditionEnchantments.E
 
     protected static class EnchantmentCondition extends IdentifierCondition {
         @Override
-        public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException {
-            super.load(value, properties);
+        public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
+            super.load(key, value, properties);
 
             /*?<1.21 {?*//*
             if (!Registries.ENCHANTMENT.containsId(this.value))

@@ -4,6 +4,7 @@ import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 /**
@@ -47,5 +48,5 @@ public abstract class ConstantCondition extends CITCondition {
     }
 
     @Override
-    public void load(PropertyValue value, PropertyGroup properties) throws CITParsingException { }
+    public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException { }
 }
