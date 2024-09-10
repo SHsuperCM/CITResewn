@@ -76,7 +76,7 @@ public class ConditionComponents extends CITCondition {
                 //todo avoid nbt based check if possible
             }*/
 
-            NbtElement fallbackComponentNBT = ((ComponentType<Object>) this.componentType).getCodec().encodeStart(NbtOps.INSTANCE, stackComponent).getOrThrow();
+            NbtElement fallbackComponentNBT = ((ComponentType<Object>) this.componentType).getCodec().encodeStart(context.world.getRegistryManager().getOps(NbtOps.INSTANCE), stackComponent).getOrThrow();
             return this.fallbackNBTCheck.testPath(fallbackComponentNBT, 0, context);
         }
         /*?}?*/
