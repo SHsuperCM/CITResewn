@@ -1,6 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
+import com.mojang.brigadier.StringReader;
 import net.minecraft.nbt.*;
 import net.minecraft.text.Text;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
@@ -29,7 +30,7 @@ public class ConditionNBT extends CITCondition {
     protected NbtDouble matchDouble = null;
     protected NbtLong matchLong = null;
     protected NbtShort matchShort = null;
-    protected NbtCompound matchCompound = null;
+    protected NbtElement matchElement = null;
 
     @Override
     public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
@@ -85,7 +86,7 @@ public class ConditionNBT extends CITCondition {
             matchShort = NbtShort.of(Short.parseShort(nbtValue));
         } catch (Exception ignored) { }
         try {
-            matchCompound = StringNbtReader.parse(nbtValue);
+            matchElement = new StringNbtReader(new StringReader(nbtValue)).parseElement();
         } catch (Exception ignored) { }
     }
 
@@ -148,8 +149,8 @@ public class ConditionNBT extends CITCondition {
                 return nbtLong.equals(matchLong);
             else if (element instanceof NbtShort nbtShort && matchShort != null)
                 return nbtShort.equals(matchShort);
-            else if (element instanceof NbtCompound nbtCompound && matchCompound != null)
-                return NbtHelper.matches(matchCompound, nbtCompound, true);
+            else if ((element instanceof NbtCompound || element instanceof NbtList) && matchElement != null)
+                return NbtHelper.matches(matchElement, element, true);
 
             if (element instanceof AbstractNbtNumber nbtNumber && !(matchString instanceof StringMatcher.DirectMatcher))
                 return matchString.matches(String.valueOf(nbtNumber.numberValue()));
