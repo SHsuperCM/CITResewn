@@ -1,3 +1,4 @@
- - Ported to 1.21
- - New format changes from nbt conditions to components for parity with optifine. [See #447](https://github.com/SHsuperCM/CITResewn/pull/447). 
+ - Slight optimization for components of `Text`s
+ - Fixed component and nbt checks not matching when the root element is a list ([#456](https://github.com/SHsuperCM/CITResewn/pull/456)) 
+ - Fixed components not checking registry values ([#456](https://github.com/SHsuperCM/CITResewn/pull/456), [#465](https://github.com/SHsuperCM/CITResewn/pull/465), [#466](https://github.com/SHsuperCM/CITResewn/pull/466)) 
  - Temporarily disabled enchantment glint CITs.
