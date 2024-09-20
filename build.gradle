@@ -42,6 +42,9 @@ java {
 }
 
 processResources {
+    inputs.property 'mod_version', version
+    inputs.property 'mod_target_mc', project.property('mod.target-mc')
+
     filesMatching('fabric.mod.json') {
         expand 'mod_version': version, 'mod_target_mc': project.property('mod.target-mc')
     }
