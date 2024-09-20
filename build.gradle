@@ -73,6 +73,7 @@ if (stonecutter.current().isActiveVersion()) {
         changelog = java.nio.file.Files.readString(rootProject.file("Changelog.md").toPath())
         versionNumber = version
         versionName = "v" + version
+        versionType = 'beta'
         additionalFiles = [sourcesJar.outputs.getFiles().singleFile]
         gameVersions = Arrays.asList(property('publish.target-mc').split(","))
     }
@@ -83,7 +84,7 @@ if (stonecutter.current().isActiveVersion()) {
             id = property('publish.curseforge.id')
             changelogType = 'markdown'
             changelog = rootProject.file('Changelog.md')
-            releaseType = 'release'
+            releaseType = 'beta'
             mainArtifact(remapJar) {
                 displayName = "v" + version
             }
