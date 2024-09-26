@@ -1,0 +1,25 @@
+name: Feature Request
+description: Use to ask for a new feature that is not in the mod already.   
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Please fill out the following to submit a feature request
+  - type: textarea
+    id: the-feature
+    attributes:
+      label: The feature
+      description: |
+        Describe the feature you want in the mod.
+      placeholder: Could you make it so the mod gives me free diamonds?
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Check the boxes in order to submit the issue
+      options:
+        - label: I checked the issues(both open and closed) and could not find a duplicate of my feature
+          required: true

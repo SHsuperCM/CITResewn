@@ -1,0 +1,57 @@
+name: Crash using mod
+description: Use to submit a report about a crash or the game not starting with the mod installed.   
+labels: ["crash", "unverified"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Please fill out the following to submit an issue
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: |
+        Explain how one would go about causing this issue to happen.
+        Attach or link the resourcepack that caused the issue if possible.
+      placeholder: |
+        1. Run in a circle
+        2. Apply the given resourcepack
+        3. ???
+        4. Issue happens
+    validations:
+      required: true
+  - type: input
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Link the latest.log file that was made while the crash took place.
+        Do not post it directly here or modify it in any significant way.
+      placeholder: e.g. https://mclo.gs/XXXXXXX https://pastebin.com/XXXXXXXX
+    validations:
+      required: true
+  - type: input
+    id: crash-report
+    attributes:
+      label: Crash Report
+      description: |
+        Link the crash-report file that was generated if one was produced.
+        Do not post it directly here or modify it in any significant way.
+        The logs are still required as they may contain more information.
+      placeholder: e.g. https://mclo.gs/XXXXXXX https://pastebin.com/XXXXXXXX
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Check the boxes in order to submit the issue
+      options:
+        - label: I checked the issues(both open and closed) and could not find a duplicate of my issue
+          required: true
+        - label: I am using the latest version of CIT Resewn for my Minecraft version
+          required: true
+        - label: I have disabled Broken Paths and the issue persists
+          required: true
+        - label: I am running the mod using Fabric Loader
+          required: true

@@ -1,0 +1,25 @@
+name: Repo/Docs Issue
+description: Use to submit a general issue with the repository or the documentation site.   
+labels: ["repo"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Please fill out the following to submit an issue
+  - type: textarea
+    id: the-issue
+    attributes:
+      label: The issue
+      description: |
+        Please provide a clear and concise explanation of the issue.
+      placeholder: The mod page has a word that is spelled wrong!
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Check the boxes in order to submit the issue
+      options:
+        - label: I checked the issues(both open and closed) and could not find a duplicate of my issue
+          required: true
