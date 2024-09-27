@@ -1,3 +1,0 @@
-plugins.apply 'io.shcm.shsupercm.fabric.stonecutter'
-stonecutter.active '1.21'
-//-------- !DO NOT EDIT ABOVE THIS LINE! --------\\
