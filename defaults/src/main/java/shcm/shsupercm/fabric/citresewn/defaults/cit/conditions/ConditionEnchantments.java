@@ -42,10 +42,10 @@ public class ConditionEnchantments extends ListCondition<ConditionEnchantments.E
         public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
             super.load(key, value, properties);
 
-            /*?<1.21 {?*/
+            /*?<1.21 {*/
             if (!Registries.ENCHANTMENT.containsId(this.value))
                 warn(this.value + " is not in the enchantment registry", value, properties);
-            /*?}?*/
+            /*?}*/
         }
 
         @Override

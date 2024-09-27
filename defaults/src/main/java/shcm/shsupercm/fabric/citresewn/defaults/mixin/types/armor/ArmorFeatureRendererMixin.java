@@ -42,7 +42,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
             citresewn$cachedTextures = cit.type.textures;
     }
 
-    /*?<1.21 {?*/
+    /*?<1.21 {*/
     @Inject(method = "getArmorTexture", cancellable = true, at = @At("HEAD"))
     private void citresewn$replaceArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
         if (citresewn$cachedTextures == null)
@@ -52,7 +52,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         if (identifier != null)
             cir.setReturnValue(identifier);
     }
-    /*?} else {?*/
+    /*?} else {*/
     @WrapOperation(method = "renderArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ArmorMaterial$Layer;getTexture(Z)Lnet/minecraft/util/Identifier;"))
     public Identifier citresewn$replaceArmorTexture(ArmorMaterial.Layer layer, boolean secondLayer, Operation<Identifier> original) {
         if (citresewn$cachedTextures != null) {
@@ -63,5 +63,5 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
         }
         return original.call(layer, secondLayer);
     }
-    /*?}?*/
+    /*?}*/
 }

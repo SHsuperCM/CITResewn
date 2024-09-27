@@ -33,8 +33,8 @@ import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem.CONTAI
 @Mixin(ModelLoader.class)
 public class ModelLoaderMixin {
     @Shadow @Final private Map<Identifier, UnbakedModel> unbakedModels;
-    @Shadow @Final private Map</*?>=1.21 {?*/ModelIdentifier/*?} else {?*/Identifier/*?}?*/, UnbakedModel> modelsToBake;
-    @Shadow @Final private Map</*?>=1.21 {?*/ModelIdentifier/*?} else {?*/Identifier/*?}?*/, BakedModel> bakedModels;
+    @Shadow @Final private Map</*?>=1.21 {*/ModelIdentifier/*?} else {*/Identifier/*?}*/, UnbakedModel> modelsToBake;
+    @Shadow @Final private Map</*?>=1.21 {*/ModelIdentifier/*?} else {*/Identifier/*?}*/, BakedModel> bakedModels;
 
     @Inject(method = "<init>", at =
     @At(value = "INVOKE", ordinal = 0, target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"))
@@ -51,7 +51,7 @@ public class ModelLoaderMixin {
                 for (JsonUnbakedModel unbakedModel : cit.type.unbakedAssets.values()) {
                     Identifier id = ResewnItemModelIdentifier.pack(Identifier.tryParse(unbakedModel.id));
                     this.unbakedModels.put(id, unbakedModel);
-                    this.modelsToBake.put(/*?>=1.21 {?*/ModelIdentifier.ofInventoryVariant(id)/*?} else {?*/id/*?}?*/, unbakedModel);
+                    this.modelsToBake.put(/*?>=1.21 {*/ModelIdentifier.ofInventoryVariant(id)/*?} else {*/id/*?}*/, unbakedModel);
                 }
             } catch (Exception e) {
                 CITResewn.logErrorLoading("Errored loading model in " + cit.propertiesIdentifier + " from " + cit.packName);
@@ -62,7 +62,7 @@ public class ModelLoaderMixin {
     }
 
     @Inject(method = "bake", at = @At("RETURN"))
-    public void citresewn$linkTypeItemModels(/*?<1.21 {?*/BiFunction<Identifier, SpriteIdentifier, Sprite> spriteLoader/*?} else {?*/ModelLoader.SpriteGetter spriteGetter/*?}?*/, CallbackInfo ci) {
+    public void citresewn$linkTypeItemModels(/*?<1.21 {*/BiFunction<Identifier, SpriteIdentifier, Sprite> spriteLoader/*?} else {*/ModelLoader.SpriteGetter spriteGetter/*?}*/, CallbackInfo ci) {
         if (!CONTAINER.active())
             return;
 
@@ -70,7 +70,7 @@ public class ModelLoaderMixin {
 
         for (CIT<TypeItem> cit : CONTAINER.loaded) {
             for (Map.Entry<List<ModelOverride.Condition>, JsonUnbakedModel> citModelEntry : cit.type.unbakedAssets.entrySet()) {
-                var modelIdentifier = /*?>=1.21 {?*/ModelIdentifier.ofInventoryVariant(ResewnItemModelIdentifier.pack(Identifier.of(citModelEntry.getValue().id)))/*?} else {?*/ResewnItemModelIdentifier.pack(Identifier.tryParse(citModelEntry.getValue().id))/*?}?*/;
+                var modelIdentifier = /*?>=1.21 {*/ModelIdentifier.ofInventoryVariant(ResewnItemModelIdentifier.pack(Identifier.of(citModelEntry.getValue().id)))/*?} else {*/ResewnItemModelIdentifier.pack(Identifier.tryParse(citModelEntry.getValue().id))/*?}*/;
                 if (citModelEntry.getKey() == null) {
                     cit.type.bakedModel = this.bakedModels.get(modelIdentifier);
                 } else {
