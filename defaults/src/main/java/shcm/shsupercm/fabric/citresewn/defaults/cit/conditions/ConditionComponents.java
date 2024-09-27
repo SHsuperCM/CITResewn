@@ -1,7 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
-/*?>=1.21 {*/
+/*? >=1.21 {*/
 import net.minecraft.component.ComponentType;
 /*?}*/
 import net.minecraft.nbt.NbtElement;
@@ -19,7 +19,7 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 public class ConditionComponents extends CITCondition {
-    /*?>=1.21 {*/@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}*/
+    /*? >=1.21 {*/@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}*/
     public static final CITConditionContainer<ConditionComponents> CONTAINER = new CITConditionContainer<>(ConditionComponents.class, ConditionComponents::new,
             "components", "component", "nbt");
 
@@ -66,7 +66,7 @@ public class ConditionComponents extends CITCondition {
 
     @Override
     public boolean test(CITContext context) {
-        /*?>=1.21 {*/
+        /*? >=1.21 {*/
         Object stackComponent = context.stack.getComponents().get(this.componentType);
         if (stackComponent != null) {
             if (stackComponent instanceof Text text) {
