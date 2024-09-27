@@ -1,7 +1,7 @@
 plugins.apply 'fabric-loom'
 plugins.apply 'io.shcm.shsupercm.fabric.fletchingtable'
 
-version = "${property('mod.version')}+${stonecutter.current().version()}"
+version = "${property('mod.version')}+${stonecutter.current.version}"
 group = 'shcm.shsupercm.fabric.citresewn'
 
 repositories {
@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${stonecutter.current().version()}"
+    minecraft "com.mojang:minecraft:${stonecutter.current.version}"
     mappings "net.fabricmc:yarn:${property('deps.yarn')}:v2"
 
     modCompileOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
@@ -19,7 +19,7 @@ dependencies {
     modCompileOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
 
-    include project(":defaults:${stonecutter.current().version()}")
+    include project(":defaults:${stonecutter.current.version}")
 }
 
 fletchingTable {
@@ -56,7 +56,7 @@ jar {
     from rootProject.file('LICENSE')
 }
 
-if (stonecutter.current().isActiveVersion()) {
+if (stonecutter.current.isActive) {
     rootProject.tasks.register('buildActive') {
         setGroup 'project'
 
