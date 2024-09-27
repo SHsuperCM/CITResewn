@@ -42,7 +42,7 @@ public class ArmorFeatureRendererMixin<T extends LivingEntity, M extends BipedEn
             citresewn$cachedTextures = cit.type.textures;
     }
 
-    /*?<1.21 {?*//*
+    /*?<1.21 {?*/
     @Inject(method = "getArmorTexture", cancellable = true, at = @At("HEAD"))
     private void citresewn$replaceArmorTexture(ArmorItem item, boolean legs, String overlay, CallbackInfoReturnable<Identifier> cir) {
         if (citresewn$cachedTextures == null)

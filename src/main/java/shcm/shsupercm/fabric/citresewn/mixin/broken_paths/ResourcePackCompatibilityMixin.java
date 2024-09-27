@@ -25,7 +25,7 @@ public abstract class ResourcePackCompatibilityMixin {
 
     @Inject(method = "from", cancellable = true, at = @At("HEAD"))
     private static void citresewn$brokenpaths$redirectBrokenPathsCompatibility
-            /*?<=1.20.1 {?*//*
+            /*?<=1.20.1 {?*/
                 (int current, net.minecraft.resource.ResourceType type, CallbackInfoReturnable<ResourcePackCompatibility> cir)
             /*?} else {?*/
                 (net.minecraft.util.dynamic.Range<Integer> range, int current, CallbackInfoReturnable<ResourcePackCompatibility> cir)

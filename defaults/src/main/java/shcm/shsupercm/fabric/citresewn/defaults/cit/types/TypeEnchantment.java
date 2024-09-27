@@ -244,7 +244,7 @@ public class TypeEnchantment extends CITType {
     }
     
     public enum GlintRenderLayer {
-        /*?<1.21 {?*//*
+        /*?<1.21 {?*/
         ARMOR_GLINT("armor_glint", 8f, layer -> layer
                 .program(RenderPhaseAccessor.ARMOR_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
@@ -269,7 +269,7 @@ public class TypeEnchantment extends CITType {
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())
                 .cull(RenderPhaseAccessor.DISABLE_CULLING())
                 .depthTest(RenderPhaseAccessor.EQUAL_DEPTH_TEST())),
-        /*?<1.21 {?*//*
+        /*?<1.21 {?*/
         DIRECT_GLINT("glint_direct", 8f, layer -> layer
                 .program(RenderPhaseAccessor.DIRECT_GLINT_SHADER())
                 .writeMaskState(RenderPhaseAccessor.COLOR_MASK())

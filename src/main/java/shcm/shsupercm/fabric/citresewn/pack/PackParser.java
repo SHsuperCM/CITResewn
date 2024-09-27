@@ -44,10 +44,10 @@ public final class PackParser { private PackParser() {}
                     try {
                         InputSupplier<InputStream> citPropertiesSupplier = pack.open(ResourceType.CLIENT_RESOURCES, identifier);
                         if (citPropertiesSupplier != null)
-                            globalProperties.load(pack./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/(), identifier, citPropertiesSupplier.get());
+                            globalProperties.load(pack./*?<1.21 {?*/getName/*?} else {?*/getId/*?}?*/(), identifier, citPropertiesSupplier.get());
                     } catch (FileNotFoundException ignored) {
                     } catch (Exception e) {
-                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/());
+                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack./*?<1.21 {?*/getName/*?} else {?*/getId/*?}?*/());
                         e.printStackTrace();
                     }
                 }
@@ -66,7 +66,7 @@ public final class PackParser { private PackParser() {}
             for (Map.Entry<Identifier, Resource> entry : resourceManager.findResources(root + "/cit", s -> s.getPath().endsWith(".properties")).entrySet()) {
                 String packName = null;
                 try {
-                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getPack()./*?<1.21 {?*//*getName/*?} else {?*/getId/*?}?*/(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
+                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getPack()./*?<1.21 {?*/getName/*?} else {?*/getId/*?}?*/(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
                 } catch (CITParsingException e) {
                     CITResewn.logErrorLoading(e.getMessage());
                 } catch (Exception e) {

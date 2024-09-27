@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class ConditionNBT extends CITCondition {
-    /*?<1.21 {?*//*@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}?*/
+    /*?<1.21 {?*/@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}?*/
     public static final CITConditionContainer<ConditionNBT> CONTAINER = new CITConditionContainer<>(ConditionNBT.class, ConditionNBT::new,
             "nbt");
 
@@ -94,7 +94,7 @@ public class ConditionNBT extends CITCondition {
     public boolean test(CITContext context) {
         /*?>=1.21 {?*/
         throw new AssertionError("NBT condition replaced with component condition in 1.21");
-        /*?} else {?*//*
+        /*?} else {?*/
         return testPath(context.stack.getNbt(), 0, context);
         /*?}?*/
     }
@@ -164,7 +164,7 @@ public class ConditionNBT extends CITCondition {
                 return true;
 
             if (elementText == null)
-                elementText = Text./*?>=1.20.4 {?*/Serialization/*?} else {?*//*Serializer/*?}?*/
+                elementText = Text./*?>=1.20.4 {?*/Serialization/*?} else {?*/Serializer/*?}?*/
                         .fromJson(element/*?>=1.21 {?*/, context.world.getRegistryManager()/*?}?*/);
         }
 

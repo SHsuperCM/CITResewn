@@ -56,7 +56,7 @@ public class CITContext {
     public Map<Identifier, Integer> enchantments() {
         if (this.enchantments == null) {
             this.enchantments = new LinkedHashMap<>();
-            /*?<1.21 {?*//*
+            /*?<1.21 {?*/
             for (NbtElement nbtElement : stack.isOf(Items.ENCHANTED_BOOK) ? EnchantedBookItem.getEnchantmentNbt(stack) : stack.getEnchantments())
                 this.enchantments.put(EnchantmentHelper.getIdFromNbt((NbtCompound) nbtElement), EnchantmentHelper.getLevelFromNbt((NbtCompound) nbtElement));
             /*?} else {?*/
