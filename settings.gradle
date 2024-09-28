@@ -1,5 +1,8 @@
 pluginManagement {
     repositories {
+        maven { url = 'https://maven.kikugie.dev/releases' }
+        maven { url = 'https://maven.kikugie.dev/snapshots' }
+
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
@@ -9,7 +12,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'io.shcm.shsupercm.fabric.stonecutter' version '1.5'
+    id 'dev.kikugie.stonecutter' version '0.5-alpha.8'
 
     id 'fabric-loom' version '1.7-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6' apply false
@@ -17,13 +20,9 @@ plugins {
     id 'com.matthewprenger.cursegradle' version '1.4.0' apply false
 }
 
-include 'defaults'
+stonecutter.create(rootProject) {
+    versions '1.21', '1.20.4', '1.20.1', '1.19.4'
+    branch 'defaults'
 
-stonecutter {
-    shared {
-        versions '1.21', '1.20.4', '1.20.1', '1.19.4'
-        vcsVersion '1.21'
-    }
-
-    create rootProject, project(':defaults')
+    vcsVersion = '1.21'
 }

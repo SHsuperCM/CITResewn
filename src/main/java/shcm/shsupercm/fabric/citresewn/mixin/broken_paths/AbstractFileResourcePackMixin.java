@@ -29,7 +29,7 @@ public abstract class AbstractFileResourcePackMixin implements ResourcePack {
                 });
             }
         } catch (InvalidIdentifierException e) {
-            cir.setReturnValue((T) new PackResourceMetadata(cir.getReturnValue()./*?>=1.20.4 {?*/description()/*?} else {?*//*getDescription()/*?}?*/, Integer.MAX_VALUE - 53/*?>=1.20.4 {?*/, cir.getReturnValue().supportedFormats()/*?}?*/));
+            cir.setReturnValue((T) new PackResourceMetadata(cir.getReturnValue()./*? >=1.20.4 {*/description()/*?} else {*//*getDescription()*//*?}*/, Integer.MAX_VALUE - 53/*? >=1.20.4 {*/, cir.getReturnValue().supportedFormats()/*?}*/));
         } catch (Exception ignored) { }
     }
 }
