@@ -39,16 +39,6 @@ public class ConditionEnchantments extends ListCondition<ConditionEnchantments.E
 
     protected static class EnchantmentCondition extends IdentifierCondition {
         @Override
-        public void load(PropertyKey key, PropertyValue value, PropertyGroup properties) throws CITParsingException {
-            super.load(key, value, properties);
-
-            /*? <1.21 {*/
-            /*if (!Registries.ENCHANTMENT.containsId(this.value))
-                warn(this.value + " is not in the enchantment registry", value, properties);
-            *//*?}*/
-        }
-
-        @Override
         public boolean test(CITContext context) {
             return context.enchantments().containsKey(this.value);
         }
