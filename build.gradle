@@ -19,7 +19,7 @@ dependencies {
     modCompileOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
 
-    include project(":defaults:${stonecutter.current.version}")
+    include stonecutter.node.sibling("defaults").project
 }
 
 fletchingTable {

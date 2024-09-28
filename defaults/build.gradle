@@ -16,10 +16,10 @@ dependencies {
     modCompileOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
     modCompileOnly "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric-api')}"
 
+    implementation project(path: stonecutter.node.sibling("").getPath(), configuration: "namedElements")
+
     modCompileOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
-
-    implementation project(path: ":${stonecutter.current.version}", configuration: "namedElements")
 
     // testing mods
     modRuntimeOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
