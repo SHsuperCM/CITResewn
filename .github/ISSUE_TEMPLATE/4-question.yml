@@ -1,5 +1,5 @@
 name: Question
-description: Use to submit a question or if you need help with using the mod.   
+description: Use to submit a question or if you need help with using the mod. Use only if none of the other options are relevant.   
 labels: ["question", "help wanted"]
 body:
   - type: markdown
