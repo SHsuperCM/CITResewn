@@ -50,6 +50,9 @@ public class ItemRendererMixin {
             if (citModel != null) {
                 if (stack.isOf(Items.TRIDENT) || stack.isOf(Items.SPYGLASS)) {
                     citresewn$mojankCITModel = new WeakReference<>(citModel);
+                    if (stack.isOf(Items.SPYGLASS)) {
+                        cir.setReturnValue(citModel);
+                    }
                 } else
                     cir.setReturnValue(citModel);
             }
