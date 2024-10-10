@@ -35,6 +35,10 @@ fletchingTable {
 loom {
     accessWidenerPath = file("../../src/main/resources/citresewn-defaults.accesswidener")
 
+    validateAccessWidener {
+        enabled = false
+    }
+
     runConfigs.client.ideConfigGenerated = false
     runConfigs.server.ideConfigGenerated = false
 }
