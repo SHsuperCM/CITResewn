@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.*;
+import net.minecraft.client.util.*;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
@@ -146,7 +147,7 @@ public class TypeEnchantment extends CITType {
                     RenderLayer renderLayer = glintLayer.build(cit.type, cit.propertiesIdentifier);
 
                     cit.type.renderLayers.put(glintLayer, renderLayer);
-                    //todo 1205 MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.put(renderLayer, new BufferBuilder(renderLayer.getExpectedBufferSize()));
+                    MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.put(renderLayer, /*? <1.21 {*//*new BufferBuilder(renderLayer.getExpectedBufferSize()) *//*?} else {*/ new BufferAllocator(renderLayer.getExpectedBufferSize()) /*}*/);
                 }
         }
 
@@ -175,10 +176,9 @@ public class TypeEnchantment extends CITType {
             appliedContext = null;
             apply = false;
 
-            //todo 1205
-            /*for (CIT<TypeEnchantment> cit : loaded)
+            for (CIT<TypeEnchantment> cit : loaded)
                 for (RenderLayer renderLayer : cit.type.renderLayers.values())
-                    MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.remove(renderLayer);*/
+                    MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.remove(renderLayer);
 
             loaded.clear();
             synchronized (loadedLayered) {
