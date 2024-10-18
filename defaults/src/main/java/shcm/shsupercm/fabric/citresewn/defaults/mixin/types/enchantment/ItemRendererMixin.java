@@ -44,10 +44,10 @@ public class ItemRendererMixin {
     private static void citresewn$enchantment$getArmorGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, /*? <1.21 {*//*boolean solid, *//*?}*/boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
-        //todo 1205
-        /*VertexConsumer vertexConsumer = solid ? TypeEnchantment.GlintRenderLayer.ARMOR_GLINT.tryApply(cir.getReturnValue(), layer, provider) : TypeEnchantment.GlintRenderLayer.ARMOR_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
+
+        VertexConsumer vertexConsumer = /*? <1.21 {*//*solid ? TypeEnchantment.GlintRenderLayer.ARMOR_GLINT.tryApply(cir.getReturnValue(), layer, provider) : *//*?}*/TypeEnchantment.GlintRenderLayer.ARMOR_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
         if (vertexConsumer != null)
-            cir.setReturnValue(vertexConsumer);*/
+            cir.setReturnValue(vertexConsumer);
     }
 
     @Inject(method = /*? <1.20 {*//*"getCompassGlintConsumer"*//*?} else {*/"getDynamicDisplayGlintConsumer"/*?}*/, cancellable = true, at = @At("RETURN"))
@@ -59,15 +59,16 @@ public class ItemRendererMixin {
             cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, /*? >=1.21 {*/entry/*?} else {*//*entry.getPositionMatrix(), entry.getNormalMatrix()*//*?}*/, 1f), cir.getReturnValue()));
     }
 
-    //todo 1205
-    //@Inject(method = /*? <1.20 {*/"getDirectCompassGlintConsumer"/*?} else {*/"getDirectDynamicDisplayGlintConsumer"/*?}*/, cancellable = true, at = @At("RETURN"))
-    //private static void citresewn$enchantment$getDirectDynamicDisplayGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
-    //    if (!CONTAINER.shouldApply())
-    //        return;
-    //    VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
-    //    if (vertexConsumer != null)
-    //        cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1f), cir.getReturnValue()));
-    //}
+    //? <1.21 {
+    /*@Inject(method = /^? <1.20 {^/"getDirectCompassGlintConsumer"/^?} else {^//^"getDirectDynamicDisplayGlintConsumer"^//^?}^/, cancellable = true, at = @At("RETURN"))
+    private static void citresewn$enchantment$getDirectDynamicDisplayGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
+        if (!CONTAINER.shouldApply())
+            return;
+        VertexConsumer vertexConsumer = TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(null, layer, provider);
+        if (vertexConsumer != null)
+            cir.setReturnValue(VertexConsumers.union(new OverlayVertexConsumer(vertexConsumer, entry.getPositionMatrix(), entry.getNormalMatrix(), 1f), cir.getReturnValue()));
+    }
+    *///?}
 
     @Inject(method = "getItemGlintConsumer", cancellable = true, at = @At("RETURN"))
     private static void citresewn$enchantment$getItemGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
@@ -78,13 +79,12 @@ public class ItemRendererMixin {
             cir.setReturnValue(vertexConsumer);
     }
 
-    //todo 1205
-    //@Inject(method = "getDirectItemGlintConsumer", cancellable = true, at = @At("RETURN"))
-    //private static void citresewn$enchantment$getDirectItemGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
-    //    if (!CONTAINER.shouldApply())
-    //        return;
-    //    VertexConsumer vertexConsumer = solid ? TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(cir.getReturnValue(), layer, provider) : TypeEnchantment.GlintRenderLayer.DIRECT_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
-    //    if (vertexConsumer != null)
-    //        cir.setReturnValue(vertexConsumer);
-    //}
+    @Inject(method = "getDirectItemGlintConsumer", cancellable = true, at = @At("RETURN"))
+    private static void citresewn$enchantment$getDirectItemGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, boolean solid, boolean glint, CallbackInfoReturnable<VertexConsumer> cir) {
+        if (!CONTAINER.shouldApply())
+            return;
+        VertexConsumer vertexConsumer = /*? <1.21 {*//*solid ? TypeEnchantment.GlintRenderLayer.DIRECT_GLINT.tryApply(cir.getReturnValue(), layer, provider) : *//*?}*/TypeEnchantment.GlintRenderLayer.DIRECT_ENTITY_GLINT.tryApply(cir.getReturnValue(), layer, provider);
+        if (vertexConsumer != null)
+            cir.setReturnValue(vertexConsumer);
+    }
 }

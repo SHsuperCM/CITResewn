@@ -12,7 +12,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'dev.kikugie.stonecutter' version '0.5-alpha.8'
+    id 'dev.kikugie.stonecutter' version '0.5-beta.3'
 
     id 'fabric-loom' version '1.7-SNAPSHOT' apply false
     id 'io.shcm.shsupercm.fabric.fletchingtable' version '1.6' apply false

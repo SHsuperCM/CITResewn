@@ -1,9 +1,7 @@
 package shcm.shsupercm.fabric.citresewn.defaults.cit.conditions;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
-/*? >=1.21 {*/
-import net.minecraft.component.ComponentType;
-/*?}*/
+/*? >=1.21*/ import net.minecraft.component.ComponentType;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.Registries;
@@ -19,11 +17,11 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
 public class ConditionComponents extends CITCondition {
-    /*? >=1.21 {*/@Entrypoint(CITConditionContainer.ENTRYPOINT)/*?}*/
+    /*? >=1.21*/ @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<ConditionComponents> CONTAINER = new CITConditionContainer<>(ConditionComponents.class, ConditionComponents::new,
             "components", "component", "nbt");
 
-    private ComponentType<?> componentType;
+    /*? >=1.21*/ private ComponentType<?> componentType;
     private String componentMetadata;
     private String matchValue;
 
@@ -47,8 +45,10 @@ public class ConditionComponents extends CITCondition {
 
         String componentId = metadata.split("\\.")[0];
 
+        /*? >=1.21 {*/
         if ((this.componentType = Registries.DATA_COMPONENT_TYPE.get(Identifier.tryParse(componentId))) == null)
             throw new CITParsingException("Unknown component type \"" + componentId + "\"", properties, value.position());
+        /*?}*/
 
         metadata = metadata.substring(componentId.length());
         if (metadata.startsWith("."))
