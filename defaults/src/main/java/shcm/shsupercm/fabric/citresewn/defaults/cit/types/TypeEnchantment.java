@@ -147,7 +147,7 @@ public class TypeEnchantment extends CITType {
                     RenderLayer renderLayer = glintLayer.build(cit.type, cit.propertiesIdentifier);
 
                     cit.type.renderLayers.put(glintLayer, renderLayer);
-                    MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.put(renderLayer, /*? <1.21 {*//*new BufferBuilder(renderLayer.getExpectedBufferSize()) *//*?} else {*/ new BufferAllocator(renderLayer.getExpectedBufferSize()) /*}*/);
+                    MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.put(renderLayer, /*? <1.21 {*//*new BufferBuilder(renderLayer.getExpectedBufferSize()) *//*?} else {*/ new BufferAllocator(renderLayer.getExpectedBufferSize()) /*?}*/);
                 }
         }
 

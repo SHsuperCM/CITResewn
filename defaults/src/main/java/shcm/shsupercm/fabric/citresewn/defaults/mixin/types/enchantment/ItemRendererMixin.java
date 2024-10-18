@@ -60,7 +60,7 @@ public class ItemRendererMixin {
     }
 
     //? <1.21 {
-    /*@Inject(method = /^? <1.20 {^//^"getDirectCompassGlintConsumer"^//^?} else {^/"getDirectDynamicDisplayGlintConsumer"/^?}^/, cancellable = true, at = @At("RETURN"))
+    /*@Inject(method = /^? <1.20 {^/"getDirectCompassGlintConsumer"/^?} else {^//^"getDirectDynamicDisplayGlintConsumer"^//^?}^/, cancellable = true, at = @At("RETURN"))
     private static void citresewn$enchantment$getDirectDynamicDisplayGlintConsumer(VertexConsumerProvider provider, RenderLayer layer, MatrixStack.Entry entry, CallbackInfoReturnable<VertexConsumer> cir) {
         if (!CONTAINER.shouldApply())
             return;
