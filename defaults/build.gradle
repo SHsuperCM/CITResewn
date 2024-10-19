@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    minecraft "com.mojang:minecraft:${stonecutter.current.version}"
+    minecraft (property('deps.minecraft') == '[VERSIONED]' ? "com.mojang:minecraft:${stonecutter.current.version}" : property('deps.minecraft'))
     mappings "net.fabricmc:yarn:${property('deps.yarn')}:v2"
 
     modCompileOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
