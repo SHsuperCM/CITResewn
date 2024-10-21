@@ -11,12 +11,27 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
+import shcm.shsupercm.fabric.citresewn.CITResewn;
+import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
+import shcm.shsupercm.fabric.citresewn.cit.CIT;
+import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
+import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
+import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
+import shcm.shsupercm.fabric.citresewn.pack.PackParser;
+import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
+
 public class CITReloadListener implements SimpleResourceReloadListener<CITResources> {
+    /**
+     * Possible CIT roots in resourcepacks ordered in increasing order of priority.
+     */
+    public static final List<String> ROOTS = List.of("mcpatcher", "optifine", "citresewn");
+
     private CompletableFuture<CITResources> passingPrepareTask = null;
 
     @Entrypoint(Entrypoint.CLIENT) public static void register() {
@@ -62,24 +77,44 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
     }
 
     public CITResources prepare(ResourceManager manager) {
+        if (!CITResewnConfig.INSTANCE.enabled) {
+            info("CIT loading is disabled");
+            return CITResources.EMPTY;
+        }
+
+        info("Reading CITs from loaded packs..");
+
         Map<CITIdentifier, Resource> citResources = new HashMap<>();
 
-        for (String root : List.of("mcpatcher", "optifine", "citresewn")) {
+        for (String root : ROOTS)
             for (Map.Entry<Identifier, List<Resource>> entry : new ResourceFinder(root + "/cit", ".properties").findAllResources(manager).entrySet())
                 for (Resource resource : entry.getValue()) {
                     CITIdentifier citId = new CITIdentifier(entry.getKey(), root, resource);
                     citResources.put(citId, resource);
                 }
-            // todo global properties
-        }
 
-        // todo process resources
-        CITResources resources = new CITResources(new CITResources.CITData(), new CITResources.Models());
+        GlobalProperties globalProperties = PackParser.loadGlobalProperties(manager, new GlobalProperties());
+        Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
 
-        return resources;
+        for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
+            try {
+                CIT<?> cit = PackParser.parseCIT(entry.getKey(), PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream()), manager);
+                cits.put(entry.getKey(), cit);
+            } catch (CITParsingException e) {
+                CITResewn.logErrorLoading(e.getMessage());
+            } catch (Exception e) {
+                CITResewn.logErrorLoading("Errored while loading cit: " + entry.getKey() + entry.getKey().packName());
+                e.printStackTrace();
+            }
+
+        info("Loaded " + cits.size() + "/" + citResources.size() + " CITs from loaded resourcepacks");
+
+        return new CITResources(new CITResources.CITData(globalProperties, cits), new CITResources.CITModels());
     }
 
     public void apply(CITResources data) {
-        // todo apply cits to game
+        // todo retrieve models
+
+        ActiveCITs.load(data.citData());
     }
 }

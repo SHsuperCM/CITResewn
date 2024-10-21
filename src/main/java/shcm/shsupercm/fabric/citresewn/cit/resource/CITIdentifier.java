@@ -8,4 +8,8 @@ public record CITIdentifier(ResourcePack pack, String root, Identifier path) {
     public CITIdentifier(Identifier path, String root, Resource resource) {
         this(resource.getPack(), root, path);
     }
+
+    public String packName() {
+        return pack.getId();
+    }
 }

@@ -10,6 +10,7 @@ import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITRegistry;
 import shcm.shsupercm.fabric.citresewn.cit.CITType;
+import shcm.shsupercm.fabric.citresewn.cit.resource.CITIdentifier;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
@@ -55,38 +56,13 @@ public final class PackParser { private PackParser() {}
     }
 
     /**
-     * Attempts parsing all CITs out of all loaded packs.
-     * @param resourceManager the manager that contains the packs
-     * @return unordered list of successfully parsed CITs
-     */
-    public static List<CIT<?>> parseCITs(ResourceManager resourceManager) {
-        List<CIT<?>> cits = new ArrayList<>();
-
-        for (String root : ROOTS) {
-            for (Map.Entry<Identifier, Resource> entry : resourceManager.findResources(root + "/cit", s -> s.getPath().endsWith(".properties")).entrySet()) {
-                String packName = null;
-                try {
-                    cits.add(parseCIT(PropertyGroup.tryParseGroup(packName = entry.getValue().getPack()./*? <1.21 {*//*getName*//*?} else {*/getId/*?}*/(), entry.getKey(), entry.getValue().getInputStream()), resourceManager));
-                } catch (CITParsingException e) {
-                    CITResewn.logErrorLoading(e.getMessage());
-                } catch (Exception e) {
-                    CITResewn.logErrorLoading("Errored while loading cit: " + entry.getKey() + (packName == null ? "" : " from " + packName));
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return cits;
-    }
-
-    /**
      * Attempts parsing a CIT from a property group.
      * @param properties property group representation of the CIT
      * @param resourceManager the manager that contains the the property group, used to resolve relative assets
      * @return the successfully parsed CIT
      * @throws CITParsingException if the CIT failed parsing for any reason
      */
-    public static CIT<?> parseCIT(PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
+    public static CIT<?> parseCIT(CITIdentifier id, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
         CITType citType = CITRegistry.parseType(properties);
 
         List<CITCondition> conditions = new ArrayList<>();
@@ -128,6 +104,6 @@ public final class PackParser { private PackParser() {}
 
         citType.load(conditions, properties, resourceManager);
 
-        return new CIT<>(properties.identifier, properties.packName, citType, conditions.toArray(new CITCondition[0]), weight.getWeight(), fallback.getFallback());
+        return new CIT<>(id, citType, conditions.toArray(new CITCondition[0]), weight.getWeight(), fallback.getFallback());
     }
 }
