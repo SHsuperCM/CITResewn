@@ -59,12 +59,12 @@ public class FallbackCondition extends IdentifierCondition {
         Map<String, Set<Identifier>> removePacks = new HashMap<>();
 
         for (CIT<?> cit : cits) {
-            Set<Identifier> remove = removePacks.computeIfAbsent(cit.packName, s -> new HashSet<>());
+            Set<Identifier> remove = removePacks.computeIfAbsent(cit.identifier.packName(), s -> new HashSet<>());
             if (cit.fallback == null) {
-                if (fallbackCITResewnRoot && cit.propertiesIdentifier.getPath().startsWith("citresewn/")) {
-                    String subPath = cit.propertiesIdentifier.getPath().substring(10);
-                    remove.add(Identifier.of(cit.propertiesIdentifier.getNamespace(), "optifine/" + subPath));
-                    remove.add(Identifier.of(cit.propertiesIdentifier.getNamespace(), "mcpatcher/" + subPath));
+                if (fallbackCITResewnRoot && cit.identifier.path().getPath().startsWith("citresewn/")) {
+                    String subPath = cit.identifier.path().getPath().substring(10);
+                    remove.add(Identifier.of(cit.identifier.path().getNamespace(), "optifine/" + subPath));
+                    remove.add(Identifier.of(cit.identifier.path().getNamespace(), "mcpatcher/" + subPath));
                 }
             } else {
                 remove.add(cit.fallback);
@@ -72,8 +72,8 @@ public class FallbackCondition extends IdentifierCondition {
         }
 
         cits.removeIf(cit -> {
-            Set<Identifier> remove = removePacks.get(cit.packName);
-            return remove != null && remove.contains(cit.propertiesIdentifier);
+            Set<Identifier> remove = removePacks.get(cit.identifier.packName());
+            return remove != null && remove.contains(cit.identifier.path());
         });
     }
 }

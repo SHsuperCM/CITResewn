@@ -7,17 +7,10 @@ import shcm.shsupercm.fabric.citresewn.cit.resource.CITIdentifier;
  * Runtime representation of a CIT, holding its type and conditions as well as additional metadata.
  */
 public class CIT<T extends CITType> {
+    /**
+     * The full location of this CIT and its resourcepack.
+     */
     public final CITIdentifier identifier;
-
-    /**
-     * The full location of this CIT in its resourcepack.
-     */
-    public final Identifier propertiesIdentifier;
-
-    /**
-     * Name of the resourcepack that contains this CIT.
-     */
-    public final String packName;
 
     /**
      * The CIT's type.
@@ -42,8 +35,6 @@ public class CIT<T extends CITType> {
 
     public CIT(CITIdentifier identifier, T type, CITCondition[] conditions, int weight, Identifier fallback) {
         this.identifier = identifier;
-        this.propertiesIdentifier = identifier.path();
-        this.packName = identifier.packName();
         this.type = type;
         this.conditions = conditions;
         this.weight = weight;

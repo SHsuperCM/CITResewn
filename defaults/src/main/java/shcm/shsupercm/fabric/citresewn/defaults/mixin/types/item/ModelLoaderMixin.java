@@ -54,7 +54,7 @@ public class ModelLoaderMixin {
                     this.modelsToBake.put(/*? >=1.21 {*/ModelIdentifier.ofInventoryVariant(id)/*?} else {*//*id*//*?}*/, unbakedModel);
                 }
             } catch (Exception e) {
-                CITResewn.logErrorLoading("Errored loading model in " + cit.propertiesIdentifier + " from " + cit.packName);
+                CITResewn.logErrorLoading("Errored loading model in " + cit.identifier.path() + " from " + cit.identifier.packName());
                 e.printStackTrace();
             }
 
@@ -76,7 +76,7 @@ public class ModelLoaderMixin {
                 } else {
                     BakedModel bakedModel = this.bakedModels.get(modelIdentifier);
                     if (bakedModel == null)
-                        CITResewn.logWarnLoading("Skipping sub cit: Failed loading model for \"" + citModelEntry.getValue().id + "\" in " + cit.propertiesIdentifier + " from " + cit.packName);
+                        CITResewn.logWarnLoading("Skipping sub cit: Failed loading model for \"" + citModelEntry.getValue().id + "\" in " + cit.identifier.path() + " from " + cit.identifier.packName());
                     else
                         cit.type.bakedSubModels.override(citModelEntry.getKey(), bakedModel);
                 }

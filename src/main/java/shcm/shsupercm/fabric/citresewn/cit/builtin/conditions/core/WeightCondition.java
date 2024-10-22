@@ -39,6 +39,6 @@ public class WeightCondition extends IntegerCondition {
         cits.sort(
                 Comparator.<CIT<?>>comparingInt(cit -> cit.weight)
                 .reversed()
-                .thenComparing(cit -> cit.propertiesIdentifier.toString() + cit.packName));
+                .thenComparing(cit -> cit.identifier.path().toString() + cit.identifier.packName()));
     }
 }

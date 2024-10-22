@@ -144,7 +144,7 @@ public class TypeEnchantment extends CITType {
 
             for (CIT<TypeEnchantment> cit : loaded)
                 for (GlintRenderLayer glintLayer : GlintRenderLayer.values()) {
-                    RenderLayer renderLayer = glintLayer.build(cit.type, cit.propertiesIdentifier);
+                    RenderLayer renderLayer = glintLayer.build(cit.type, cit.identifier.path());
 
                     cit.type.renderLayers.put(glintLayer, renderLayer);
                     MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers().layerBuffers.put(renderLayer, /*? <1.21 {*//*new BufferBuilder(renderLayer.getExpectedBufferSize()) *//*?} else {*/ new BufferAllocator(renderLayer.getExpectedBufferSize()) /*?}*/);
