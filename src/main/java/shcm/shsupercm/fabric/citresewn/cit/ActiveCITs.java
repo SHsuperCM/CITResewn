@@ -6,6 +6,7 @@ import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.*;
+import shcm.shsupercm.fabric.citresewn.cit.resource.CITReloadListener;
 import shcm.shsupercm.fabric.citresewn.cit.resource.CITResources;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
@@ -52,30 +53,21 @@ public class ActiveCITs {
     public final Map<Class<? extends CITType>, List<CIT<?>>> cits = new IdentityHashMap<>();
 
 	/**
-	 * Attempts to load/activate CITs from packs in the given resource manager, disposing of any previously loaded CITs if present.
-	 * @see PackParser#loadGlobalProperties(ResourceManager, GlobalProperties)
+	 * Attempts to load/activate CITs from packs in the given cit data, disposing of any previously loaded CITs if present.
+	 * @see CITReloadListener
 	 * @see GlobalProperties#callHandlers()
-	 * @see PackParser#parseCITs(ResourceManager)
-	 * @param resourceManager manager containing resourcepacks with possible CITs
-	 * @param profiler loading profiler that was pushed once into "citresewn:reloading_cits" and would pop after
+	 * @param data raw cit data to activate
 	 */
     public static void load(CITResources.CITData data) {
-        for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
-            disposable.dispose();
-
-        for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
-            typeContainer.unload();
-
         if (active != null) {
             active.globalProperties.properties.replaceAll((key, value) -> Set.of());
             active.globalProperties.callHandlers();
-
             active = null;
         }
+        data.globalProperties().callHandlers(); // for runtime global properties
 
-        if (!CITResewnConfig.INSTANCE.enabled) {
+        if (!CITResewnConfig.INSTANCE.enabled)
             return;
-        }
 
         ActiveCITs active = new ActiveCITs();
 

@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlu
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
@@ -12,9 +13,9 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
-import shcm.shsupercm.fabric.citresewn.cit.ActiveCITs;
-import shcm.shsupercm.fabric.citresewn.cit.CIT;
-import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
+import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
+import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 import shcm.shsupercm.fabric.citresewn.pack.PackParser;
@@ -41,7 +42,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
         ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(citReloadListener);
         PreparableModelLoadingPlugin.register((manager, executor) ->
                 citReloadListener.getPrepare(manager, executor)
-                        .thenApply(CITResources::models), modelPlugin);
+                                 .thenApply(CITResources::models), modelPlugin);
     }
 
     @Override
@@ -77,6 +78,11 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
     }
 
     public CITResources prepare(ResourceManager manager) {
+        if (ActiveCITs.isActive()) {
+            ActiveCITs.getActive().globalProperties.properties.replaceAll((key, value) -> Set.of());
+            ActiveCITs.getActive().globalProperties.callHandlers();
+        }
+
         if (!CITResewnConfig.INSTANCE.enabled) {
             info("CIT loading is disabled");
             return CITResources.EMPTY;
@@ -94,6 +100,8 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
                 }
 
         GlobalProperties globalProperties = PackParser.loadGlobalProperties(manager, new GlobalProperties());
+        globalProperties.callHandlers();
+
         Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
 
         for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
@@ -113,6 +121,12 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
     }
 
     public void apply(CITResources data) {
+        for (CITDisposable disposable : FabricLoader.getInstance().getEntrypoints(CITDisposable.ENTRYPOINT, CITDisposable.class))
+            disposable.dispose();
+
+        for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
+            typeContainer.unload();
+
         // todo retrieve models
 
         ActiveCITs.load(data.citData());
