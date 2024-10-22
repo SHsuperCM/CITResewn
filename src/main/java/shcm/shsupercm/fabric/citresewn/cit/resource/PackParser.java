@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.pack;
+package shcm.shsupercm.fabric.citresewn.cit.resource;
 
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
@@ -10,10 +10,9 @@ import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITRegistry;
 import shcm.shsupercm.fabric.citresewn.cit.CITType;
-import shcm.shsupercm.fabric.citresewn.cit.resource.CITIdentifier;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

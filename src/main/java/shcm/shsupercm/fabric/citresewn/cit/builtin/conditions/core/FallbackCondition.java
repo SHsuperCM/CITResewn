@@ -6,7 +6,7 @@ import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITGlobalProperties;
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierCondition;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.util.*;
 

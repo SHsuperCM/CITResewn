@@ -9,9 +9,9 @@ import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierCondition;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ListCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.util.LinkedHashSet;
 import java.util.Set;

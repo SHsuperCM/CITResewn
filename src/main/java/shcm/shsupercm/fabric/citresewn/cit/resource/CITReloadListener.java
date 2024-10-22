@@ -16,10 +16,8 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
-import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
-import shcm.shsupercm.fabric.citresewn.pack.PackParser;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;

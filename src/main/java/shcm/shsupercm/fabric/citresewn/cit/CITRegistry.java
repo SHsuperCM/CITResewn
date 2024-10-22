@@ -2,15 +2,14 @@ package shcm.shsupercm.fabric.citresewn.cit;
 
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.loader.api.FabricLoader;
-import net.fabricmc.loader.api.entrypoint.EntrypointContainer;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ConstantCondition;
-import shcm.shsupercm.fabric.citresewn.pack.PackParser;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.PackParser;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.util.*;
 

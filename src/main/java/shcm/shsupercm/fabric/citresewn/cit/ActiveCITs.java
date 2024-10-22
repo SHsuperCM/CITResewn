@@ -1,16 +1,11 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.util.profiler.Profiler;
-import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.*;
 import shcm.shsupercm.fabric.citresewn.cit.resource.CITReloadListener;
 import shcm.shsupercm.fabric.citresewn.cit.resource.CITResources;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
-import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
-import shcm.shsupercm.fabric.citresewn.pack.PackParser;
+import shcm.shsupercm.fabric.citresewn.cit.resource.GlobalProperties;
 
 import java.util.*;
 

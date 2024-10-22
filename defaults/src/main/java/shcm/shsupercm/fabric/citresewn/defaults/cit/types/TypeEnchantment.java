@@ -16,9 +16,9 @@ import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionEnchantments;
 import shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.RenderPhaseAccessor;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 import shcm.shsupercm.util.logic.Loops;
 
 import java.lang.ref.WeakReference;

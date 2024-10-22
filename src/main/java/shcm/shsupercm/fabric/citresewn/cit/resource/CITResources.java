@@ -1,7 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit.resource;
 
 import shcm.shsupercm.fabric.citresewn.cit.CIT;
-import shcm.shsupercm.fabric.citresewn.pack.GlobalProperties;
 
 import java.util.Map;
 

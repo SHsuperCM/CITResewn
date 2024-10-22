@@ -15,8 +15,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;

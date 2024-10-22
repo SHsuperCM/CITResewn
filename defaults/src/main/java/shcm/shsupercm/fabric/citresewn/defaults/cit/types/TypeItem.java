@@ -25,9 +25,9 @@ import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.defaults.common.ResewnItemModelIdentifier;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.item.JsonUnbakedModelAccessor;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

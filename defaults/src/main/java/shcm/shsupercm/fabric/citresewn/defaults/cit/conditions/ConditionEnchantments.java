@@ -7,11 +7,6 @@ import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.IdentifierCondition;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ListCondition;
-import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
-
 import java.util.Set;
 
 public class ConditionEnchantments extends ListCondition<ConditionEnchantments.EnchantmentCondition> {

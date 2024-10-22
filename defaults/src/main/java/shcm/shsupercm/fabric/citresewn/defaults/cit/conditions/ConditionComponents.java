@@ -12,9 +12,9 @@ import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.cit.CITCondition;
 import shcm.shsupercm.fabric.citresewn.cit.CITContext;
 import shcm.shsupercm.fabric.citresewn.cit.CITParsingException;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 public class ConditionComponents extends CITCondition {
     /*? >=1.21*/ @Entrypoint(CITConditionContainer.ENTRYPOINT)

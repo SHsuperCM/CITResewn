@@ -1,6 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 
 /**
  * Thrown if errored while parsing the properties of a {@link PropertyGroup}.
