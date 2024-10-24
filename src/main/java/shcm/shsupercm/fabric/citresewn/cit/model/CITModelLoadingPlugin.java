@@ -2,6 +2,7 @@ package shcm.shsupercm.fabric.citresewn.cit.model;
 
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.model.loading.v1.PreparableModelLoadingPlugin;
+import shcm.shsupercm.fabric.citresewn.cit.resource.CITResources;
 
 public class CITModelLoadingPlugin implements PreparableModelLoadingPlugin<CITResources.CITModels> {
     @Override
