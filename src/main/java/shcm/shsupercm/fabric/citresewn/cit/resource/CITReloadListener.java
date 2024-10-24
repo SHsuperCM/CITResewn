@@ -16,6 +16,8 @@ import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.cit.model.CITModelLoadingPlugin;
+import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
@@ -102,9 +104,14 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
 
+        CITModelsAccess modelsAccess = new CITModelsAccess(manager);
+
         for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
             try {
                 CIT<?> cit = PackParser.parseCIT(entry.getKey(), PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream()), manager);
+
+                cit.type.modelsAccess(modelsAccess);
+
                 cits.put(entry.getKey(), cit);
             } catch (CITParsingException e) {
                 CITResewn.logErrorLoading(e.getMessage());
@@ -115,7 +122,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         info("Loaded " + cits.size() + "/" + citResources.size() + " CITs from loaded resourcepacks");
 
-        return new CITResources(new CITResources.CITData(globalProperties, cits), new CITResources.CITModels());
+        return new CITResources(new CITResources.CITData(globalProperties, cits), modelsAccess.build());
     }
 
     public void apply(CITResources data) {

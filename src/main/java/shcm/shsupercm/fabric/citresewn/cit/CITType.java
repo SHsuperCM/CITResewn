@@ -4,6 +4,7 @@ import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
+import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
@@ -30,6 +31,10 @@ public abstract class CITType {
      * @throws CITParsingException if errored while parsing the type
      */
     public abstract void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
+
+    public void modelsAccess(CITModelsAccess access) {
+
+    }
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
         CITResewn.logWarnLoading("Warning: " + properties.messageWithDescriptorOf(message, value == null ? -1 : value.position()));
