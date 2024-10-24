@@ -1,20 +1,16 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
 import net.minecraft.util.Identifier;
+import shcm.shsupercm.fabric.citresewn.cit.resource.CITIdentifier;
 
 /**
  * Runtime representation of a CIT, holding its type and conditions as well as additional metadata.
  */
 public class CIT<T extends CITType> {
     /**
-     * The full location of this CIT in its resourcepack.
+     * The full location of this CIT and its resourcepack.
      */
-    public final Identifier propertiesIdentifier;
-
-    /**
-     * Name of the resourcepack that contains this CIT.
-     */
-    public final String packName;
+    public final CITIdentifier identifier;
 
     /**
      * The CIT's type.
@@ -37,9 +33,8 @@ public class CIT<T extends CITType> {
      */
     public final Identifier fallback;
 
-    public CIT(Identifier propertiesIdentifier, String packName, T type, CITCondition[] conditions, int weight, Identifier fallback) {
-        this.propertiesIdentifier = propertiesIdentifier;
-        this.packName = packName;
+    public CIT(CITIdentifier identifier, T type, CITCondition[] conditions, int weight, Identifier fallback) {
+        this.identifier = identifier;
         this.type = type;
         this.conditions = conditions;
         this.weight = weight;

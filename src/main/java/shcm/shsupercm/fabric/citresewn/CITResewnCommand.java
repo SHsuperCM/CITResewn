@@ -8,14 +8,15 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.text.Text;
 import shcm.shsupercm.fabric.citresewn.cit.*;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -43,7 +44,7 @@ public class CITResewnCommand {
     /**
      * Registers all of CIT Resewn's commands.
      */
-    public static void register() {
+    @Entrypoint(Entrypoint.CLIENT) public static void register() {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(
                 ClientCommandManager.literal("citresewn").executes(context -> {
@@ -53,7 +54,7 @@ public class CITResewnCommand {
                     final boolean active = CITResewnConfig.INSTANCE.enabled && ActiveCITs.isActive();
                     context.getSource().sendFeedback(of("  Active: " + (active ? "yes" : ("no, " + (CITResewnConfig.INSTANCE.enabled ? "no cit packs loaded" : "disabled in config")))));
                     if (active) {
-                        context.getSource().sendFeedback(of("   Loaded: " + ActiveCITs.getActive().cits.values().stream().mapToLong(Collection::size).sum() + " CITs from " + ActiveCITs.getActive().cits.values().stream().flatMap(Collection::stream).map(cit -> cit.packName).distinct().count() + " resourcepacks"));
+                        context.getSource().sendFeedback(of("   Loaded: " + ActiveCITs.getActive().cits.values().stream().mapToLong(Collection::size).sum() + " CITs from " + ActiveCITs.getActive().cits.values().stream().flatMap(Collection::stream).map(cit -> cit.identifier.packName()).distinct().count() + " resourcepacks"));
                     }
                     context.getSource().sendFeedback(of(""));
 
@@ -89,7 +90,7 @@ public class CITResewnCommand {
 
                                                 for (Map.Entry<Class<? extends CITType>, List<CIT<?>>> entry : ActiveCITs.getActive().cits.entrySet())
                                                     if (!entry.getValue().isEmpty()) {
-                                                        long count = entry.getValue().stream().filter(cit -> cit.packName.equals(pack)).count();
+                                                        long count = entry.getValue().stream().filter(cit -> cit.identifier.packName().equals(pack)).count();
                                                         if (count > 0)
                                                             builder.add(of("  " + CITRegistry.idOfType(entry.getKey()).toString() + " = " + count));
                                                     }
@@ -103,7 +104,7 @@ public class CITResewnCommand {
 
                                                 List<CITCondition> conditions = ActiveCITs.getActive().cits.values().stream()
                                                         .flatMap(Collection::stream)
-                                                        .filter(cit -> cit.packName.equals(pack))
+                                                        .filter(cit -> cit.identifier.packName().equals(pack))
                                                         .flatMap(cit -> Arrays.stream(cit.conditions))
                                                         .toList();
                                                 if (!conditions.isEmpty())
@@ -154,7 +155,7 @@ public class CITResewnCommand {
             if (ActiveCITs.isActive())
                 return ActiveCITs.getActive().cits.values().stream()
                         .flatMap(Collection::stream)
-                        .map(cit -> cit.packName)
+                        .map(cit -> cit.identifier.packName())
                         .collect(Collectors.toSet());
             else
                 return Collections.emptySet();

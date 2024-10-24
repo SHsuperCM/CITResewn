@@ -1,4 +1,4 @@
-package shcm.shsupercm.fabric.citresewn.pack.format;
+package shcm.shsupercm.fabric.citresewn.cit.resource.format;
 
 /**
  * Marker for the connection between a {@link PropertyKey} and its {@link PropertyValue}.

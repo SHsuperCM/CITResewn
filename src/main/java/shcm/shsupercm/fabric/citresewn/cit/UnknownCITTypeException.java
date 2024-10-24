@@ -1,6 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
-import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 
 /**
  * Thrown when a property group contains an unrecognized value associated with the "type" key.

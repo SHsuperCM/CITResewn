@@ -34,8 +34,6 @@ import static shcm.shsupercm.fabric.citresewn.defaults.cit.types.TypeItem.CONTAI
 public class ItemRendererMixin {
     @Shadow @Final private ItemModels models;
 
-    private WeakReference<BakedModel> citresewn$mojankCITModel = null;
-
     @Inject(method = "getModel", cancellable = true, at = @At("HEAD"))
     private void citresewn$getItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
         if (!CONTAINER.active())
@@ -43,27 +41,5 @@ public class ItemRendererMixin {
 
         CITContext context = new CITContext(stack, world, entity);
         CIT<TypeItem> cit = CONTAINER.getCIT(context, seed);
-        citresewn$mojankCITModel = null;
-        if (cit != null) {
-            BakedModel citModel = cit.type.getItemModel(context, seed);
-
-            if (citModel != null) {
-                if (stack.isOf(Items.TRIDENT) || stack.isOf(Items.SPYGLASS)) {
-                    citresewn$mojankCITModel = new WeakReference<>(citModel);
-                } else
-                    cir.setReturnValue(citModel);
-            }
-        }
-    }
-
-    @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
-    private void citresewn$fixMojankCITsContext(ItemStack stack, ModelTransformationMode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model, CallbackInfo ci) {
-        if (!CONTAINER.active() || citresewn$mojankCITModel == null)
-            return;
-
-        if (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND || renderMode == ModelTransformationMode.FIXED)
-            ((TypeItem.BakedModelManagerMixinAccess) this.models.getModelManager()).citresewn$forceMojankModel(citresewn$mojankCITModel.get());
-
-        citresewn$mojankCITModel = null;
     }
 }
