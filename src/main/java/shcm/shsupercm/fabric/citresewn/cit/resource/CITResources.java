@@ -23,7 +23,10 @@ public record CITResources(
     public record CITModels(Set<Identifier> extraModels,
                             Map<Identifier, ModelResolver> modelResolvers,
                             Map<Identifier, Consumer<BakedModel>> bakedModelReceivers) {
-        public static final CITModels EMPTY = new CITModels(Set.of(), new HashMap<>(), new HashMap<>());
+        public static final CITModels EMPTY = new CITModels();
 
+        public CITModels() {
+            this(new HashSet<>(), new HashMap<>(), new HashMap<>());
+        }
     }
 }

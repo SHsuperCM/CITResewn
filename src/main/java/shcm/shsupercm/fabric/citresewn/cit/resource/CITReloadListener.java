@@ -6,6 +6,8 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
@@ -27,6 +29,7 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
@@ -137,7 +140,8 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
         for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
             typeContainer.unload();
 
-        // todo retrieve models
+        for (Map.Entry<Identifier, Consumer<BakedModel>> entry : data.models().bakedModelReceivers().entrySet())
+            entry.getValue().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(entry.getKey()));
 
         ActiveCITs.activate(data.citData());
     }

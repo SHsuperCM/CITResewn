@@ -14,7 +14,7 @@ public class CITModelsAccess {
     private final Set<RequestEntry> modelRequests = new HashSet<>();
 
     public CITResources.CITModels build() {
-        CITResources.CITModels models = new CITResources.CITModels(new HashSet<>(), new HashMap<>(), new HashMap<>());
+        CITResources.CITModels models = new CITResources.CITModels();
 
         for (RequestEntry entry : modelRequests) {
             models.extraModels().add(entry.modelPath());
