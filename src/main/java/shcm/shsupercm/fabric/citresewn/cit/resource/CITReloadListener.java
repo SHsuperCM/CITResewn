@@ -6,24 +6,28 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys;
 import net.fabricmc.fabric.api.resource.SimpleResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceFinder;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
+import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
 import shcm.shsupercm.fabric.citresewn.api.CITDisposable;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.FallbackCondition;
+import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.core.WeightCondition;
 import shcm.shsupercm.fabric.citresewn.cit.model.CITModelLoadingPlugin;
 import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 import shcm.shsupercm.fabric.citresewn.config.CITResewnConfig;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 import static shcm.shsupercm.fabric.citresewn.CITResewn.info;
 
@@ -99,7 +103,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
                     citResources.put(citId, resource);
                 }
 
-        GlobalProperties globalProperties = PackParser.loadGlobalProperties(manager, new GlobalProperties());
+        GlobalProperties globalProperties = loadGlobalProperties(manager, new GlobalProperties());
         globalProperties.callHandlers();
 
         Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
@@ -109,7 +113,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
         for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
             try {
                 PropertyGroup propertyGroup = PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream());
-                CIT<?> cit = PackParser.parseCIT(entry.getKey(), propertyGroup, manager);
+                CIT<?> cit = parseCIT(entry.getKey(), propertyGroup, manager);
 
                 cit.type.load(Arrays.asList(cit.conditions), propertyGroup, modelsAccess, manager);
 
@@ -136,5 +140,81 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
         // todo retrieve models
 
         ActiveCITs.load(data.citData());
+    }
+
+    /**
+     * Attempts parsing a CIT from a property group.
+     * @param properties property group representation of the CIT
+     * @param resourceManager the manager that contains the the property group, used to resolve relative assets
+     * @return the successfully parsed CIT
+     * @throws CITParsingException if the CIT failed parsing for any reason
+     */
+    public static CIT<?> parseCIT(CITIdentifier id, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
+        CITType citType = CITRegistry.parseType(properties);
+
+        List<CITCondition> conditions = new ArrayList<>();
+
+        Set<PropertyKey> ignoredProperties = citType.typeProperties();
+
+        for (Map.Entry<PropertyKey, Set<PropertyValue>> entry : properties.properties.entrySet()) {
+            if (entry.getKey().path().equals("type") && entry.getKey().namespace().equals("citresewn"))
+                continue;
+            if (ignoredProperties.contains(entry.getKey()))
+                continue;
+
+            for (PropertyValue value : entry.getValue())
+                conditions.add(CITRegistry.parseCondition(entry.getKey(), value, properties));
+        }
+
+        for (CITCondition condition : new ArrayList<>(conditions))
+            if (condition != null)
+                for (Class<? extends CITCondition> siblingConditionType : condition.siblingConditions())
+                    conditions.replaceAll(
+                            siblingCondition -> siblingCondition != null && siblingConditionType == siblingCondition.getClass() ?
+                                    condition.modifySibling(siblingCondition) :
+                                    siblingCondition);
+
+        WeightCondition weight = new WeightCondition();
+        FallbackCondition fallback = new FallbackCondition();
+
+        conditions.removeIf(condition -> {
+            if (condition instanceof WeightCondition weightCondition) {
+                weight.setWeight(weightCondition.getWeight());
+                return true;
+            } else if (condition instanceof FallbackCondition fallbackCondition) {
+                fallback.setFallback(fallbackCondition.getFallback());
+                return true;
+            }
+
+            return condition == null;
+        });
+
+        return new CIT<>(id, citType, conditions.toArray(CITCondition[]::new), weight.getWeight(), fallback.getFallback());
+    }
+
+    /**
+     * Loads a merged global property group from loaded packs making sure to respect order.
+     *
+     * @see GlobalProperties#callHandlers()
+     * @param resourceManager the manager that contains the packs
+     * @param globalProperties global property group to parse into
+     * @return globalProperties
+     */
+    public static GlobalProperties loadGlobalProperties(ResourceManager resourceManager, GlobalProperties globalProperties) {
+        for (ResourcePack pack : resourceManager.streamResourcePacks().collect(Collectors.toList()))
+            for (String namespace : pack.getNamespaces(ResourceType.CLIENT_RESOURCES))
+                for (String root : ROOTS) {
+                    Identifier identifier = Identifier.of(namespace, root + "/cit.properties");
+                    try {
+                        InputSupplier<InputStream> citPropertiesSupplier = pack.open(ResourceType.CLIENT_RESOURCES, identifier);
+                        if (citPropertiesSupplier != null)
+                            globalProperties.load(pack./*? <1.21 {*//*getName*//*?} else {*/getId/*?}*/(), identifier, citPropertiesSupplier.get());
+                    } catch (FileNotFoundException ignored) {
+                    } catch (Exception e) {
+                        CITResewn.logErrorLoading("Errored while loading global properties: " + identifier + " from " + pack./*? <1.21 {*//*getName*//*?} else {*/getId/*?}*/());
+                        e.printStackTrace();
+                    }
+                }
+        return globalProperties;
     }
 }

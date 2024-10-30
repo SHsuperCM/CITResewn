@@ -6,7 +6,6 @@ import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITConditionContainer;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.builtin.conditions.ConstantCondition;
-import shcm.shsupercm.fabric.citresewn.cit.resource.PackParser;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
@@ -18,7 +17,6 @@ import static shcm.shsupercm.fabric.citresewn.CITResewn.logWarnLoading;
 
 /**
  * Holds a static registry runtime for all types and conditions.
- * @see PackParser
  * @see CITTypeContainer
  * @see CITConditionContainer
  */

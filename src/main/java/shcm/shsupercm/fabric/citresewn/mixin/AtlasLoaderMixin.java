@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import shcm.shsupercm.fabric.citresewn.cit.resource.PackParser;
+import shcm.shsupercm.fabric.citresewn.cit.resource.CITReloadListener;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public class AtlasLoaderMixin {
             ((AtlasLoaderMixin) (Object) cir.getReturnValue()).sources.add(new AtlasSource() {
                 @Override
                 public void load(ResourceManager resourceManager, SpriteRegions regions) {
-                    for (String root : PackParser.ROOTS) {
+                    for (String root : CITReloadListener.ROOTS) {
                         ResourceFinder resourceFinder = new ResourceFinder(root + "/cit", ".png");
                         for (Map.Entry<Identifier, Resource> entry : resourceFinder.findResources(resourceManager).entrySet())
                             regions.add(resourceFinder.toResourceId(entry.getKey()).withPrefixedPath(root + "/cit/"), entry.getValue());

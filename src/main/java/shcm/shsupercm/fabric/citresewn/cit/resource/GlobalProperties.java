@@ -20,7 +20,7 @@ import java.util.Set;
 /**
  * Property group representation of the global cit.properties file.
  * @see CITGlobalProperties
- * @see PackParser#loadGlobalProperties(ResourceManager, GlobalProperties)
+ * @see CITReloadListener#loadGlobalProperties(ResourceManager, GlobalProperties)
  */
 public class GlobalProperties extends PropertyGroup {
     public GlobalProperties() {
