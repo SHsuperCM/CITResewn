@@ -104,13 +104,14 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
 
-        CITModelsAccess modelsAccess = new CITModelsAccess(manager);
+        CITModelsAccess modelsAccess = new CITModelsAccess();
 
         for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
             try {
-                CIT<?> cit = PackParser.parseCIT(entry.getKey(), PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream()), manager);
+                PropertyGroup propertyGroup = PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream());
+                CIT<?> cit = PackParser.parseCIT(entry.getKey(), propertyGroup, manager);
 
-                cit.type.modelsAccess(modelsAccess);
+                cit.type.load(Arrays.asList(cit.conditions), propertyGroup, modelsAccess, manager);
 
                 cits.put(entry.getKey(), cit);
             } catch (CITParsingException e) {

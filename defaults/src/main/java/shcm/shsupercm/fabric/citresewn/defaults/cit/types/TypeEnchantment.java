@@ -13,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import shcm.shsupercm.fabric.citresewn.api.CITGlobalProperties;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionEnchantments;
 import shcm.shsupercm.fabric.citresewn.defaults.config.CITResewnDefaultsConfig;
 import shcm.shsupercm.fabric.citresewn.defaults.mixin.types.enchantment.RenderPhaseAccessor;
@@ -61,7 +62,7 @@ public class TypeEnchantment extends CITType {
     private Set<Identifier> enchantmentChecks = null;
 
     @Override
-    public void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException {
+    public void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException {
         PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture");
         this.texture = resolveAsset(properties.identifier, textureProp, "textures", ".png", resourceManager);
         if (this.texture == null)

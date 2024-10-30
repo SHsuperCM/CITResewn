@@ -30,11 +30,7 @@ public abstract class CITType {
      * @param resourceManager the CIT's containing resource manager
      * @throws CITParsingException if errored while parsing the type
      */
-    public abstract void load(List<CITCondition> conditions, PropertyGroup properties, ResourceManager resourceManager) throws CITParsingException;
-
-    public void modelsAccess(CITModelsAccess access) {
-
-    }
+    public abstract void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException;
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
         CITResewn.logWarnLoading("Warning: " + properties.messageWithDescriptorOf(message, value == null ? -1 : value.position()));

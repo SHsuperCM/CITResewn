@@ -21,9 +21,9 @@ public record CITResources(
     }
 
     public record CITModels(Set<Identifier> extraModels,
-                            IdentityHashMap<Identifier, ModelResolver> modelResolvers,
-                            IdentityHashMap<Identifier, Consumer<BakedModel>> bakedModelReceivers) {
-        public static final CITModels EMPTY = new CITModels(Set.of(), new IdentityHashMap<>(), new IdentityHashMap<>());
+                            Map<Identifier, ModelResolver> modelResolvers,
+                            Map<Identifier, Consumer<BakedModel>> bakedModelReceivers) {
+        public static final CITModels EMPTY = new CITModels(Set.of(), new HashMap<>(), new HashMap<>());
 
     }
 }
