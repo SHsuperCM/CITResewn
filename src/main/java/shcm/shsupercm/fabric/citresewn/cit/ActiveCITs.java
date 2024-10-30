@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class ActiveCITs {
 	/**
-	 * @see #load(CITResources.CITData)
+	 * @see #activate(CITResources.CITData)
 	 * @see #getActive()
 	 * @see #isActive()
 	 */
@@ -48,12 +48,12 @@ public class ActiveCITs {
     public final Map<Class<? extends CITType>, List<CIT<?>>> cits = new IdentityHashMap<>();
 
 	/**
-	 * Attempts to load/activate CITs from packs in the given cit data, disposing of any previously loaded CITs if present.
+	 * Attempts to activate CITs from packs in the given cit data, disposing of any previously loaded CITs if present.
 	 * @see CITReloadListener
 	 * @see GlobalProperties#callHandlers()
 	 * @param data raw cit data to activate
 	 */
-    public static void load(CITResources.CITData data) {
+    public static void activate(CITResources.CITData data) {
         if (active != null) {
             active.globalProperties.properties.replaceAll((key, value) -> Set.of());
             active.globalProperties.callHandlers();

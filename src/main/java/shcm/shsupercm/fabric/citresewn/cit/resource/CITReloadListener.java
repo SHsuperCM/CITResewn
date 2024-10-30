@@ -139,7 +139,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         // todo retrieve models
 
-        ActiveCITs.load(data.citData());
+        ActiveCITs.activate(data.citData());
     }
 
     /**
