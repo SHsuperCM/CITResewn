@@ -23,7 +23,7 @@ public class CITModelsAccess {
                 models.modelResolvers().put(entry.modelPath(), entry.modelResolver());
 
             if (entry.bakedModelReceiver() != null)
-                models.bakedModelReceivers().put(entry.modelPath(), entry.bakedModelReceiver());
+                models.bakedModelReceivers().computeIfAbsent(entry.modelPath(), id -> new ArrayList<>()).add(entry.bakedModelReceiver());
         }
 
         return models;

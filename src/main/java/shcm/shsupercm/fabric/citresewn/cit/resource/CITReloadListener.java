@@ -140,8 +140,9 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
         for (CITTypeContainer<? extends CITType> typeContainer : CITRegistry.TYPES.values())
             typeContainer.unload();
 
-        for (Map.Entry<Identifier, Consumer<BakedModel>> entry : data.models().bakedModelReceivers().entrySet())
-            entry.getValue().accept(MinecraftClient.getInstance().getBakedModelManager().getModel(entry.getKey()));
+        for (Map.Entry<Identifier, List<Consumer<BakedModel>>> entry : data.models().bakedModelReceivers().entrySet())
+            for (Consumer<BakedModel> receiver : entry.getValue())
+                receiver.accept(MinecraftClient.getInstance().getBakedModelManager().getModel(entry.getKey()));
 
         ActiveCITs.activate(data.citData());
     }

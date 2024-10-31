@@ -22,7 +22,7 @@ public record CITResources(
 
     public record CITModels(Set<Identifier> extraModels,
                             Map<Identifier, ModelResolver> modelResolvers,
-                            Map<Identifier, Consumer<BakedModel>> bakedModelReceivers) {
+                            Map<Identifier, List<Consumer<BakedModel>>> bakedModelReceivers) {
         public static final CITModels EMPTY = new CITModels();
 
         public CITModels() {
