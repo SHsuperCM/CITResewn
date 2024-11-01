@@ -1,5 +1,6 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
+import net.minecraft.resource.Resource;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.CITResewn;
@@ -38,82 +39,132 @@ public abstract class CITType {
     }
 
     /**
-     * ///// PORTED FROM BETA \\\\\
-     * This shit was ported from the
-     * beta and will be rewritten at
-     * some point!
-     * \\\\\                  /////
-     *
-     * Takes a defined path and resolves it to an identifier pointing to the resourcepack's path of the specified extension(returns null if no path can be resolved).<br>
-     * If definedPath is null, will try to resolve a relative file with the same name as the rootIdentifier with the extension, otherwise: <br>
-     * definedPath will be formatted to replace "\\" with "/" the extension will be appended if not there already. <br>
-     * It will first try using definedPath as an absolute path, if it cant resolve(or definedPath starts with ./), definedPath will be considered relative. <br>
-     * Relative paths support going to parent directories using "..".
-     */
-    public static Identifier resolveAsset(Identifier rootIdentifier, String path, String defaultedTypeDirectory, String extension, ResourceManager resourceManager) {
-        if (path == null) {
-            path = rootIdentifier.getPath().substring(0, rootIdentifier.getPath().length() - 11);
-            if (!path.endsWith(extension))
-                path = path + extension;
-            Identifier pathIdentifier = Identifier.of(rootIdentifier.getNamespace(), path);
-            return resourceManager.getResource(pathIdentifier).isPresent() ? pathIdentifier: null;
-        }
-
-        Identifier pathIdentifier = Identifier.tryParse(path);
-
-        path = pathIdentifier.getPath().replace('\\', '/');
-        if (!path.endsWith(extension))
-            path = path + extension;
-
-        if (path.startsWith("./"))
-            path = path.substring(2);
-        else if (!path.contains("..")) {
-            pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), path);
-            if (resourceManager.getResource(pathIdentifier).isPresent())
-                return pathIdentifier;
-            else if (path.startsWith("assets/")) {
-                path = path.substring(7);
-                int sep = path.indexOf('/');
-                pathIdentifier = Identifier.of(path.substring(0, sep), path.substring(sep + 1));
-                if (resourceManager.getResource(pathIdentifier).isPresent())
-                    return pathIdentifier;
-            }
-            pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), defaultedTypeDirectory + "/" + path);
-            if (resourceManager.getResource(pathIdentifier).isPresent())
-                return pathIdentifier;
-        }
-
-        LinkedList<String> pathParts = new LinkedList<>(Arrays.asList(rootIdentifier.getPath().split("/")));
-        pathParts.removeLast();
-
-        if (path.contains("/")) {
-            for (String part : path.split("/")) {
-                if (part.equals("..")) {
-                    if (pathParts.size() == 0)
-                        return null;
-                    pathParts.removeLast();
-                } else
-                    pathParts.addLast(part);
-            }
-        } else
-            pathParts.addLast(path);
-        path = String.join("/", pathParts);
-
-        pathIdentifier = Identifier.of(rootIdentifier.getNamespace(), path);
-
-        return resourceManager.getResource(pathIdentifier).isPresent() ? pathIdentifier : null;
-    }
-
-    public static Identifier resolveAsset(Identifier rootIdentifier, PropertyValue path, String defaultedTypeDirectory, String extension, ResourceManager resourceManager) {
-        return resolveAsset(rootIdentifier, path == null ? null : path.value(), defaultedTypeDirectory, extension, resourceManager);
-    }
-
-    /**
      * Shared context of the entire CIT loading process with some helpful methods for type loading.
      */
     public record LoadContext(
             ResourceManager resourceManager,
             CITModelsAccess modelsAccess) {
 
+        /**
+         * Resolves a resourcepack asset using a relative or absolute path.
+         * @param originResource nullable, the original file path for relative resolution
+         * @param path path to resolve
+         * @param expectedRoot expected root folder in the resourcepack
+         * @param expectedSuffix expected file extension to check if it was not supplied originally
+         * @return the full resource manager identifier of the resolved asset or {@code Optional.empty())} if one was not found
+         */
+        public Optional<Identifier> resolve(Identifier originResource, String path, String expectedRoot, String expectedSuffix) {
+            if (path == null)
+                return Optional.empty();
+
+            Identifier pathIdentifier = Identifier.tryParse(path);
+            if (pathIdentifier == null)
+                return Optional.empty();
+
+            path = pathIdentifier.getPath().replace('\\', '/');
+            if (!path.endsWith(expectedSuffix))
+                path = path + expectedSuffix;
+
+            if (path.startsWith("./"))
+                path = path.substring(2);
+            else if (!path.contains("..")) {
+                pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), path);
+                if (isResource(pathIdentifier))
+                    return Optional.of(pathIdentifier);
+                else if (path.startsWith("assets/")) {
+                    path = path.substring("assets/".length());
+                    int sep = path.indexOf('/');
+                    pathIdentifier = Identifier.of(path.substring(0, sep), path.substring(sep + 1));
+                    if (isResource(pathIdentifier))
+                        return Optional.of(pathIdentifier);
+                }
+                pathIdentifier = Identifier.of(pathIdentifier.getNamespace(), expectedRoot + "/" + path);
+                if (isResource(pathIdentifier))
+                    return Optional.of(pathIdentifier);
+            }
+
+            if (originResource == null)
+                return Optional.empty();
+
+            LinkedList<String> pathParts = new LinkedList<>(Arrays.asList(originResource.getPath().split("/")));
+            pathParts.removeLast();
+
+            if (path.contains("/")) {
+                for (String part : path.split("/")) {
+                    if (part.equals("..")) {
+                        if (pathParts.isEmpty())
+                            return Optional.empty();
+                        pathParts.removeLast();
+                    } else
+                        pathParts.addLast(part);
+                }
+            } else
+                pathParts.addLast(path);
+            path = String.join("/", pathParts);
+
+            pathIdentifier = Identifier.of(originResource.getNamespace(), path);
+
+            return isResource(pathIdentifier) ? Optional.of(pathIdentifier) : Optional.empty();
+        }
+
+        /**
+         * Resolves a texture using a relative or absolute path.
+         * @param originResource nullable, the original file path for relative resolution
+         * @param path path to resolve
+         * @return the full resource manager identifier of the resolved texture or {@code Optional.empty())} if one was not found
+         */
+        public Optional<Identifier> resolveTexture(Identifier originResource, String path) {
+            if (path == null && originResource != null && originResource.getPath().endsWith(",properties")) {
+                path = originResource.getPath().substring(0, originResource.getPath().length() - ".properties".length());
+                if (!path.endsWith(".png"))
+                    path = path + ".png";
+                Identifier pathIdentifier = Identifier.of(originResource.getNamespace(), path);
+                return isResource(pathIdentifier) ? Optional.of(pathIdentifier) : Optional.empty();
+            }
+
+            return resolve(originResource, path, "textures", ".png");
+        }
+
+        /**
+         * Resolves a model using a relative or absolute path.
+         * @param originResource nullable, the original file path for relative resolution
+         * @param path path to resolve
+         * @return normalized model identifier relative to the models root or {@code Optional.empty())} if one was not found
+         */
+        public Optional<Identifier> resolveModel(Identifier originResource, String path) {
+            Optional<Identifier> resolvedModel;
+            if (path == null && originResource != null && originResource.getPath().endsWith(",properties")) {
+                path = originResource.getPath().substring(0, originResource.getPath().length() - ".properties".length());
+                if (!path.endsWith(".json"))
+                    path = path + ".json";
+                Identifier pathIdentifier = Identifier.of(originResource.getNamespace(), path);
+                resolvedModel = isResource(pathIdentifier) ? Optional.of(pathIdentifier) : Optional.empty();
+            } else
+                resolvedModel = resolve(originResource, path, "models", ".json");
+
+            return resolvedModel.map(modelId ->
+                    modelId.withPath(modelPath -> {
+                        modelPath = modelPath.substring(0, modelPath.length() - ".json".length());
+                        return modelPath.startsWith("models/") ? modelPath.substring("models/".length()) : ("../" + modelPath);
+                    }));
+        }
+
+        /**
+         * Retrieves a resource from the shared resource manager
+         * @param id full path of the resource
+         * @return the {@link Resource} or {@code Optional.empty())} if the resource was not found in any loaded resourcepack
+         */
+        public Optional<Resource> getResource(Identifier id) {
+            return resourceManager().getResource(id);
+        }
+
+        /**
+         * Checks whether a resource exists in one of the loaded resourcepacks
+         * @param id full path of the resource
+         * @return true if the resource was found in any of the loaded resourcepack
+         */
+        public boolean isResource(Identifier id) {
+            return getResource(id).isPresent();
+        }
     }
 }

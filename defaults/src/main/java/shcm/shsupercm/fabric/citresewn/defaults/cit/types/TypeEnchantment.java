@@ -62,9 +62,8 @@ public class TypeEnchantment extends CITType {
     @Override
     public void load(List<CITCondition> conditions, PropertyGroup properties, LoadContext context) throws CITParsingException {
         PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture");
-        this.texture = resolveAsset(properties.identifier, textureProp, "textures", ".png", context.resourceManager());
-        if (this.texture == null)
-            throw textureProp == null ? new CITParsingException("No texture specified", properties, -1) : new CITParsingException("Could not resolve texture", properties, textureProp.position());
+        this.texture = context.resolveTexture(properties.identifier, textureProp == null ? null : textureProp.value())
+                .orElseThrow(() -> textureProp == null ? new CITParsingException("No texture specified", properties, -1) : new CITParsingException("Could not resolve texture", properties, textureProp.position()));
 
         PropertyValue layerProp = properties.getLastWithoutMetadataOrDefault("0", "citresewn", "layer");
         try {

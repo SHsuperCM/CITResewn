@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
+import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyValue;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
@@ -38,9 +39,9 @@ public class TypeElytra extends CITType {
                     if (!(item instanceof ElytraItem))
                         warn("Non elytra item type condition", null, properties);
 
-        texture = resolveAsset(properties.identifier, properties.getLastWithoutMetadata("citresewn", "texture"), "textures", ".png", context.resourceManager());
-        if (texture == null)
-            throw new CITParsingException("Texture not specified", properties, -1);
+        PropertyValue textureProp = properties.getLastWithoutMetadata("citresewn", "texture");
+        this.texture = context.resolveTexture(properties.identifier, textureProp == null ? null : textureProp.value())
+                .orElseThrow(() -> textureProp == null ? new CITParsingException("No texture specified", properties, -1) : new CITParsingException("Could not resolve texture", properties, textureProp.position()));
     }
 
     public static class Container extends CITTypeContainer<TypeElytra> {

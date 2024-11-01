@@ -53,13 +53,10 @@ public class TypeArmor extends CITType {
                 throw new CITParsingException("Not targeting any item type", properties, -1);
             }
 
-        for (PropertyValue propertyValue : properties.get("citresewn", "texture")) {
-            Identifier identifier = resolveAsset(properties.identifier, propertyValue, "textures", ".png", context.resourceManager());
-            if (identifier == null)
-                throw new CITParsingException("Could not resolve texture", properties, propertyValue.position());
+        for (PropertyValue textureProp : properties.get("citresewn", "texture"))
+            textures.put(textureProp.keyMetadata(), context.resolveTexture(properties.identifier, textureProp == null ? null : textureProp.value())
+                                                        .orElseThrow(() -> textureProp == null ? new CITParsingException("No texture specified", properties, -1) : new CITParsingException("Could not resolve texture", properties, textureProp.position())));
 
-            textures.put(propertyValue.keyMetadata(), identifier);
-        }
         if (textures.size() == 0)
             throw new CITParsingException("Texture not specified", properties, -1);
     }
