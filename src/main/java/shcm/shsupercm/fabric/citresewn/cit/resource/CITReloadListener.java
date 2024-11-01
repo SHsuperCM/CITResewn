@@ -111,14 +111,14 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         Map<CITIdentifier, CIT<?>> cits = new HashMap<>();
 
-        CITModelsAccess modelsAccess = new CITModelsAccess();
+        CITType.LoadContext context = new CITType.LoadContext(manager, new CITModelsAccess());
 
         for (Map.Entry<CITIdentifier, Resource> entry : citResources.entrySet())
             try {
                 PropertyGroup propertyGroup = PropertyGroup.tryParseGroup(entry.getKey().packName(), entry.getKey().path(), entry.getValue().getInputStream());
                 CIT<?> cit = parseCIT(entry.getKey(), propertyGroup, manager);
 
-                cit.type.load(Arrays.asList(cit.conditions), propertyGroup, modelsAccess, manager);
+                cit.type.load(Arrays.asList(cit.conditions), propertyGroup, context);
 
                 cits.put(entry.getKey(), cit);
             } catch (CITParsingException e) {
@@ -130,7 +130,7 @@ public class CITReloadListener implements SimpleResourceReloadListener<CITResour
 
         info("Loaded " + cits.size() + "/" + citResources.size() + " CITs from loaded resourcepacks");
 
-        return new CITResources(new CITResources.CITData(globalProperties, cits), modelsAccess.build());
+        return new CITResources(new CITResources.CITData(globalProperties, cits), context.modelsAccess().build());
     }
 
     public void apply(CITResources data) {

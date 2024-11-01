@@ -25,12 +25,13 @@ public abstract class CITType {
 
     /**
      * Loads the given property group into the type.
+     *
      * @param conditions conditions that were parsed out of the property group
      * @param properties group of properties to be read into this type
-     * @param resourceManager the CIT's containing resource manager
+     * @param context shared context of the entire CIT loading process with some helpful methods
      * @throws CITParsingException if errored while parsing the type
      */
-    public abstract void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException;
+    public abstract void load(List<CITCondition> conditions, PropertyGroup properties, LoadContext context) throws CITParsingException;
 
     protected void warn(String message, PropertyValue value, PropertyGroup properties) {
         CITResewn.logWarnLoading("Warning: " + properties.messageWithDescriptorOf(message, value == null ? -1 : value.position()));
@@ -105,5 +106,14 @@ public abstract class CITType {
 
     public static Identifier resolveAsset(Identifier rootIdentifier, PropertyValue path, String defaultedTypeDirectory, String extension, ResourceManager resourceManager) {
         return resolveAsset(rootIdentifier, path == null ? null : path.value(), defaultedTypeDirectory, extension, resourceManager);
+    }
+
+    /**
+     * Shared context of the entire CIT loading process with some helpful methods for type loading.
+     */
+    public record LoadContext(
+            ResourceManager resourceManager,
+            CITModelsAccess modelsAccess) {
+
     }
 }

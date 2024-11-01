@@ -6,11 +6,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
-import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
@@ -33,14 +31,14 @@ public class TypeElytra extends CITType {
     }
 
     @Override
-    public void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException {
+    public void load(List<CITCondition> conditions, PropertyGroup properties, LoadContext context) throws CITParsingException {
         for (CITCondition condition : conditions)
             if (condition instanceof ConditionItems items)
                 for (Item item : items.items)
                     if (!(item instanceof ElytraItem))
                         warn("Non elytra item type condition", null, properties);
 
-        texture = resolveAsset(properties.identifier, properties.getLastWithoutMetadata("citresewn", "texture"), "textures", ".png", resourceManager);
+        texture = resolveAsset(properties.identifier, properties.getLastWithoutMetadata("citresewn", "texture"), "textures", ".png", context.resourceManager());
         if (texture == null)
             throw new CITParsingException("Texture not specified", properties, -1);
     }

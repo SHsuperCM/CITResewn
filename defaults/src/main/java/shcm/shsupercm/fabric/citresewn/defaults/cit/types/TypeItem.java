@@ -3,11 +3,9 @@ package shcm.shsupercm.fabric.citresewn.defaults.cit.types;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
-import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
@@ -25,7 +23,7 @@ public class TypeItem extends CITType {
     }
 
     @Override
-    public void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException {
+    public void load(List<CITCondition> conditions, PropertyGroup properties, LoadContext context) throws CITParsingException {
         for (CITCondition condition : conditions)
             if (condition instanceof ConditionItems conditionItems)
                 items.addAll(Arrays.asList(conditionItems.items));

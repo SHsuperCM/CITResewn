@@ -7,11 +7,9 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
-import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import shcm.shsupercm.fabric.citresewn.api.CITTypeContainer;
 import shcm.shsupercm.fabric.citresewn.cit.*;
-import shcm.shsupercm.fabric.citresewn.cit.model.CITModelsAccess;
 import shcm.shsupercm.fabric.citresewn.defaults.cit.conditions.ConditionItems;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.cit.resource.format.PropertyKey;
@@ -32,7 +30,7 @@ public class TypeArmor extends CITType {
     }
 
     @Override
-    public void load(List<CITCondition> conditions, PropertyGroup properties, CITModelsAccess modelsAccess, ResourceManager resourceManager) throws CITParsingException {
+    public void load(List<CITCondition> conditions, PropertyGroup properties, LoadContext context) throws CITParsingException {
         boolean itemsConditionPresent = false;
         for (CITCondition condition : conditions)
             if (condition instanceof ConditionItems conditionItems)
@@ -56,7 +54,7 @@ public class TypeArmor extends CITType {
             }
 
         for (PropertyValue propertyValue : properties.get("citresewn", "texture")) {
-            Identifier identifier = resolveAsset(properties.identifier, propertyValue, "textures", ".png", resourceManager);
+            Identifier identifier = resolveAsset(properties.identifier, propertyValue, "textures", ".png", context.resourceManager());
             if (identifier == null)
                 throw new CITParsingException("Could not resolve texture", properties, propertyValue.position());
 
