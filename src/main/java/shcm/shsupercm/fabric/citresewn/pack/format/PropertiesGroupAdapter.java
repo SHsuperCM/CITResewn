@@ -102,6 +102,6 @@ public class PropertiesGroupAdapter extends PropertyGroup {
     private static boolean shouldSkipLine(String line) {
         return line.startsWith("#") ||
                 line.startsWith("!") ||
-                line.startsWith("%");
+                line.startsWith("$");
     }
 }
