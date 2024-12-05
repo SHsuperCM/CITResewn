@@ -12,9 +12,15 @@ import net.minecraft.util.Identifier;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 public class ClientComponentChanges {
     public static final ClientComponentChanges EMPTY = new ClientComponentChanges(new Reference2ObjectArrayMap<>()) {
+        @Override
+        public <T> Optional<T> get(ComponentType<? extends T> type) {
+            return null;
+        }
+
         @Override
         public <T> T getOrDefault(ComponentType<? extends T> type, T original) {
             return original;
@@ -36,10 +42,43 @@ public class ClientComponentChanges {
         return componentChanges;
     }
 
+    public <T> Optional<T> get(ComponentType<? extends T> type) {
+        return (Optional<T>) this.changedComponents.get(type);
+    }
+
     public <T> T getOrDefault(ComponentType<? extends T> type, T original) {
-        Optional<?> clientComponent = this.changedComponents.get(type);
+        Optional<?> clientComponent = get(type);
         if (clientComponent != null)
             return (T) clientComponent.orElse(null);
         return original;
+    }
+
+    public Set<ComponentType<?>> componentTypes() {
+        return this.changedComponents.keySet();
+    }
+
+    public Set<Map.Entry<ComponentType<?>, Optional<?>>> entrySet() {
+        return this.changedComponents.entrySet();
+    }
+
+    public <T> void add(ComponentType<? extends T> type, T value) {
+        this.changedComponents.put(type, Optional.of(value));
+    }
+
+    public <T> void remove(ComponentType<? extends T> type) {
+        this.changedComponents.put(type, Optional.empty());
+    }
+
+    public <T> void reset(ComponentType<? extends T> type) {
+        this.changedComponents.remove(type);
+    }
+
+    public void clear() {
+        this.changedComponents.clear();
+    }
+
+    public void from(ComponentChanges changes) {
+        for (Map.Entry<ComponentType<?>, Optional<?>> entry : changes.entrySet())
+            this.changedComponents.put(entry.getKey(), entry.getValue());
     }
 }
