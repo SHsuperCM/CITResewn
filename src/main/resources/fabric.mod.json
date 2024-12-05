@@ -15,7 +15,7 @@
     "issues": "https://github.com/SHsuperCM/CITResewn/issues"
   },
 
-  "environment": "client",
+  "environment": "*",
   "accessWidener" : "citresewn.accesswidener",
   "mixins": [
     "citresewn.mixins.json"
@@ -26,10 +26,6 @@
     "minecraft": "${mod_target_mc}"
   },
   "recommends": {
-    "modmenu": "*",
-    "cloth-config2": "*"
-  },
-  "breaks": {
-    "canvas": "*"
+    "modmenu": "*"
   }
 }

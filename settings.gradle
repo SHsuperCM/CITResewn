@@ -21,8 +21,7 @@ plugins {
 }
 
 stonecutter.create(rootProject) {
-    versions '1.21', '1.20.4', '1.20.1', '1.19.4'
-    branch 'defaults'
+    versions '1.21.4'
 
-    vcsVersion = '1.21'
+    vcsVersion = '1.21.4'
 }
