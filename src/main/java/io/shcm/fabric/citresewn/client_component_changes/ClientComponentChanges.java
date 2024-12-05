@@ -28,10 +28,12 @@ public class ClientComponentChanges {
     }
 
     public static <T extends ComponentHolder> ClientComponentChanges fromHolder(T holder) {
-        if (holder instanceof ItemStack stack)
-            return new ClientComponentChanges(new Reference2ObjectArrayMap<>());
+        ClientComponentChanges componentChanges = new ClientComponentChanges(new Reference2ObjectArrayMap<>());
 
-        return new ClientComponentChanges(new Reference2ObjectArrayMap<>());
+        if (holder instanceof ItemStack stack)
+            ClientComponentChangesEvents.ITEMSTACK.invoker().resolveClientComponents(stack, componentChanges);
+
+        return componentChanges;
     }
 
     public <T> T getOrDefault(ComponentType<? extends T> type, T original) {
