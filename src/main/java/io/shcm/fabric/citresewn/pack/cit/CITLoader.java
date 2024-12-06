@@ -1,5 +1,7 @@
 package io.shcm.fabric.citresewn.pack.cit;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import io.shcm.fabric.citresewn.CITResewn;
 import io.shcm.shsupercm.fabric.fletchingtable.api.Entrypoint;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -9,7 +11,7 @@ import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.util.Identifier;
-
+import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +33,10 @@ public class CITLoader implements SimpleResourceReloadListener<Iterable<CIT>> {
             for (Map.Entry<Identifier, List<Resource>> entry : FINDER.findAllResources(manager).entrySet())
                 for (Resource resource : entry.getValue()) {
                     try {
-                        loaded.add(load(entry.getKey(), resource));
+                        for (CIT cit : load(entry.getKey(), resource))
+                            loaded.add(cit);
                     } catch (Exception e) {
-                        CITResewn.LOG.error("Errored loading CIT from " + resource.getPack().getId() + "/" + entry.getKey().toString(), e);
+                        CITResewn.LOG.error("Errored opening CIT from " + resource.getPack().getId() + "/" + entry.getKey().toString(), e);
                     }
                 }
 
@@ -48,9 +51,15 @@ public class CITLoader implements SimpleResourceReloadListener<Iterable<CIT>> {
         }, executor);
     }
 
-    public CIT load(Identifier id, Resource resource) throws Exception {
+    public CIT[] load(Identifier id, Resource resource) throws Exception {
+        BufferedReader reader = resource.getReader();
+        try {
+            JsonElement rootJson = JsonParser.parseReader(reader);
 
-        throw new IllegalStateException();
+            throw new IllegalStateException();
+        } finally {
+            reader.close();
+        }
     }
 
     @Override
