@@ -1,9 +1,0 @@
-{
-  "modmenu.descriptionTranslation.citresewn-defaults": "CIT Resewn өчен гади төрләр һәм шартлар",
-
-  "config.citresewn-defaults.title": "CIT Resewn: Defaults",
-  "config.citresewn-defaults.tooltip": "Defaults көйләүләренең менюсына барыгыз",
-
-  "config.citresewn-defaults.type_enchantment_scroll_multiplier.title": "Сихерләр төре: Әйләнү тапкырлаучысы",
-  "config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip": "CIT-ның сихер җемелдәвенең әйләнү тизлеген билгеләүче гомуми тапкырлаучы"
-}

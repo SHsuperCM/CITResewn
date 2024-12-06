@@ -1,7 +1,0 @@
-{
-  "config.citresewn-defaults.title": "CIT Resewn: настройки по умолчанию",
-  "config.citresewn-defaults.tooltip": "Открыть окно настроек по умолчанию",
-
-  "config.citresewn-defaults.type_enchantment_scroll_multiplier.title": "Видимость чар: Множитель анимации",
-  "config.citresewn-defaults.type_enchantment_scroll_multiplier.tooltip": "Общий множитель скорости воспроизведения анимации CIT-чар"
-}

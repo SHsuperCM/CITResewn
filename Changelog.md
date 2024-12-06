@@ -1,5 +1,1 @@
- - Fixed enchantment glints not working
- - Switched legacy Stonecutter out in favor of the newer [Stonecutter](https://stonecutter.kikugie.dev/)
- - Fixed 1.19.4 port
- - Fixed 1.20.1 port
- - Fixed 1.20.4 port
+ - Nuked everything

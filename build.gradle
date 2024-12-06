@@ -2,7 +2,7 @@ plugins.apply 'fabric-loom'
 plugins.apply 'io.shcm.shsupercm.fabric.fletchingtable'
 
 version = "${property('mod.version')}+${stonecutter.current.version}"
-group = 'shcm.shsupercm.fabric.citresewn'
+group = 'io.shcm.fabric.citresewn'
 
 repositories {
     maven { url 'https://maven.terraformersmc.com/releases/' }
@@ -13,30 +13,27 @@ dependencies {
     minecraft "com.mojang:minecraft:${stonecutter.current.version}"
     mappings "net.fabricmc:yarn:${property('deps.yarn')}:v2"
 
-    modCompileOnly "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
-    modCompileOnly "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric-api')}"
+    modImplementation "net.fabricmc:fabric-loader:${property('deps.fabric-loader')}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${property('deps.fabric-api')}"
 
-    modCompileOnly "com.terraformersmc:modmenu:${property('deps.modmenu')}"
-    modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${property('deps.cloth-config')}"
-
-    include stonecutter.node.sibling("defaults").project
+    modImplementation "com.terraformersmc:modmenu:${property('deps.modmenu')}"
 }
 
 fletchingTable {
-    defaultMixinEnvironment = "auto"
+    defaultMixinEnvironment = "client"
 }
 
 loom {
     accessWidenerPath = file("../../src/main/resources/citresewn.accesswidener")
 
-    runConfigs.client.ideConfigGenerated = false
-    runConfigs.server.ideConfigGenerated = false
+    runConfigs.client.ideConfigGenerated = true
+    runConfigs.server.ideConfigGenerated = true
 }
 
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 
     archivesBaseName = property('mod.jarname')
 }
