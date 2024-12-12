@@ -2,7 +2,6 @@ package io.shcm.fabric.citresewn.pack.cit.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
 
 import java.util.function.Function;
 
@@ -24,7 +23,7 @@ public abstract class ConstantCondition extends CITCondition {
         public static final Passes INSTANCE = new Passes();
 
         @Override
-        public boolean test(ItemStack itemStack) {
+        public boolean test(CITCondition.TestContext context) {
             return true;
         }
     }
@@ -33,7 +32,7 @@ public abstract class ConstantCondition extends CITCondition {
         public static final Fails INSTANCE = new Fails();
 
         @Override
-        public boolean test(ItemStack itemStack) {
+        public boolean test(CITCondition.TestContext context) {
             return false;
         }
     }

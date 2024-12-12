@@ -2,7 +2,6 @@ package io.shcm.fabric.citresewn.pack.cit.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,9 +32,9 @@ public class AnyCondition extends CITCondition {
     }
 
     @Override
-    public boolean test(ItemStack itemStack) {
+    public boolean test(CITCondition.TestContext context) {
         for (CITCondition condition : conditions())
-            if (condition.test(itemStack))
+            if (condition.test(context))
                 return true;
         return false;
     }

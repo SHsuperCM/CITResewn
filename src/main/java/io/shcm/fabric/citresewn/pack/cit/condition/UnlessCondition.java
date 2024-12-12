@@ -2,7 +2,6 @@ package io.shcm.fabric.citresewn.pack.cit.condition;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
 import java.util.function.Function;
 
 public class UnlessCondition extends CITCondition {
@@ -26,7 +25,7 @@ public class UnlessCondition extends CITCondition {
     }
 
     @Override
-    public boolean test(ItemStack itemStack) {
-        return !condition().test(itemStack);
+    public boolean test(CITCondition.TestContext context) {
+        return !condition().test(context);
     }
 }
