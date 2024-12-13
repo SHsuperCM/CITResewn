@@ -1,12 +1,10 @@
 package shcm.shsupercm.fabric.citresewn.cit;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.ComponentType;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.RegistryKey;
@@ -17,6 +15,7 @@ import net.minecraft.world.World;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * Holds momentary information to be used for CITs' condition matching and type effects.
@@ -43,6 +42,8 @@ public class CITContext {
      */
     private Map<Identifier, Integer> enchantments = null;
 
+    private Map<ComponentType<?>, NbtElement> cachedComponents = new LinkedHashMap<>();
+
     public CITContext(ItemStack stack, World world, LivingEntity entity) {
         this.stack = stack;
         this.world = world == null ? MinecraftClient.getInstance().world : world;
@@ -66,6 +67,13 @@ public class CITContext {
 
         }
         return this.enchantments;
+    }
+
+    /**
+     * @return the item's NBT element or using provided loader to initialize it.
+     */
+    public NbtElement getNbtElementOrLoad(ComponentType<?> componentType, Supplier<NbtElement> loader) {
+        return this.cachedComponents.computeIfAbsent(componentType, k -> loader.get());
     }
 
     @Override

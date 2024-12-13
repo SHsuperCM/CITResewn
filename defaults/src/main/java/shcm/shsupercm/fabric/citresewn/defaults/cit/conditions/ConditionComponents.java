@@ -16,6 +16,8 @@ import shcm.shsupercm.fabric.citresewn.pack.format.PropertyGroup;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyKey;
 import shcm.shsupercm.fabric.citresewn.pack.format.PropertyValue;
 
+import java.util.function.Supplier;
+
 public class ConditionComponents extends CITCondition {
     /*? >=1.21*/ @Entrypoint(CITConditionContainer.ENTRYPOINT)
     public static final CITConditionContainer<ConditionComponents> CONTAINER = new CITConditionContainer<>(ConditionComponents.class, ConditionComponents::new,
@@ -75,8 +77,8 @@ public class ConditionComponents extends CITCondition {
             } /*else if (stackComponent instanceof LoreComponent lore) {
                 //todo avoid nbt based check if possible
             }*/
-
-            NbtElement fallbackComponentNBT = ((ComponentType<Object>) this.componentType).getCodec().encodeStart(context.world.getRegistryManager().getOps(NbtOps.INSTANCE), stackComponent).getOrThrow();
+            Supplier<NbtElement> supplier = () -> ((ComponentType<Object>) this.componentType).getCodec().encodeStart(context.world.getRegistryManager().getOps(NbtOps.INSTANCE), stackComponent).getOrThrow();
+            NbtElement fallbackComponentNBT = context.getNbtElementOrLoad(this.componentType, supplier);
             return this.fallbackNBTCheck.testPath(fallbackComponentNBT, 0, context);
         }
         /*?}*/
