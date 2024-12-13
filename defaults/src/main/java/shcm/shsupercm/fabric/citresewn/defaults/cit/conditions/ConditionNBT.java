@@ -158,12 +158,19 @@ public class ConditionNBT extends CITCondition {
         return false;
     }
 
+    private static boolean likesJson(String value){
+        int index = 0;
+        while (index < value.length() && Character.isWhitespace(value.charAt(index)))
+            index++;
+        return index < value.length() && (value.charAt(index) == '{' || value.charAt(index) == '[');
+    }
+
     public boolean testString(String element, Text elementText, CITContext context) {
         if (element != null) {
             if (matchString.matches(element))
                 return true;
 
-            if (elementText == null)
+            if (elementText == null && likesJson(element))
                 elementText = Text./*? >=1.20.4 {*/Serialization/*?} else {*//*Serializer*//*?}*/
                         .fromJson(element/*? >=1.21 {*/, context.world.getRegistryManager()/*?}*/);
         }
