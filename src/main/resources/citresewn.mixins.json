@@ -1,9 +1,8 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "shcm.shsupercm.fabric.citresewn.mixin",
-  "plugin": "shcm.shsupercm.fabric.citresewn.config.CITResewnMixinConfiguration",
-  "compatibilityLevel": "JAVA_17",
+  "package": "io.shcm.fabric.citresewn.mixin",
+  "compatibilityLevel": "JAVA_21",
   "injectors": {
     "defaultRequire": 1
   }
